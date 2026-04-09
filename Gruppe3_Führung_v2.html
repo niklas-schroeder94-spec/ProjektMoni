@@ -1215,6 +1215,36 @@
     margin-left: calc(var(--timeline-label-width) + 0.3rem);
     height: 2.2rem;
     border-bottom: 2px solid var(--light);
+    overflow: hidden;
+  }
+
+  .timeline-heatmap {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+    pointer-events: none;
+  }
+
+  .timeline-heatmap-cell {
+    border-right: 1px solid rgba(255,255,255,0.5);
+    transition: background-color 220ms ease;
+  }
+
+  .timeline-heatmap-cell:last-child {
+    border-right: none;
+  }
+
+  .timeline-heatmap-low {
+    background: rgba(46,125,50,0.16);
+  }
+
+  .timeline-heatmap-medium {
+    background: rgba(212,168,83,0.25);
+  }
+
+  .timeline-heatmap-high {
+    background: rgba(200,75,49,0.2);
   }
 
   .timeline-tick {
@@ -1277,6 +1307,109 @@
     height: 100%;
     border-radius: 999px;
     background: var(--accent);
+  }
+
+  .timeline-sim-cursor {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 0 1px rgba(200,75,49,0.18);
+    transform: translateX(-50%);
+    pointer-events: none;
+    transition: left 120ms linear;
+    z-index: 4;
+  }
+
+  .timeline-sim-cursor::after {
+    content: '';
+    position: absolute;
+    top: -0.22rem;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--accent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .timeline-load-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.9rem;
+    font-size: 0.64rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  .timeline-load-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+  }
+
+  .timeline-load-swatch {
+    width: 0.88rem;
+    height: 0.88rem;
+    border: 1px solid rgba(26,26,46,0.08);
+  }
+
+  .timeline-sim-panel {
+    margin-top: 0.2rem;
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 0.85rem 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.9rem;
+    align-items: center;
+  }
+
+  .timeline-sim-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .simulate-btn {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.45rem 0.7rem;
+    cursor: pointer;
+  }
+
+  .simulate-btn:hover {
+    background: #b6412a;
+    border-color: #b6412a;
+  }
+
+  .simulate-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+  }
+
+  .timeline-sim-status {
+    font-size: 0.66rem;
+    color: var(--muted);
+    max-width: 15rem;
+    line-height: 1.4;
+  }
+
+  .timeline-live-radar .radar-lbl {
+    font-size: 0.64rem;
+  }
+
+  .timeline-live-radar-note {
+    font-size: 0.67rem;
+    color: var(--muted);
+    line-height: 1.45;
   }
 
   .timeline-point {
@@ -2432,6 +2565,39 @@
     </div>
 
     <div id="timeline-container" aria-label="18-Monate-Timeline"></div>
+
+    <div class="timeline-sim-panel">
+      <div class="timeline-sim-actions">
+        <button id="simulate-journey-btn" class="simulate-btn" type="button">Entwicklungsreise simulieren</button>
+        <div id="timeline-sim-status" class="timeline-sim-status">Die Simulation zeigt in Echtzeit, wie das Kompetenzprofil entlang der 18 Monate wächst.</div>
+      </div>
+      <div class="timeline-live-radar soll-radar" style="gap:0.65rem">
+        <div class="radar-lbl">Echtzeit-Radar (Folie 8) — Fortschritt bis Cursor-Position</div>
+        <svg id="timeline-radar" width="248" height="248" viewBox="0 0 270 270" style="overflow:visible">
+          <g transform="translate(135,138)">
+            <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="-95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <polygon id="timeline-radar-ist" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(120,120,120,0.18)" stroke="rgba(115,115,115,0.9)" stroke-width="1.8"/>
+            <polygon id="timeline-radar-live" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.23)" stroke="var(--steel)" stroke-width="2"/>
+            <g id="timeline-radar-points"></g>
+            <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
+            <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
+            <text x="90" y="53" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Selbst</text>
+            <text x="0" y="110" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Pers.führung</text>
+            <text x="-90" y="53" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Konflikt</text>
+            <text x="-90" y="-50" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Durchsetzen</text>
+          </g>
+        </svg>
+        <div class="timeline-live-radar-note">Grau = Ist-Basis. Blau = kumulierter Entwicklungsstand bis zur aktuellen Cursor-Position.</div>
+      </div>
+    </div>
   </div>
   <div class="slide-number">08 / 10</div>
 </div>
@@ -2724,12 +2890,20 @@
     const radarBasePolygon = Array.from(document.querySelectorAll('#massnahmen-radar-ist-baseline')).at(-1) || null;
     const radarProjectionPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-projektion')).at(-1) || null;
     const radarPoints = Array.from(document.querySelectorAll('#massnahmen-radar-points')).at(-1) || null;
+    const timelineRadarBasePolygon = document.getElementById('timeline-radar-ist');
+    const timelineRadarLivePolygon = document.getElementById('timeline-radar-live');
+    const timelineRadarPoints = document.getElementById('timeline-radar-points');
     const measureCountLabel = Array.from(document.querySelectorAll('#massnahmen-count')).at(-1) || null;
     const selectedMeasuresBody = document.getElementById('selected-measures-body');
     const timelineContainer = document.getElementById('timeline-container');
+    const simulateJourneyButton = document.getElementById('simulate-journey-btn');
+    const timelineSimulationStatus = document.getElementById('timeline-sim-status');
     const projectStartDate = new Date(2026, 4, 1);
     const projectEndDate = new Date(2027, 9, 31);
     const totalTimelineDays = Math.max(1, Math.round((projectEndDate - projectStartDate) / 86400000) + 1);
+    const totalTimelineMonths = 18;
+    const simulationDurationMs = 6500;
+    let simulationFrame = null;
 
     function formatDate(date) {
       const dd = String(date.getDate()).padStart(2, '0');
@@ -3026,6 +3200,18 @@
       });
     }
 
+    function renderTimelineRadar(profile) {
+      if (!timelineRadarLivePolygon || !timelineRadarPoints) return;
+      const points = profileToPoints(profile.map((value) => Math.min(100, value)));
+      timelineRadarLivePolygon.setAttribute('points', points.join(' '));
+      timelineRadarPoints.innerHTML = points
+        .map((point) => {
+          const [cx, cy] = point.split(',');
+          return `<circle cx="${cx}" cy="${cy}" r="3" fill="var(--steel)"></circle>`;
+        })
+        .join('');
+    }
+
     function renderRadarFromSelection() {
       if (!radarProjectionPolygon || !radarPoints) return;
 
@@ -3067,6 +3253,132 @@
       return Math.round((date - projectStartDate) / 86400000);
     }
 
+    function getMonthDateRange(monthNumber) {
+      const monthIndex = monthNumber - 1;
+      const monthStart = new Date(projectStartDate.getFullYear(), projectStartDate.getMonth() + monthIndex, 1);
+      const monthEnd = new Date(projectStartDate.getFullYear(), projectStartDate.getMonth() + monthIndex + 1, 0);
+      return { monthStart, monthEnd };
+    }
+
+    function getCardRange(card) {
+      const startDate = parseDateInput(card.dataset.startDate);
+      const endDate = parseDateInput(card.dataset.endDate);
+      if (!startDate || !endDate) return null;
+      return { startDate, endDate };
+    }
+
+    function getMonthLoadCounts(selectedCards) {
+      return Array.from({ length: totalTimelineMonths }, (_, monthIndex) => {
+        const monthNumber = monthIndex + 1;
+        const { monthStart, monthEnd } = getMonthDateRange(monthNumber);
+        return selectedCards.reduce((count, card) => {
+          const range = getCardRange(card);
+          if (!range) return count;
+
+          if (card.dataset.coaching === 'true') {
+            const entries = JSON.parse(card.dataset.coachDates || '[]')
+              .map((value) => new Date(value))
+              .filter((date) => !Number.isNaN(date.getTime()));
+            const hasSessionInMonth = entries.some((entry) => entry >= monthStart && entry <= monthEnd);
+            return count + (hasSessionInMonth ? 1 : 0);
+          }
+
+          const overlaps = range.startDate <= monthEnd && range.endDate >= monthStart;
+          return count + (overlaps ? 1 : 0);
+        }, 0);
+      });
+    }
+
+    function loadClassForCount(count) {
+      if (count >= 5) return 'timeline-heatmap-high';
+      if (count >= 3) return 'timeline-heatmap-medium';
+      return 'timeline-heatmap-low';
+    }
+
+    function progressForCardAtDate(card, cursorDate) {
+      const range = getCardRange(card);
+      if (!range) return 0;
+
+      if (card.dataset.coaching === 'true') {
+        const entries = JSON.parse(card.dataset.coachDates || '[]')
+          .map((value) => new Date(value))
+          .filter((date) => !Number.isNaN(date.getTime()))
+          .sort((a, b) => a - b);
+        if (!entries.length) return 0;
+        const passed = entries.filter((date) => date <= cursorDate).length;
+        return passed / entries.length;
+      }
+
+      if (cursorDate < range.startDate) return 0;
+      if (cursorDate >= range.endDate) return 1;
+      const fullSpanDays = Math.max(1, daysFromProjectStart(range.endDate) - daysFromProjectStart(range.startDate) + 1);
+      const elapsedDays = Math.max(0, daysFromProjectStart(cursorDate) - daysFromProjectStart(range.startDate) + 1);
+      return Math.max(0, Math.min(1, elapsedDays / fullSpanDays));
+    }
+
+    function buildProfileAtCursor(selectedCards, cursorDate) {
+      const profile = [...baseIstProfile];
+      selectedCards.forEach((card) => {
+        const impact = (card.dataset.impact || '').split(',').map((value) => Number(value.trim()) || 0);
+        const progress = progressForCardAtDate(card, cursorDate);
+        for (let i = 0; i < profile.length; i += 1) {
+          profile[i] += (impact[i] || 0) * progress;
+        }
+      });
+      return profile.map((value) => Math.min(100, value));
+    }
+
+    function setCursorPosition(percent) {
+      const cursor = timelineContainer?.querySelector('.timeline-sim-cursor');
+      if (cursor) cursor.style.left = `${Math.max(0, Math.min(100, percent))}%`;
+    }
+
+    function stopSimulation(resetStatus = false) {
+      if (simulationFrame) {
+        cancelAnimationFrame(simulationFrame);
+        simulationFrame = null;
+      }
+      if (simulateJourneyButton) simulateJourneyButton.disabled = false;
+      if (resetStatus && timelineSimulationStatus) {
+        timelineSimulationStatus.textContent = 'Die Simulation zeigt in Echtzeit, wie das Kompetenzprofil entlang der 18 Monate wächst.';
+      }
+    }
+
+    function runJourneySimulation() {
+      if (!timelineContainer) return;
+      const selectedCards = getSelectedCardsSorted();
+      if (!selectedCards.length) {
+        if (timelineSimulationStatus) {
+          timelineSimulationStatus.textContent = 'Bitte zuerst mindestens eine Maßnahme auf Folie 7 auswählen.';
+        }
+        return;
+      }
+
+      stopSimulation();
+      if (simulateJourneyButton) simulateJourneyButton.disabled = true;
+      if (timelineSimulationStatus) timelineSimulationStatus.textContent = 'Simulation läuft… Cursor bewegt sich über Monat 1–18.';
+
+      const startTs = performance.now();
+      const animate = (now) => {
+        const elapsed = now - startTs;
+        const progress = Math.min(1, elapsed / simulationDurationMs);
+        const cursorPercent = progress * 100;
+        const cursorDate = new Date(projectStartDate.getTime() + progress * (projectEndDate.getTime() - projectStartDate.getTime()));
+        setCursorPosition(cursorPercent);
+        renderTimelineRadar(buildProfileAtCursor(selectedCards, cursorDate));
+
+        if (progress < 1) {
+          simulationFrame = requestAnimationFrame(animate);
+        } else {
+          simulationFrame = null;
+          if (simulateJourneyButton) simulateJourneyButton.disabled = false;
+          if (timelineSimulationStatus) timelineSimulationStatus.textContent = 'Simulation abgeschlossen: Profil bei Monat 18 erreicht.';
+        }
+      };
+
+      simulationFrame = requestAnimationFrame(animate);
+    }
+
     function updateTimeline() {
       const selectedCards = getSelectedCardsSorted();
       if (selectedMeasuresBody) {
@@ -3094,6 +3406,8 @@
         const pos = (idx / 17) * 100;
         return `<div class="timeline-tick" style="left:${pos}%">M${idx + 1}</div>`;
       }).join('');
+      const monthCounts = getMonthLoadCounts(selectedCards);
+      const heatmap = monthCounts.map((count, idx) => `<span class="timeline-heatmap-cell ${loadClassForCount(count)}" title="Monat ${idx + 1}: ${count} aktive Maßnahmen"></span>`).join('');
 
       const bars = selectedCards.map((card) => {
         const startDate = parseDateInput(card.dataset.startDate);
@@ -3128,9 +3442,23 @@
 
       timelineContainer.innerHTML = `
         <div class="selected-measures-title">Grafische Timeline (Monat 1–18)</div>
-        <div class="timeline-axis"><div class="timeline-axis-scale">${axisTicks}</div></div>
+        <div class="timeline-axis">
+          <div class="timeline-axis-scale">
+            <div class="timeline-heatmap">${heatmap}</div>
+            ${axisTicks}
+          </div>
+        </div>
         <div class="timeline-bars">${bars || '<div class="m-date-hint">Wähle auf Folie 7 mindestens eine Maßnahme aus.</div>'}</div>
+        <div class="timeline-load-legend" aria-label="Belastungs-Legende">
+          <span class="timeline-load-legend-item"><span class="timeline-load-swatch timeline-heatmap-low"></span>0–2 Maßnahmen · optimale Last</span>
+          <span class="timeline-load-legend-item"><span class="timeline-load-swatch timeline-heatmap-medium"></span>3–4 Maßnahmen · hohe Last</span>
+          <span class="timeline-load-legend-item"><span class="timeline-load-swatch timeline-heatmap-high"></span>5+ Maßnahmen · Überlastungsgefahr</span>
+        </div>
+        <div class="timeline-sim-cursor" style="left:0%"></div>
       `;
+      setCursorPosition(0);
+      renderTimelineRadar(buildProfileAtCursor(selectedCards, projectStartDate));
+      stopSimulation(true);
     }
 
     measureCards.forEach((card) => {
@@ -3152,6 +3480,12 @@
 
     if (radarBasePolygon) {
       radarBasePolygon.setAttribute('points', profileToPoints(baseIstProfile).join(' '));
+    }
+    if (timelineRadarBasePolygon) {
+      timelineRadarBasePolygon.setAttribute('points', profileToPoints(baseIstProfile).join(' '));
+    }
+    if (simulateJourneyButton) {
+      simulateJourneyButton.addEventListener('click', runJourneySimulation);
     }
 
     renderSlideNav();
