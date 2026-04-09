@@ -176,7 +176,7 @@
 
   .deck-progress-fill {
     height: 100%;
-    width: calc(100% / 10);
+    width: calc(100% / 11);
     background: linear-gradient(to right, var(--steel), var(--accent));
     transition: width 220ms ease;
   }
@@ -1626,6 +1626,161 @@
     padding-top: 1.5rem;
   }
 
+
+  /* ════════════════════════════════════════
+     FOLIE 11 — GRAND FINALE
+  ════════════════════════════════════════ */
+  .slide-finale {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(212,168,83,0.12), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(200,75,49,0.12), transparent 44%),
+      var(--ink);
+    color: var(--white);
+  }
+
+  .slide-finale .slide-inner {
+    padding-top: 3.5rem;
+    gap: 1.4rem;
+  }
+
+  .slide-finale .slide-header {
+    border-bottom-color: rgba(255,255,255,0.16);
+  }
+
+  .slide-finale .slide-tag {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .slide-finale .slide-h1 {
+    color: var(--white);
+    font-size: 2.15rem;
+  }
+
+  .finale-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+
+  .finale-radar-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(212,168,83,0.35);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .finale-radar-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 0.65rem;
+  }
+
+  .finale-radar-sub {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.72);
+    margin-top: 0.45rem;
+    line-height: 1.5;
+  }
+
+  .finale-radar-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 18.4rem;
+  }
+
+  .finale-actions {
+    margin-top: 0.2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .mission-button {
+    border: 1px solid rgba(212,168,83,0.75);
+    background: linear-gradient(135deg, rgba(212,168,83,0.35), rgba(212,168,83,0.18));
+    color: var(--white);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    padding: 0.95rem 3rem;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.08);
+    transition: transform 140ms ease, box-shadow 180ms ease, background 180ms ease;
+  }
+
+  .mission-button:hover,
+  .mission-button:focus-visible {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.4), 0 0 24px rgba(212,168,83,0.3);
+    background: linear-gradient(135deg, rgba(212,168,83,0.5), rgba(212,168,83,0.24));
+    outline: none;
+  }
+
+  .finale-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .slide-finale.celebrate .finale-canvas {
+    opacity: 1;
+  }
+
+  .commitment-board {
+    position: absolute;
+    left: 50%;
+    top: 53%;
+    transform: translate(-50%, -50%) scale(0.92);
+    width: min(85%, 38rem);
+    background: linear-gradient(165deg, rgba(17,17,32,0.97), rgba(30,30,52,0.96));
+    border: 1px solid rgba(212,168,83,0.45);
+    border-radius: 16px;
+    padding: 1.6rem 1.8rem;
+    box-shadow: 0 20px 44px rgba(0,0,0,0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+
+  .commitment-board.is-visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .commitment-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .commitment-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    line-height: 1.25;
+    color: var(--white);
+  }
+
+  .commitment-sub {
+    margin-top: 0.7rem;
+    font-size: 0.76rem;
+    color: rgba(255,255,255,0.76);
+    line-height: 1.6;
+  }
+
   /* ── MISC ── */
   .divider {
     height: 1px;
@@ -1641,7 +1796,7 @@
     <button class="deck-btn nav-arrow" id="deck-prev" type="button" aria-label="Vorherige Folie">←</button>
     <button class="deck-btn nav-arrow" id="deck-next" type="button" aria-label="Nächste Folie">→</button>
     <button class="deck-btn" id="deck-nav-toggle" type="button">Agenda</button>
-    <div class="deck-page" id="deck-page">01 / 10</div>
+    <div class="deck-page" id="deck-page">01 / 11</div>
   </div>
 </div>
 <div class="deck-progress" aria-hidden="true">
@@ -1676,7 +1831,7 @@
     </div>
   </div>
   <div class="cover-stripe"></div>
-  <div class="slide-number" style="color:rgba(255,255,255,0.25)">01 / 10</div>
+  <div class="slide-number" style="color:rgba(255,255,255,0.25)">01 / 11</div>
 </div>
 
 
@@ -1736,7 +1891,7 @@
       <div class="otj-banner-text"><strong>Warum off-the-job für Führungskräfteentwicklung?</strong> Führungskompetenzen erfordern kognitive Auseinandersetzung mit Modellen, kritische Selbstreflexion und das Einüben neuer Verhaltensmuster in geschütztem Rahmen. All das ist im laufenden Schichtbetrieb strukturell nicht leistbar. Off-the-job schafft den notwendigen Lern- und Reflexionsraum — z. B. durch <span class="inline-icon mini" aria-hidden="true">📘</span>Seminare und <span class="inline-icon mini" aria-hidden="true">💬</span>Coaching.</div>
     </div>
   </div>
-  <div class="slide-number">02 / 10</div>
+  <div class="slide-number">02 / 11</div>
 </div>
 
 
@@ -1838,7 +1993,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">03 / 10</div>
+  <div class="slide-number">03 / 11</div>
 </div>
 
 
@@ -1964,7 +2119,7 @@
 
     </div>
   </div>
-  <div class="slide-number">04 / 10</div>
+  <div class="slide-number">04 / 11</div>
 </div>
 
 
@@ -2087,7 +2242,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">05 / 10</div>
+  <div class="slide-number">05 / 11</div>
 </div>
 
 
@@ -2242,7 +2397,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">06 / 10</div>
+  <div class="slide-number">06 / 11</div>
 </div>
 
 
@@ -2366,7 +2521,7 @@
 
     </div>
   </div>
-  <div class="slide-number">07 / 10</div>
+  <div class="slide-number">07 / 11</div>
 </div>
 
 
@@ -2490,7 +2645,7 @@
     <div id="timeline-container" aria-label="18-Monate-Timeline"></div>
 
   </div>
-  <div class="slide-number">08 / 10</div>
+  <div class="slide-number">08 / 11</div>
 </div>
 
 
@@ -2606,7 +2761,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">09 / 10</div>
+  <div class="slide-number">09 / 11</div>
 </div>
 
 
@@ -2645,8 +2800,96 @@
   </div>
 
   <div class="fazit-footer">Personalentwicklung · Kompetenzmanagement · Führung · Entwicklungsplan Niklas S.</div>
-  <div class="slide-number" style="color:rgba(255,255,255,0.25)">10 / 10</div>
+  <div class="slide-number" style="color:rgba(255,255,255,0.25)">10 / 11</div>
 </div>
+
+<!-- ════════════════════════════════════════
+     FOLIE 11 — GRAND FINALE
+════════════════════════════════════════ -->
+<div class="slide slide-finale" id="slide-finale">
+  <canvas class="finale-canvas" id="finale-canvas" aria-hidden="true"></canvas>
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Grand Finale</span>
+      <h1 class="slide-h1">Transformation: Von der Fachkraft zur Führungspersönlichkeit</h1>
+    </div>
+
+    <div class="finale-compare">
+      <div class="finale-radar-card">
+        <div class="finale-radar-title">Vorher · Ist-Zustand</div>
+        <div class="finale-radar-wrap">
+          <svg viewBox="-130 -130 260 260" width="100%" height="280" aria-label="Radarchart Ist-Zustand">
+            <g stroke="rgba(255,255,255,0.18)" fill="none">
+              <polygon points="0,-108 93,-54 93,54 0,108 -93,54 -93,-54"/>
+              <polygon points="0,-86 74,-43 74,43 0,86 -74,43 -74,-43"/>
+              <polygon points="0,-64 55,-32 55,32 0,64 -55,32 -55,-32"/>
+              <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21"/>
+              <polygon points="0,-20 17,-10 17,10 0,20 -17,10 -17,-10"/>
+            </g>
+            <g stroke="rgba(255,255,255,0.28)">
+              <line x1="0" y1="0" x2="0" y2="-108"/><line x1="0" y1="0" x2="93" y2="-54"/>
+              <line x1="0" y1="0" x2="93" y2="54"/><line x1="0" y1="0" x2="0" y2="108"/>
+              <line x1="0" y1="0" x2="-93" y2="54"/><line x1="0" y1="0" x2="-93" y2="-54"/>
+            </g>
+            <polygon id="finale-ist-polygon" fill="rgba(212,168,83,0.44)" stroke="var(--gold)" stroke-width="2"></polygon>
+            <g fill="#f4ede1" font-family="DM Sans" font-size="9">
+              <text x="0" y="-118" text-anchor="middle">Fach</text>
+              <text x="101" y="-58">Methodik</text>
+              <text x="103" y="58">Selbst</text>
+              <text x="0" y="122" text-anchor="middle">Pers.führung</text>
+              <text x="-99" y="58" text-anchor="end">Konflikt</text>
+              <text x="-99" y="-50" text-anchor="end">Durchsetzen</text>
+            </g>
+          </svg>
+        </div>
+        <div class="finale-radar-sub">Startprofil als Basis der Reise — Fokus auf fachliche Stärke, mit klaren Führungs-Gaps.</div>
+      </div>
+
+      <div class="finale-radar-card">
+        <div class="finale-radar-title">Nach 18 Monaten · Soll-Projektion</div>
+        <div class="finale-radar-wrap">
+          <svg viewBox="-130 -130 260 260" width="100%" height="280" aria-label="Radarchart Soll-Zustand">
+            <g stroke="rgba(255,255,255,0.18)" fill="none">
+              <polygon points="0,-108 93,-54 93,54 0,108 -93,54 -93,-54"/>
+              <polygon points="0,-86 74,-43 74,43 0,86 -74,43 -74,-43"/>
+              <polygon points="0,-64 55,-32 55,32 0,64 -55,32 -55,-32"/>
+              <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21"/>
+              <polygon points="0,-20 17,-10 17,10 0,20 -17,10 -17,-10"/>
+            </g>
+            <g stroke="rgba(255,255,255,0.28)">
+              <line x1="0" y1="0" x2="0" y2="-108"/><line x1="0" y1="0" x2="93" y2="-54"/>
+              <line x1="0" y1="0" x2="93" y2="54"/><line x1="0" y1="0" x2="0" y2="108"/>
+              <line x1="0" y1="0" x2="-93" y2="54"/><line x1="0" y1="0" x2="-93" y2="-54"/>
+            </g>
+            <polygon id="finale-soll-polygon" fill="rgba(74,111,165,0.5)" stroke="#8cb6ea" stroke-width="2"></polygon>
+            <g fill="#f4ede1" font-family="DM Sans" font-size="9">
+              <text x="0" y="-118" text-anchor="middle">Fach</text>
+              <text x="101" y="-58">Methodik</text>
+              <text x="103" y="58">Selbst</text>
+              <text x="0" y="122" text-anchor="middle">Pers.führung</text>
+              <text x="-99" y="58" text-anchor="end">Konflikt</text>
+              <text x="-99" y="-50" text-anchor="end">Durchsetzen</text>
+            </g>
+          </svg>
+        </div>
+        <div class="finale-radar-sub">Dynamische Zielkurve auf Basis der gewählten Maßnahmen von Folie 7.</div>
+      </div>
+    </div>
+
+    <div class="finale-actions">
+      <button class="mission-button" id="mission-start" type="button">Mission Starten</button>
+    </div>
+  </div>
+
+  <div class="commitment-board" id="commitment-board" aria-live="polite">
+    <div class="commitment-label">Urkunde · Commitment Board</div>
+    <div class="commitment-title">Niklas S. – Road to Leadership: 2024-2025</div>
+    <div class="commitment-sub">Der Entwicklungsplan wird verbindlich gestartet. Fokus: sichtbarer Kompetenzaufbau, konsequenter Transfer und verantwortliche Führungsübernahme in 18 Monaten.</div>
+  </div>
+
+  <div class="slide-number" style="color:rgba(255,255,255,0.25)">11 / 11</div>
+</div>
+
 
 <script>
   (function () {
@@ -2658,6 +2901,12 @@
     const navPanel = document.getElementById('slide-nav');
     const navOverlay = document.getElementById('slide-nav-overlay');
     const progressFill = document.getElementById('deck-progress-fill');
+    const finaleIstPolygon = document.getElementById('finale-ist-polygon');
+    const finaleSollPolygon = document.getElementById('finale-soll-polygon');
+    const missionButton = document.getElementById('mission-start');
+    const finaleCanvas = document.getElementById('finale-canvas');
+    const commitmentBoard = document.getElementById('commitment-board');
+    const finaleSlide = document.getElementById('slide-finale');
     let currentIndex = 0;
     let navItems = [];
 
@@ -2668,6 +2917,8 @@
       if (coverTitle) return coverTitle.textContent.replace(/\s+/g, ' ').trim();
       const fazitTitle = slide.querySelector('.fazit-heading');
       if (fazitTitle) return fazitTitle.textContent.trim();
+      const missionTitle = slide.querySelector('#mission-start');
+      if (missionTitle) return 'Transformation: Von der Fachkraft zur Führungspersönlichkeit';
       return `Folie ${fallbackIndex + 1}`;
     }
 
@@ -2788,6 +3039,114 @@
     const projectEndDate = new Date(2027, 9, 31);
     const totalTimelineDays = Math.max(1, Math.round((projectEndDate - projectStartDate) / 86400000) + 1);
     const totalTimelineMonths = 18;
+
+    function updateFinaleComparison(nextProfile) {
+      if (finaleIstPolygon) {
+        finaleIstPolygon.setAttribute('points', profileToPoints(baseIstProfile).join(' '));
+      }
+      if (finaleSollPolygon) {
+        finaleSollPolygon.setAttribute('points', profileToPoints(nextProfile).join(' '));
+      }
+    }
+
+    function playSuccessSound() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      const ctx = new Ctx();
+      const now = ctx.currentTime;
+
+      const noteA = ctx.createOscillator();
+      const gainA = ctx.createGain();
+      noteA.type = 'triangle';
+      noteA.frequency.setValueAtTime(659.25, now);
+      gainA.gain.setValueAtTime(0.0001, now);
+      gainA.gain.exponentialRampToValueAtTime(0.08, now + 0.015);
+      gainA.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+      noteA.connect(gainA).connect(ctx.destination);
+      noteA.start(now);
+      noteA.stop(now + 0.26);
+
+      const noteB = ctx.createOscillator();
+      const gainB = ctx.createGain();
+      noteB.type = 'triangle';
+      noteB.frequency.setValueAtTime(880, now + 0.12);
+      gainB.gain.setValueAtTime(0.0001, now + 0.12);
+      gainB.gain.exponentialRampToValueAtTime(0.065, now + 0.14);
+      gainB.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+      noteB.connect(gainB).connect(ctx.destination);
+      noteB.start(now + 0.12);
+      noteB.stop(now + 0.44);
+
+      setTimeout(() => {
+        ctx.close();
+      }, 520);
+    }
+
+    function launchConfetti() {
+      if (!finaleCanvas || !finaleSlide) return;
+      const ctx = finaleCanvas.getContext('2d');
+      if (!ctx) return;
+
+      const rect = finaleSlide.getBoundingClientRect();
+      finaleCanvas.width = Math.max(1, Math.floor(rect.width * window.devicePixelRatio));
+      finaleCanvas.height = Math.max(1, Math.floor(rect.height * window.devicePixelRatio));
+      finaleCanvas.style.width = `${rect.width}px`;
+      finaleCanvas.style.height = `${rect.height}px`;
+      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+
+      const colors = ['#d4a853', '#c84b31', '#4a6fa5', '#ffffff'];
+      const particles = Array.from({ length: 150 }, () => ({
+        x: Math.random() * rect.width,
+        y: -20 - Math.random() * rect.height * 0.35,
+        vx: (Math.random() - 0.5) * 3.5,
+        vy: 2 + Math.random() * 3,
+        size: 4 + Math.random() * 7,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * Math.PI,
+        spin: (Math.random() - 0.5) * 0.3
+      }));
+
+      finaleSlide.classList.add('celebrate');
+      let start = null;
+      const duration = 2100;
+
+      function frame(timestamp) {
+        if (!start) start = timestamp;
+        const elapsed = timestamp - start;
+        ctx.clearRect(0, 0, rect.width, rect.height);
+
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.06;
+          p.rotation += p.spin;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+          ctx.restore();
+        });
+
+        if (elapsed < duration) {
+          requestAnimationFrame(frame);
+        } else {
+          ctx.clearRect(0, 0, rect.width, rect.height);
+          finaleSlide.classList.remove('celebrate');
+        }
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    function triggerFinale() {
+      launchConfetti();
+      playSuccessSound();
+      if (commitmentBoard) {
+        commitmentBoard.classList.add('is-visible');
+      }
+    }
 
     function formatDate(date) {
       const dd = String(date.getDate()).padStart(2, '0');
@@ -3153,7 +3512,8 @@
         }
       });
 
-      const points = profileToPoints(nextProfile.map((value) => Math.min(100, value)));
+      const cappedProfile = nextProfile.map((value) => Math.min(100, value));
+      const points = profileToPoints(cappedProfile);
       radarProjectionPolygon.setAttribute('points', points.join(' '));
       radarPoints.innerHTML = points
         .map((point) => {
@@ -3165,6 +3525,8 @@
       if (measureCountLabel) {
         measureCountLabel.textContent = `${selectedCards.length} Maßnahme${selectedCards.length === 1 ? '' : 'n'} aktiv`;
       }
+
+      updateFinaleComparison(cappedProfile);
     }
 
     function getSelectedCardsSorted() {
@@ -3348,6 +3710,12 @@
 
     if (radarBasePolygon) {
       radarBasePolygon.setAttribute('points', profileToPoints(baseIstProfile).join(' '));
+    }
+
+    updateFinaleComparison(baseIstProfile);
+
+    if (missionButton) {
+      missionButton.addEventListener('click', triggerFinale);
     }
 
     renderSlideNav();
