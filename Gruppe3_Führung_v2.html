@@ -87,6 +87,13 @@
     color: var(--steel);
   }
 
+  .deck-btn.nav-arrow {
+    min-width: 1.8rem;
+    padding: 0.28rem 0.4rem;
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+
   .slide-nav {
     position: fixed;
     top: 2.9rem;
@@ -103,6 +110,18 @@
   }
 
   .slide-nav.is-open {
+    display: block;
+  }
+
+  .slide-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1090;
+    background: rgba(0,0,0,0.08);
+    display: none;
+  }
+
+  .slide-nav-overlay.is-open {
     display: block;
   }
 
@@ -157,7 +176,7 @@
 
   .deck-progress-fill {
     height: 100%;
-    width: 10%;
+    width: calc(100% / 10);
     background: linear-gradient(to right, var(--steel), var(--accent));
     transition: width 220ms ease;
   }
@@ -785,6 +804,15 @@
   .s-teil     { background: #fff3e0; color: #e65100; }
   .s-luecke   { background: #fce4ec; color: #c62828; }
 
+  .ab-values {
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 0.2rem;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+  }
+
   .ab-legend-row {
     display: flex;
     gap: 1.8rem;
@@ -837,40 +865,6 @@
     margin-top: 0.2rem;
   }
 
-  .m-radar-count {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 700;
-    margin-top: 0.2rem;
-  }
-
-  .m-radar-card {
-    background: var(--white);
-    padding: 1rem 1.1rem;
-    border: 1px solid var(--light);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .m-radar-copy {
-    width: 100%;
-    font-size: 0.73rem;
-    line-height: 1.45;
-    color: var(--muted);
-  }
-
-  .m-radar-copy strong {
-    color: var(--ink);
-  }
-
   .m-radar-card {
     background: var(--white);
     border: 1px solid var(--light);
@@ -890,18 +884,6 @@
 
   .m-radar-copy strong {
     color: var(--ink);
-  }
-
-  .m-radar-count {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 700;
-    margin-top: 0.2rem;
   }
 
   .m-card {
@@ -1287,8 +1269,59 @@
 
   .fc-text {
     font-size: 0.7rem;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.8);
     line-height: 1.6;
+  }
+
+  .zeitplan-logic {
+    background: #f9f7f2;
+    border-left: 3px solid var(--gold);
+    padding: 0.75rem 1rem;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    color: #5f5a53;
+    margin-bottom: 0.8rem;
+  }
+
+  .risiko-matrix {
+    margin-top: 0.9rem;
+    background: #f9f7f2;
+    border: 1px solid var(--light);
+    padding: 0.8rem;
+  }
+
+  .risiko-matrix-title {
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .risiko-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.68rem;
+  }
+
+  .risiko-table th,
+  .risiko-table td {
+    border-bottom: 1px solid #e6e1d9;
+    padding: 0.35rem 0.25rem;
+    text-align: left;
+  }
+
+  .risiko-table th {
+    color: var(--muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .risk-prio {
+    font-weight: 700;
+    color: var(--accent);
   }
 
   .fazit-footer {
@@ -1310,8 +1343,10 @@
 </head>
 <body>
 <div class="deck-header">
-  <div class="deck-meta">Führung · DHBW SST · Niklas Schröder &amp; Angelina Diesterweg</div>
+  <div class="deck-meta">Gruppe 3 · Führung · DHBW SST</div>
   <div class="deck-controls">
+    <button class="deck-btn nav-arrow" id="deck-prev" type="button" aria-label="Vorherige Folie">←</button>
+    <button class="deck-btn nav-arrow" id="deck-next" type="button" aria-label="Nächste Folie">→</button>
     <button class="deck-btn" id="deck-nav-toggle" type="button">Agenda</button>
     <div class="deck-page" id="deck-page">01 / 10</div>
   </div>
@@ -1319,6 +1354,7 @@
 <div class="deck-progress" aria-hidden="true">
   <div class="deck-progress-fill" id="deck-progress-fill"></div>
 </div>
+<div class="slide-nav-overlay" id="slide-nav-overlay" aria-hidden="true"></div>
 <div class="slide-nav" id="slide-nav" aria-label="Foliennavigation"></div>
 
 <!-- ════════════════════════════════════════
@@ -1792,6 +1828,7 @@
             <div class="ab-ist-fill" style="width:70%"></div>
             <div class="ab-soll-line" style="left:70%"></div>
           </div>
+          <div class="ab-values">70 → 70</div>
         </div>
         <div class="ab-status s-stark">✓ Ausreichend</div>
       </div>
@@ -1804,6 +1841,7 @@
             <div class="ab-ist-fill" style="width:86%"></div>
             <div class="ab-soll-line" style="left:75%"></div>
           </div>
+          <div class="ab-values">86 → 75</div>
         </div>
         <div class="ab-status s-stark">✓ Ausreichend</div>
       </div>
@@ -1816,6 +1854,7 @@
             <div class="ab-ist-fill" style="width:90%"></div>
             <div class="ab-soll-line" style="left:80%"></div>
           </div>
+          <div class="ab-values">90 → 80</div>
         </div>
         <div class="ab-status s-stark">✓ Ausreichend</div>
       </div>
@@ -1829,6 +1868,7 @@
             <div class="ab-ist-fill" style="width:55%"></div>
             <div class="ab-soll-line" style="left:85%"></div>
           </div>
+          <div class="ab-values">55 → 85</div>
         </div>
         <div class="ab-status s-teil">◑ Ausbaubedarf</div>
       </div>
@@ -1841,6 +1881,7 @@
             <div class="ab-ist-fill" style="width:40%"></div>
             <div class="ab-soll-line" style="left:80%"></div>
           </div>
+          <div class="ab-values">40 → 80</div>
         </div>
         <div class="ab-status s-teil">◑ Ausbaubedarf</div>
       </div>
@@ -1854,6 +1895,7 @@
             <div class="ab-ist-fill" style="width:35%;background:var(--accent)"></div>
             <div class="ab-soll-line" style="left:88%"></div>
           </div>
+          <div class="ab-values">35 → 88</div>
         </div>
         <div class="ab-status s-luecke">⚠ Lücke</div>
       </div>
@@ -1866,6 +1908,7 @@
             <div class="ab-ist-fill" style="width:28%;background:var(--accent)"></div>
             <div class="ab-soll-line" style="left:85%"></div>
           </div>
+          <div class="ab-values">28 → 85</div>
         </div>
         <div class="ab-status s-luecke">⚠ Lücke</div>
       </div>
@@ -1878,6 +1921,7 @@
             <div class="ab-ist-fill" style="width:10%;background:var(--accent)"></div>
             <div class="ab-soll-line" style="left:92%"></div>
           </div>
+          <div class="ab-values">10 → 92</div>
         </div>
         <div class="ab-status s-luecke">⚠ Kritische Lücke</div>
       </div>
@@ -1890,6 +1934,7 @@
             <div class="ab-ist-fill" style="width:0%;background:var(--accent)"></div>
             <div class="ab-soll-line" style="left:92%"></div>
           </div>
+          <div class="ab-values">0 → 92</div>
         </div>
         <div class="ab-status s-luecke">⚠ Fehlt vollständig</div>
       </div>
@@ -2039,6 +2084,10 @@
     <div class="slide-header">
       <span class="slide-tag">Zeitplanung</span>
       <h1 class="slide-h1">Zeitlicher Fahrplan — Aufbau vor Transfer</h1>
+    </div>
+
+    <div class="zeitplan-logic">
+      Die Sequenz folgt der Lernlogik: Zuerst off-the-job Grundlagen (Führungsmodelle, Recht, Konfliktkompetenz), dann begleiteter Near-/On-the-job-Transfer. So sinkt das operative Risiko, bevor echte Personalverantwortung schrittweise übernommen wird.
     </div>
 
     <div class="zeitplan">
@@ -2200,6 +2249,46 @@
             <div><strong>On-the-job:</strong> Im kontrollierten Ernstfall anwenden — mit Reflexionsschleife</div>
           </div>
         </div>
+
+        <div class="risiko-matrix">
+          <div class="risiko-matrix-title">Priorisierungsmatrix (Wahrscheinlichkeit × Auswirkung)</div>
+          <table class="risiko-table" aria-label="Risikomatrix">
+            <thead>
+              <tr>
+                <th>Risiko</th>
+                <th>Wahrsch.</th>
+                <th>Auswirkung</th>
+                <th>Priorität</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Transferproblem</td>
+                <td>4/5</td>
+                <td>5/5</td>
+                <td class="risk-prio">20 (sehr hoch)</td>
+              </tr>
+              <tr>
+                <td>Durchsetzungsproblem</td>
+                <td>3/5</td>
+                <td>5/5</td>
+                <td class="risk-prio">15 (hoch)</td>
+              </tr>
+              <tr>
+                <td>Freistellung</td>
+                <td>4/5</td>
+                <td>4/5</td>
+                <td class="risk-prio">16 (hoch)</td>
+              </tr>
+              <tr>
+                <td>Akzeptanz Finishing</td>
+                <td>3/5</td>
+                <td>4/5</td>
+                <td class="risk-prio">12 (mittel-hoch)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -2250,7 +2339,10 @@
     const slides = Array.from(document.querySelectorAll('.slide'));
     const pageIndicator = document.getElementById('deck-page');
     const navToggle = document.getElementById('deck-nav-toggle');
+    const prevButton = document.getElementById('deck-prev');
+    const nextButton = document.getElementById('deck-next');
     const navPanel = document.getElementById('slide-nav');
+    const navOverlay = document.getElementById('slide-nav-overlay');
     const progressFill = document.getElementById('deck-progress-fill');
     let currentIndex = 0;
     let navItems = [];
@@ -2263,6 +2355,11 @@
       const fazitTitle = slide.querySelector('.fazit-heading');
       if (fazitTitle) return fazitTitle.textContent.trim();
       return `Folie ${fallbackIndex + 1}`;
+    }
+
+    function setNavOpen(isOpen) {
+      navPanel?.classList.toggle('is-open', isOpen);
+      navOverlay?.classList.toggle('is-open', isOpen);
     }
 
     function renderSlideNav() {
@@ -2279,7 +2376,7 @@
         `;
         item.addEventListener('click', () => {
           goToSlide(index);
-          navPanel.classList.remove('is-open');
+          setNavOpen(false);
         });
         navPanel.appendChild(item);
         return item;
@@ -2308,6 +2405,7 @@
       if (nextIndex < 0 || nextIndex >= slides.length) return;
       currentIndex = nextIndex;
       renderSlides();
+      setNavOpen(false);
       slides[currentIndex].scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }
 
@@ -2328,29 +2426,32 @@
         goToSlide(slides.length - 1);
       } else if (event.key.toLowerCase() === 'm') {
         event.preventDefault();
-        navPanel.classList.toggle('is-open');
+        setNavOpen(!navPanel?.classList.contains('is-open'));
       } else if (event.key === 'Escape') {
-        navPanel.classList.remove('is-open');
+        setNavOpen(false);
       }
     });
 
     navToggle?.addEventListener('click', () => {
-      navPanel.classList.toggle('is-open');
+      setNavOpen(!navPanel?.classList.contains('is-open'));
     });
 
-    document.addEventListener('click', (event) => {
+    prevButton?.addEventListener('click', () => goToSlide(currentIndex - 1));
+    nextButton?.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+    navOverlay?.addEventListener('click', () => {
+      setNavOpen(false);
+    });
+
+    window.addEventListener('click', (event) => {
       if (!navPanel || !navToggle) return;
       const clickedInsideMenu = navPanel.contains(event.target);
       const clickedToggle = navToggle.contains(event.target);
-      if (!clickedInsideMenu && !clickedToggle) {
-        navPanel.classList.remove('is-open');
+      const clickedOverlay = navOverlay?.contains(event.target);
+      if (!clickedInsideMenu && !clickedToggle && !clickedOverlay) {
+        setNavOpen(false);
       }
     });
-
-    const duplicateRadarCards = Array.from(document.querySelectorAll('.m-radar-card'));
-    if (duplicateRadarCards.length > 1) {
-      duplicateRadarCards.slice(0, -1).forEach((card) => card.remove());
-    }
 
     const baseIstProfile = [87, 65, 75, 12, 30, 38];
     const radarVectors = [
