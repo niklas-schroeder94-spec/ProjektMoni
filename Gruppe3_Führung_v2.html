@@ -3091,25 +3091,26 @@
         const leftPercent = (daysFromProjectStart(startDate) / totalTimelineDays) * 100;
         const widthPercent = ((daysFromProjectStart(endDate) - daysFromProjectStart(startDate) + 1) / totalTimelineDays) * 100;
 
+        const isCoaching = card.dataset.coaching === 'true';
         let coachingMarks = '';
-        if (card.dataset.coaching === 'true') {
+        if (isCoaching) {
           const entries = JSON.parse(card.dataset.coachDates || '[]')
             .map((value) => new Date(value))
             .filter((date) => !Number.isNaN(date.getTime()));
           coachingMarks = entries.map((date) => {
-            const relPercent = ((daysFromProjectStart(date) - daysFromProjectStart(startDate)) / Math.max(1, (daysFromProjectStart(endDate) - daysFromProjectStart(startDate)))) * 100;
+            const relPercent = (daysFromProjectStart(date) / totalTimelineDays) * 100;
             return `<span class="timeline-point" style="left:${Math.max(0, Math.min(100, relPercent))}%"></span>`;
           }).join('');
         }
 
+        const barMarkup = isCoaching
+          ? coachingMarks
+          : `<div class="timeline-bar" style="left:${Math.max(0, leftPercent)}%;width:${Math.max(1.2, widthPercent)}%"></div>`;
+
         return `
           <div class="timeline-row">
             <div class="timeline-row-label">${getMeasureName(card)}</div>
-            <div class="timeline-track">
-              <div class="timeline-bar" style="left:${Math.max(0, leftPercent)}%;width:${Math.max(1.2, widthPercent)}%">
-                ${coachingMarks}
-              </div>
-            </div>
+            <div class="timeline-track">${barMarkup}</div>
           </div>
         `;
       }).join('');
