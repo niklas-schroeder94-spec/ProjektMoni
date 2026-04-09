@@ -2278,6 +2278,7 @@
     const navToggle = document.getElementById('deck-nav-toggle');
     const navPanel = document.getElementById('slide-nav');
     const progressFill = document.getElementById('deck-progress-fill');
+<<<<<<< codex/find-html-access-in-repository
     const impactIst = document.getElementById('impact-ist');
     const impactProj = document.getElementById('impact-proj');
     const impactSelected = document.getElementById('impact-selected');
@@ -2290,6 +2291,11 @@
     const maxModel = [95, 90, 90, 92, 88, 90];
     const competencyNames = ['Fach', 'Methodik', 'Selbst', 'Führung', 'Konflikt', 'Durchsetzen'];
 
+=======
+    let currentIndex = 0;
+    let navItems = [];
+
+>>>>>>> main
     function getSlideTitle(slide, fallbackIndex) {
       const heading = slide.querySelector('.slide-h1');
       if (heading) return heading.textContent.trim();
@@ -2321,6 +2327,7 @@
       });
     }
 
+<<<<<<< codex/find-html-access-in-repository
     function modelToPoints(values, radius = 74) {
       const step = (Math.PI * 2) / 6;
       return values
@@ -2369,6 +2376,8 @@
       }
     }
 
+=======
+>>>>>>> main
     function renderSlides() {
       slides.forEach((slide, index) => {
         slide.classList.toggle('is-hidden', index !== currentIndex);
@@ -2430,6 +2439,7 @@
       }
     });
 
+<<<<<<< codex/find-html-access-in-repository
     measureCards.forEach((card) => {
       card.setAttribute('tabindex', '0');
       card.setAttribute('role', 'button');
@@ -2446,6 +2456,8 @@
       updateImpactModel(measureCards[0]);
     }
 
+=======
+>>>>>>> main
     renderSlideNav();
     renderSlides();
   })();
