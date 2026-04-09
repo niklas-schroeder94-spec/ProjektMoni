@@ -1029,6 +1029,7 @@
   }
 
   .m-date-field input,
+  .m-date-select,
   .coach-slot input {
     font-family: 'DM Sans', sans-serif;
     border: 1px solid #d9d3c8;
@@ -1036,6 +1037,10 @@
     color: var(--ink);
     padding: 0.3rem 0.35rem;
     font-size: 0.7rem;
+  }
+
+  .m-date-select {
+    width: 100%;
   }
 
   .m-date-hint {
@@ -1215,7 +1220,7 @@
     margin-left: calc(var(--timeline-label-width) + 0.3rem);
     height: 2.2rem;
     border-bottom: 2px solid var(--light);
-    overflow: hidden;
+    overflow: visible;
   }
 
   .timeline-heatmap {
@@ -2299,7 +2304,7 @@
       <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20" data-coaching="true">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (8 Sitzungen)</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (6 Sitzungen)</div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
         <div class="m-text">Individuelle Bearbeitung von Verhaltensmustern, die in Gruppensettings oft verborgen bleiben. Die Maßnahme adressiert das Defizit im Durchsetzungsverhalten, weil persönliche Hemmungen, Konfliktmuster und Entscheidungsunsicherheit gezielt bearbeitet werden. Begleitend über die gesamte Entwicklungsphase.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2834,34 +2839,69 @@
       return safeDate;
     }
 
-    function randomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function randomWeekday(minDate, maxDate) {
-      const days = Math.round((maxDate - minDate) / 86400000);
-      let candidate = new Date(minDate.getTime());
-      for (let attempts = 0; attempts < 150; attempts += 1) {
-        const offset = randomInt(0, Math.max(0, days));
-        candidate = new Date(minDate.getTime());
-        candidate.setDate(candidate.getDate() + offset);
-        if (isWeekday(candidate)) return candidate;
-      }
-      return ensureWeekday(candidate, 1);
-    }
-
-    const MAX_NON_COACHING_DURATION_DAYS = 7;
     const coachingPhasePlan = [
-      { startMonth: 1, endMonth: 4, slots: 4 },
+      { startMonth: 1, endMonth: 4, slots: 3 },
       { startMonth: 5, endMonth: 10, slots: 2 },
-      { startMonth: 11, endMonth: 18, slots: 2 }
+      { startMonth: 11, endMonth: 18, slots: 1 }
     ];
 
+    const fixedTermineByMeasure = {
+      'Führungskräfteseminar „Führung im Industriebetrieb"': [
+        { start: '2026-05-11', end: '2026-05-13' },
+        { start: '2026-06-15', end: '2026-06-17' },
+        { start: '2026-08-03', end: '2026-08-05' }
+      ],
+      'AdA-Kurs — Ausbildereignungsprüfung (IHK)': [
+        { start: '2026-05-25', end: '2026-05-29' },
+        { start: '2026-07-06', end: '2026-07-10' },
+        { start: '2026-08-17', end: '2026-08-21' }
+      ],
+      'Seminar „Konfliktmanagement in der Produktion"': [
+        { start: '2026-06-22', end: '2026-06-24' },
+        { start: '2026-07-20', end: '2026-07-22' },
+        { start: '2026-08-10', end: '2026-08-12' }
+      ],
+      'Planspiel „Produktionssteuerung & Wirtschaftlichkeit"': [
+        { start: '2026-09-14', end: '2026-09-16' },
+        { start: '2026-11-09', end: '2026-11-11' },
+        { start: '2027-01-18', end: '2027-01-20' }
+      ],
+      'Workshop „Arbeitsrecht für Führungskräfte"': [
+        { start: '2026-10-05', end: '2026-10-06' },
+        { start: '2026-12-07', end: '2026-12-08' },
+        { start: '2027-02-01', end: '2027-02-02' }
+      ],
+      'Strukturierte Hospitation Finishing-Abteilung': [
+        { start: '2026-05-18', end: '2026-06-12' },
+        { start: '2026-06-29', end: '2026-07-24' },
+        { start: '2026-07-27', end: '2026-08-21' }
+      ],
+      'Vertretungsmandat Leitung Finishing (schrittweise)': [
+        { start: '2026-09-07', end: '2026-10-16' },
+        { start: '2026-11-02', end: '2026-12-18' },
+        { start: '2027-01-11', end: '2027-02-26' }
+      ]
+    };
+
     function getPhaseMonthsByIndex(index) {
-      const position = index + 1;
-      if (position <= 4) return { startMonth: 1, endMonth: 4 };
-      if (position <= 7) return { startMonth: 5, endMonth: 10 };
-      return { startMonth: 11, endMonth: 18 };
+      const card = measureCards[index];
+      const name = getMeasureName(card);
+      if (
+        name === 'Führungskräfteseminar „Führung im Industriebetrieb"'
+        || name === 'AdA-Kurs — Ausbildereignungsprüfung (IHK)'
+        || name === 'Seminar „Konfliktmanagement in der Produktion"'
+        || name === 'Strukturierte Hospitation Finishing-Abteilung'
+      ) {
+        return { startMonth: 1, endMonth: 4 };
+      }
+      if (
+        name === 'Planspiel „Produktionssteuerung & Wirtschaftlichkeit"'
+        || name === 'Workshop „Arbeitsrecht für Führungskräfte"'
+        || name === 'Vertretungsmandat Leitung Finishing (schrittweise)'
+      ) {
+        return { startMonth: 5, endMonth: 10 };
+      }
+      return { startMonth: 1, endMonth: 18 };
     }
 
     function getPhaseLabelByIndex(index) {
@@ -2907,43 +2947,19 @@
       const dateWrap = document.createElement('div');
       dateWrap.className = 'm-date-fields';
       dateWrap.innerHTML = `
-        <label class="m-date-field">Start
-          <input type="date" class="m-start-date" min="${card.dataset.rangeMin}" max="${card.dataset.rangeMax}">
-        </label>
-        <label class="m-date-field">Ende
-          <input type="date" class="m-end-date" min="${card.dataset.rangeMin}" max="${card.dataset.rangeMax}">
-        </label>
         <div class="m-date-hint">Erlaubter Zeitraum: Monat ${phase.startMonth}–${phase.endMonth} (nur Mo–Fr)</div>
       `;
       card.appendChild(dateWrap);
-
-      const startInput = dateWrap.querySelector('.m-start-date');
-      const endInput = dateWrap.querySelector('.m-end-date');
-      attachInputStopPropagation(startInput);
-      attachInputStopPropagation(endInput);
-
-      [startInput, endInput].forEach((input) => {
-        input.addEventListener('change', () => {
-          applyDateValidation(card);
-          updateTimeline();
-        });
-      });
 
       if (card.dataset.coaching === 'true') {
         const fullRange = monthWindowToDates(1, 18);
         card.dataset.rangeMin = toDateInputValue(fullRange.minDate);
         card.dataset.rangeMax = toDateInputValue(fullRange.maxDate);
-        startInput.min = card.dataset.rangeMin;
-        startInput.max = card.dataset.rangeMax;
-        endInput.min = card.dataset.rangeMin;
-        endInput.max = card.dataset.rangeMax;
-        startInput.disabled = true;
-        endInput.disabled = true;
 
         const coachingWrap = document.createElement('div');
         coachingWrap.className = 'coaching-schedule';
         coachingWrap.innerHTML = `
-          <div class="coaching-title">Coaching-Termine (8x Datum + Uhrzeit: 4x M1–4, 2x M5–10, 2x M11–18)</div>
+          <div class="coaching-title">Coaching-Termine (6x Datum + Uhrzeit: 3x M1–4, 2x M5–10, 1x M11–18)</div>
           <div class="coach-slots"></div>
         `;
         dateWrap.appendChild(coachingWrap);
@@ -2957,33 +2973,62 @@
           attachInputStopPropagation(slotInput);
           slotInput.addEventListener('change', () => {
             applyCoachingValidation(card);
+            renderRadarFromSelection();
             updateTimeline();
           });
           slots.appendChild(label);
         }
+      } else {
+        const options = fixedTermineByMeasure[getMeasureName(card)] || [];
+        const selectLabel = document.createElement('label');
+        selectLabel.className = 'm-date-field';
+        selectLabel.innerHTML = 'Starttermin wählen';
+        const select = document.createElement('select');
+        select.className = 'm-date-select';
+        options.forEach((option, idx) => {
+          const optionEl = document.createElement('option');
+          optionEl.value = String(idx);
+          optionEl.textContent = `${formatDate(parseDateInput(option.start))} - ${formatDate(parseDateInput(option.end))}`;
+          select.appendChild(optionEl);
+        });
+        attachInputStopPropagation(select);
+        select.addEventListener('change', () => {
+          applyFixedDateSelection(card);
+          renderRadarFromSelection();
+          updateTimeline();
+        });
+        selectLabel.appendChild(select);
+        dateWrap.prepend(selectLabel);
       }
     }
 
+    function applyFixedDateSelection(card) {
+      if (card.dataset.coaching === 'true') return;
+      const options = fixedTermineByMeasure[getMeasureName(card)] || [];
+      const select = card.querySelector('.m-date-select');
+      if (!options.length || !select) return;
+      const selectedIndex = Number(select.value) || 0;
+      const selectedOption = options[Math.max(0, Math.min(options.length - 1, selectedIndex))];
+      card.dataset.startDate = selectedOption.start;
+      card.dataset.endDate = selectedOption.end;
+      card.dataset.coachDates = '[]';
+    }
+
     function applyDateValidation(card) {
+      if (card.dataset.coaching !== 'true') {
+        applyFixedDateSelection(card);
+        return;
+      }
       const minDate = parseDateInput(card.dataset.rangeMin);
       const maxDate = parseDateInput(card.dataset.rangeMax);
-      const startInput = card.querySelector('.m-start-date');
-      const endInput = card.querySelector('.m-end-date');
-      let startDate = parseDateInput(startInput.value) || new Date(minDate.getTime());
-      let endDate = parseDateInput(endInput.value) || new Date(startDate.getTime());
+      let startDate = parseDateInput(card.dataset.startDate) || new Date(minDate.getTime());
+      let endDate = parseDateInput(card.dataset.endDate) || new Date(startDate.getTime());
 
       startDate = ensureWeekday(clampDateToRange(startDate, minDate, maxDate), 1);
       endDate = ensureWeekday(clampDateToRange(endDate, minDate, maxDate), -1);
       if (endDate < startDate) endDate = new Date(startDate.getTime());
-      if (card.dataset.coaching !== 'true') {
-        const maxEnd = ensureWeekday(clampDateToRange(addDays(startDate, MAX_NON_COACHING_DURATION_DAYS - 1), startDate, maxDate), -1);
-        if (endDate > maxEnd) endDate = maxEnd;
-      }
-
-      startInput.value = toDateInputValue(startDate);
-      endInput.value = toDateInputValue(endDate);
-      card.dataset.startDate = startInput.value;
-      card.dataset.endDate = endInput.value;
+      card.dataset.startDate = toDateInputValue(startDate);
+      card.dataset.endDate = toDateInputValue(endDate);
 
       applyCoachingValidation(card);
     }
@@ -3028,10 +3073,6 @@
       if (validValues.length) {
         card.dataset.startDate = toDateInputValue(validValues[0]);
         card.dataset.endDate = toDateInputValue(validValues.at(-1));
-        const startInput = card.querySelector('.m-start-date');
-        const endInput = card.querySelector('.m-end-date');
-        if (startInput) startInput.value = card.dataset.startDate;
-        if (endInput) endInput.value = card.dataset.endDate;
       }
       card.dataset.coachDates = JSON.stringify(validValues.map((date) => date.toISOString()));
     }
@@ -3039,19 +3080,10 @@
     function initializeDates() {
       measureCards.forEach((card, index) => {
         buildDateUi(card, index);
-        const minDate = parseDateInput(card.dataset.rangeMin);
-        const maxDate = parseDateInput(card.dataset.rangeMax);
-        const randomStart = randomWeekday(minDate, maxDate);
-        const randomEnd = randomWeekday(randomStart, card.dataset.coaching === 'true'
-          ? maxDate
-          : ensureWeekday(clampDateToRange(addDays(randomStart, MAX_NON_COACHING_DURATION_DAYS - 1), randomStart, maxDate), -1));
-        const startInput = card.querySelector('.m-start-date');
-        const endInput = card.querySelector('.m-end-date');
-        startInput.value = toDateInputValue(randomStart);
-        endInput.value = toDateInputValue(randomEnd);
-        applyDateValidation(card);
-
         if (card.dataset.coaching === 'true') {
+          const fullRange = monthWindowToDates(1, 18);
+          card.dataset.startDate = toDateInputValue(fullRange.minDate);
+          card.dataset.endDate = toDateInputValue(fullRange.maxDate);
           const slotInputs = Array.from(card.querySelectorAll('.coach-date-time'));
           let slotIndex = 0;
           coachingPhasePlan.forEach((phase) => {
@@ -3059,14 +3091,20 @@
             for (let i = 0; i < phase.slots; i += 1) {
               const input = slotInputs[slotIndex];
               if (!input) break;
-              const randomDay = randomWeekday(phaseRange.minDate, phaseRange.maxDate);
-              const hour = 9 + ((slotIndex + 1) % 6);
-              const appointment = new Date(randomDay.getFullYear(), randomDay.getMonth(), randomDay.getDate(), hour, 0, 0, 0);
+              const dayOffset = Math.round(((i + 1) / (phase.slots + 1)) * ((phaseRange.maxDate - phaseRange.minDate) / 86400000));
+              const baseDate = addDays(phaseRange.minDate, dayOffset);
+              const sessionDate = ensureWeekday(clampDateToRange(baseDate, phaseRange.minDate, phaseRange.maxDate), 1);
+              const hour = 9 + ((slotIndex + 1) % 5);
+              const appointment = new Date(sessionDate.getFullYear(), sessionDate.getMonth(), sessionDate.getDate(), hour, 0, 0, 0);
               input.value = toDateTimeLocalValue(appointment);
               slotIndex += 1;
             }
           });
           applyCoachingValidation(card);
+        } else {
+          const select = card.querySelector('.m-date-select');
+          if (select) select.value = '0';
+          applyFixedDateSelection(card);
         }
       });
     }
@@ -3156,8 +3194,34 @@
       });
     }
 
-    function loadClassForCount(count) {
-      if (count >= 5) return 'timeline-heatmap-high';
+    function getMonthCollisionFlags(selectedCards) {
+      return Array.from({ length: totalTimelineMonths }, (_, monthIndex) => {
+        const monthNumber = monthIndex + 1;
+        const { monthStart, monthEnd } = getMonthDateRange(monthNumber);
+        for (let day = new Date(monthStart.getTime()); day <= monthEnd; day.setDate(day.getDate() + 1)) {
+          let dayLoad = 0;
+          selectedCards.forEach((card) => {
+            const range = getCardRange(card);
+            if (!range) return;
+            if (card.dataset.coaching === 'true') {
+              const entries = JSON.parse(card.dataset.coachDates || '[]')
+                .map((value) => new Date(value))
+                .filter((date) => !Number.isNaN(date.getTime()));
+              if (entries.some((entry) => entry.getFullYear() === day.getFullYear() && entry.getMonth() === day.getMonth() && entry.getDate() === day.getDate())) {
+                dayLoad += 1;
+              }
+              return;
+            }
+            if (day >= range.startDate && day <= range.endDate) dayLoad += 1;
+          });
+          if (dayLoad >= 2) return true;
+        }
+        return false;
+      });
+    }
+
+    function loadClassForCount(count, hasCollision) {
+      if (hasCollision) return 'timeline-heatmap-high';
       if (count >= 3) return 'timeline-heatmap-medium';
       return 'timeline-heatmap-low';
     }
@@ -3187,10 +3251,12 @@
       if (!timelineContainer) return;
       const axisTicks = Array.from({ length: 18 }, (_, idx) => {
         const pos = (idx / 17) * 100;
-        return `<div class="timeline-tick" style="left:${pos}%">M${idx + 1}</div>`;
+        const transform = idx === 0 ? 'translateX(0)' : idx === 17 ? 'translateX(-100%)' : 'translateX(-50%)';
+        return `<div class="timeline-tick" style="left:${pos}%;transform:${transform}">M${idx + 1}</div>`;
       }).join('');
       const monthCounts = getMonthLoadCounts(selectedCards);
-      const heatmap = monthCounts.map((count, idx) => `<span class="timeline-heatmap-cell ${loadClassForCount(count)}" title="Monat ${idx + 1}: ${count} aktive Maßnahmen"></span>`).join('');
+      const monthCollisionFlags = getMonthCollisionFlags(selectedCards);
+      const heatmap = monthCounts.map((count, idx) => `<span class="timeline-heatmap-cell ${loadClassForCount(count, monthCollisionFlags[idx])}" title="Monat ${idx + 1}: ${count} aktive Maßnahmen${monthCollisionFlags[idx] ? ' · Terminüberschneidung' : ''}"></span>`).join('');
 
       const bars = selectedCards.map((card) => {
         const startDate = parseDateInput(card.dataset.startDate);
@@ -3235,7 +3301,7 @@
         <div class="timeline-load-legend" aria-label="Belastungs-Legende">
           <span class="timeline-load-legend-item"><span class="timeline-load-swatch timeline-heatmap-low"></span>0–2 Maßnahmen · optimale Last</span>
           <span class="timeline-load-legend-item"><span class="timeline-load-swatch timeline-heatmap-medium"></span>3–4 Maßnahmen · hohe Last</span>
-          <span class="timeline-load-legend-item"><span class="timeline-load-swatch timeline-heatmap-high"></span>5+ Maßnahmen · Überlastungsgefahr</span>
+          <span class="timeline-load-legend-item"><span class="timeline-load-swatch timeline-heatmap-high"></span>Terminüberschneidung · Überlastungsgefahr</span>
         </div>
       `;
     }
