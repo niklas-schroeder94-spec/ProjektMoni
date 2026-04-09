@@ -802,31 +802,6 @@
     flex: 1;
   }
 
-  .m-radar-panel {
-    background: var(--white);
-    border: 1px solid var(--light);
-    padding: 1rem 1.2rem;
-    margin-top: 0.2rem;
-    display: grid;
-    grid-template-columns: 310px 1fr;
-    gap: 1.2rem;
-    align-items: center;
-  }
-
-  .m-radar-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    font-size: 0.73rem;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .m-radar-meta strong {
-    color: var(--ink);
-    font-size: 0.78rem;
-  }
-
   .m-radar-count {
     display: inline-flex;
     align-items: center;
@@ -837,6 +812,17 @@
     color: var(--accent);
     font-weight: 700;
     margin-top: 0.2rem;
+  }
+
+  .m-radar-card {
+    background: var(--white);
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
   }
 
   .m-card {
@@ -1728,7 +1714,7 @@
             <div class="ab-soll-line" style="left:70%"></div>
           </div>
         </div>
-        <div class="ab-status s-teil">△ Teilweise</div>
+        <div class="ab-status s-stark">✓ Ausreichend</div>
       </div>
 
       <div class="ab-row">
@@ -1964,30 +1950,31 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <!-- Legende -->
-      <div class="m-legend">
-        <div class="ml-title">Lernformen</div>
-        <div class="ml-item">
-          <div class="ml-bar" style="background:var(--accent)"></div>
-          <div>
-            <div class="ml-name">Off-the-job</div>
-            <div class="ml-desc">Hauptformat · 6 Maßnahmen</div>
-          </div>
-        </div>
-        <div class="ml-item">
-          <div class="ml-bar" style="background:var(--steel)"></div>
-          <div>
-            <div class="ml-name">Near-the-job</div>
-            <div class="ml-desc">Ergänzend · 1 Maßnahme</div>
-          </div>
-        </div>
-        <div class="ml-item">
-          <div class="ml-bar" style="background:var(--gold)"></div>
-          <div>
-            <div class="ml-name">On-the-job</div>
-            <div class="ml-desc">Transfer · 1 Maßnahme</div>
-          </div>
-        </div>
+      <div class="m-radar-card">
+        <div class="radar-lbl">Interaktive Entwicklung — Ist-Verlauf</div>
+        <svg id="massnahmen-radar" width="250" height="250" viewBox="0 0 270 270" style="overflow:visible">
+          <g transform="translate(135,138)">
+            <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="-95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <polygon id="massnahmen-radar-soll" points="0,-92 79,-46 79,46 0,92 -79,46 -79,-46" fill="rgba(200,75,49,0.07)" stroke="var(--accent)" stroke-width="2"/>
+            <polygon id="massnahmen-radar-ist" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
+            <g id="massnahmen-radar-points"></g>
+            <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
+            <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
+            <text x="90" y="53" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Selbst</text>
+            <text x="0" y="110" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Pers.führung</text>
+            <text x="-90" y="53" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Konflikt</text>
+            <text x="-90" y="-50" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Durchsetzen</text>
+          </g>
+        </svg>
+        <div class="m-radar-count"><span>✓</span><span id="massnahmen-count">0 Maßnahmen aktiv</span></div>
       </div>
 
     </div>
