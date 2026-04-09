@@ -886,6 +886,34 @@
     color: var(--ink);
   }
 
+  .inline-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    background: rgba(74,111,165,0.1);
+    color: var(--steel);
+    font-size: 0.76rem;
+    line-height: 1;
+    margin-right: 0.35rem;
+    vertical-align: text-top;
+  }
+
+  .inline-icon.mini {
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.68rem;
+    margin-right: 0.3rem;
+  }
+
+  .m-name .inline-icon {
+    background: rgba(200,75,49,0.1);
+    color: var(--accent);
+    margin-right: 0.42rem;
+  }
+
   .m-card {
     background: var(--white);
     padding: 1.3rem;
@@ -1406,12 +1434,12 @@
         <div class="otj-title">Off-the-job</div>
         <div class="otj-def">Maßnahmen, die vollständig außerhalb des Arbeitsplatzes stattfinden — räumlich und zeitlich vom Produktionsprozess entkoppelt. Der Lernende ist aus dem Tagesgeschäft herausgezogen; es besteht maximaler Raum für Reflexion, Verhaltenserprobung und konzeptionelle Auseinandersetzung.</div>
         <div class="otj-examples">
-          <span class="chip">Seminar</span>
-          <span class="chip">Coaching (extern)</span>
-          <span class="chip">Planspiel</span>
-          <span class="chip">Workshop</span>
-          <span class="chip">AdA-Kurs (IHK)</span>
-          <span class="chip">Studienreise</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">📘</span>Seminar</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">💬</span>Coaching (extern)</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">🎯</span>Planspiel</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">🛠</span>Workshop</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">🎓</span>AdA-Kurs (IHK)</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">✈️</span>Studienreise</span>
         </div>
       </div>
 
@@ -1442,7 +1470,7 @@
 
     <div class="otj-banner">
       <div style="font-size:1.6rem;flex-shrink:0">↗</div>
-      <div class="otj-banner-text"><strong>Warum off-the-job für Führungskräfteentwicklung?</strong> Führungskompetenzen erfordern kognitive Auseinandersetzung mit Modellen, kritische Selbstreflexion und das Einüben neuer Verhaltensmuster in geschütztem Rahmen. All das ist im laufenden Schichtbetrieb strukturell nicht leistbar. Off-the-job schafft den notwendigen Lern- und Reflexionsraum.</div>
+      <div class="otj-banner-text"><strong>Warum off-the-job für Führungskräfteentwicklung?</strong> Führungskompetenzen erfordern kognitive Auseinandersetzung mit Modellen, kritische Selbstreflexion und das Einüben neuer Verhaltensmuster in geschütztem Rahmen. All das ist im laufenden Schichtbetrieb strukturell nicht leistbar. Off-the-job schafft den notwendigen Lern- und Reflexionsraum — z. B. durch <span class="inline-icon mini" aria-hidden="true">📘</span>Seminare und <span class="inline-icon mini" aria-hidden="true">💬</span>Coaching.</div>
     </div>
   </div>
   <div class="slide-number">02 / 10</div>
@@ -1967,7 +1995,7 @@
 
     <div class="m-radar-panel">
       <div class="soll-radar" style="gap:0.75rem">
-        <div class="radar-lbl">Interaktive Entwicklung — Ist-Verlauf</div>
+        <div class="radar-lbl">Interaktive Entwicklung — Ist-Profil (grau) vs. Projektion (blau)</div>
         <svg id="massnahmen-radar" width="270" height="270" viewBox="0 0 270 270" style="overflow:visible">
           <g transform="translate(135,138)">
             <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
@@ -1980,7 +2008,8 @@
             <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
             <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
             <polygon id="massnahmen-radar-soll" points="0,-92 79,-46 79,46 0,92 -79,46 -79,-46" fill="rgba(200,75,49,0.07)" stroke="var(--accent)" stroke-width="2"/>
-            <polygon id="massnahmen-radar-ist" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
+            <polygon id="massnahmen-radar-ist-baseline" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(120,120,120,0.18)" stroke="rgba(115,115,115,0.9)" stroke-width="1.8"/>
+            <polygon id="massnahmen-radar-projektion" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.23)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
             <g id="massnahmen-radar-points"></g>
             <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
             <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
@@ -1992,7 +2021,7 @@
         </svg>
       </div>
       <div class="m-radar-meta">
-        <strong>Simulation:</strong> Wähle Maßnahmen aus. Das blaue Ist-Profil verschiebt sich entsprechend der Kompetenzwirkung.
+        <strong>Simulation:</strong> Wähle Maßnahmen aus. Das graue Ist-Profil bleibt als Ausgangsbasis sichtbar, während das blaue Projektions-Profil die erwartete Entwicklung zeigt.
         <div>Basis-Ist startet bei: Fach 87 · Methodik 65 · Selbst 75 · Führung 12 · Konflikt 30 · Durchsetzen 38.</div>
         <div class="m-radar-count"><span>✓</span><span id="massnahmen-count">0 Maßnahmen aktiv</span></div>
       </div>
@@ -2003,7 +2032,7 @@
       <div class="m-card off js-massnahme" data-impact="0,4,2,20,6,8">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name">Führungskräfteseminar „Führung im Industriebetrieb"</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">📘</span>Führungskräfteseminar „Führung im Industriebetrieb"</div>
         <div class="m-ziel">Zielkompetenz: Mitarbeiterführung, Gesprächsführung</div>
         <div class="m-text">Konzeptionelle Grundlagen (situatives Führen, transaktional/transformational) und Rollenspiele zu Kritik-, Zielvereinbarungs- und Rückkehrgesprächen. Die Maßnahme schließt die Lücke in der direkten Mitarbeiterführung, weil Führungsverhalten in einem geschützten Rahmen eingeübt und reflektiert werden kann.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2012,7 +2041,7 @@
       <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name">Externes Einzelcoaching (6–8 Sitzungen)</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (6–8 Sitzungen)</div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
         <div class="m-text">Individuelle Bearbeitung von Verhaltensmustern, die in Gruppensettings oft verborgen bleiben. Die Maßnahme adressiert das Defizit im Durchsetzungsverhalten, weil persönliche Hemmungen, Konfliktmuster und Entscheidungsunsicherheit gezielt bearbeitet werden. Begleitend über die gesamte Entwicklungsphase.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2021,7 +2050,7 @@
       <div class="m-card off js-massnahme" data-impact="2,4,3,6,2,4">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name">AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🎓</span>AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
         <div class="m-ziel">Zielkompetenz: Ausbildungskompetenz (AEVO)</div>
         <div class="m-text">Rechtliche Pflichtvoraussetzung: Ohne bestandene Ausbildereignungsprüfung ist die Durchführung der Berufsausbildung in der Abteilung unzulässig. Die Maßnahme schließt damit nicht nur eine Kompetenz-, sondern eine formale Zulassungslücke der Zielposition.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2030,7 +2059,7 @@
       <div class="m-card off js-massnahme" data-impact="0,3,2,6,24,8">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
-        <div class="m-name">Seminar „Konfliktmanagement in der Produktion"</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">⚖️</span>Seminar „Konfliktmanagement in der Produktion"</div>
         <div class="m-ziel">Zielkompetenz: Konfliktfähigkeit, Deeskalation</div>
         <div class="m-text">Modelle und Methoden der Konfliktklärung (z. B. Harvard-Konzept, Gewaltfreie Kommunikation) sowie Simulation von Schicht-, Übergabe- und Teamkonflikten. Die Maßnahme ist geeignet, weil Konfliktverhalten trainiert werden kann, ohne dass reale Produktionsbeziehungen beschädigt werden.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
@@ -2039,7 +2068,7 @@
       <div class="m-card off js-massnahme" data-impact="0,18,8,4,2,12">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
-        <div class="m-name">Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🎯</span>Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
         <div class="m-ziel">Zielkompetenz: Entscheidungsstärke, wirtschaftl. Denken</div>
         <div class="m-text">Simulation von Schichtplanung, KPI-Steuerung und Budgetentscheidungen in komprimierter Form. Die Maßnahme entwickelt Entscheidungsstärke, weil Konsequenzen von Priorisierungen und Fehlentscheidungen unmittelbar sichtbar werden – jedoch ohne reales Betriebsrisiko.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
@@ -2048,7 +2077,7 @@
       <div class="m-card off js-massnahme" data-impact="0,6,6,10,4,12">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
-        <div class="m-name">Workshop „Arbeitsrecht für Führungskräfte"</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🛠</span>Workshop „Arbeitsrecht für Führungskräfte"</div>
         <div class="m-ziel">Zielkompetenz: Rechtliche Handlungssicherheit</div>
         <div class="m-text">Grundlagen zu BetrVG, ArbZG, Abmahnung und Kündigung. Die Maßnahme stärkt Handlungssicherheit, weil Durchsetzung in Führungsrollen nur dann wirksam ist, wenn sie rechtlich sauber und belastbar erfolgt.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
@@ -2057,7 +2086,7 @@
       <div class="m-card near js-massnahme" data-impact="18,8,4,6,2,4">
         <div class="m-check">✓</div>
         <div class="m-type">Near-the-job · Priorität ●●●</div>
-        <div class="m-name">Strukturierte Hospitation Finishing-Abteilung</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">👀</span>Strukturierte Hospitation Finishing-Abteilung</div>
         <div class="m-ziel">Zielkompetenz: Anlagenwissen, operative Glaubwürdigkeit</div>
         <div class="m-text">4–6 Wochen, alle Schichten, mit dokumentiertem Lernauftrag und Abschlusspräsentation. Die Maßnahme schließt die Glaubwürdigkeitslücke, weil ohne Anlagenkenntnisse zu Rollenschneider, Querschneider und Palettierer die Akzeptanz als zukünftige Führungskraft im Team begrenzt bleibt.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2066,7 +2095,7 @@
       <div class="m-card on js-massnahme" data-impact="4,10,8,35,12,20">
         <div class="m-check">✓</div>
         <div class="m-type">On-the-job · Transfer · Priorität ●●●</div>
-        <div class="m-name">Vertretungsmandat Leitung Finishing (schrittweise)</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🏭</span>Vertretungsmandat Leitung Finishing (schrittweise)</div>
         <div class="m-ziel">Zielkompetenz: Reale Führungserfahrung, Personalverantwortung</div>
         <div class="m-text">Erst nach Abschluss der off-the-job-Grundlagen: zunächst Schichtleitungsvertretung, dann Urlaubsvertretung. Die Maßnahme überführt Lernen in reale Führungsverantwortung; das begleitende Coaching sichert Reflexion und verhindert, dass neue Führungsanforderungen nur situativ statt systematisch bewältigt werden.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2466,7 +2495,8 @@
     ];
     const maxRadius = 95;
     const measureCards = Array.from(document.querySelectorAll('.js-massnahme'));
-    const radarIstPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-ist')).at(-1) || null;
+    const radarBasePolygon = Array.from(document.querySelectorAll('#massnahmen-radar-ist-baseline')).at(-1) || null;
+    const radarProjectionPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-projektion')).at(-1) || null;
     const radarPoints = Array.from(document.querySelectorAll('#massnahmen-radar-points')).at(-1) || null;
     const measureCountLabel = Array.from(document.querySelectorAll('#massnahmen-count')).at(-1) || null;
 
@@ -2479,7 +2509,7 @@
     }
 
     function renderRadarFromSelection() {
-      if (!radarIstPolygon || !radarPoints) return;
+      if (!radarProjectionPolygon || !radarPoints) return;
 
       const selectedCards = measureCards.filter((card) => card.classList.contains('selected'));
       const nextProfile = [...baseIstProfile];
@@ -2492,7 +2522,7 @@
       });
 
       const points = profileToPoints(nextProfile.map((value) => Math.min(100, value)));
-      radarIstPolygon.setAttribute('points', points.join(' '));
+      radarProjectionPolygon.setAttribute('points', points.join(' '));
       radarPoints.innerHTML = points
         .map((point) => {
           const [cx, cy] = point.split(',');
@@ -2520,6 +2550,10 @@
         card.click();
       });
     });
+
+    if (radarBasePolygon) {
+      radarBasePolygon.setAttribute('points', profileToPoints(baseIstProfile).join(' '));
+    }
 
     renderSlideNav();
     renderSlides();
