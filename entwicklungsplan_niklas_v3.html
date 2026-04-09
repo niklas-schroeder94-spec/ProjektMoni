@@ -1854,6 +1854,39 @@
       Die Maßnahmen sind bewusst als <strong style="color:var(--ink)">off-the-job-Schwerpunkt</strong> gewählt, da insbesondere Führungs-, Konflikt- und Verhaltenskompetenzen außerhalb des operativen Drucks aufgebaut werden müssen. So können neue Muster trainiert werden, bevor sie in der Linie wirksam werden müssen.
     </div>
 
+    <div class="m-radar-panel">
+      <div class="soll-radar" style="gap:0.75rem">
+        <div class="radar-lbl">Interaktive Entwicklung — Ist-Verlauf</div>
+        <svg id="massnahmen-radar" width="270" height="270" viewBox="0 0 270 270" style="overflow:visible">
+          <g transform="translate(135,138)">
+            <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="-95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <polygon id="massnahmen-radar-soll" points="0,-92 79,-46 79,46 0,92 -79,46 -79,-46" fill="rgba(200,75,49,0.07)" stroke="var(--accent)" stroke-width="2"/>
+            <polygon id="massnahmen-radar-ist" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
+            <g id="massnahmen-radar-points"></g>
+            <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
+            <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
+            <text x="90" y="53" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Selbst</text>
+            <text x="0" y="110" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Pers.führung</text>
+            <text x="-90" y="53" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Konflikt</text>
+            <text x="-90" y="-50" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Durchsetzen</text>
+          </g>
+        </svg>
+      </div>
+      <div class="m-radar-meta">
+        <strong>Simulation:</strong> Wähle Maßnahmen aus. Das blaue Ist-Profil verschiebt sich entsprechend der Kompetenzwirkung.
+        <div>Basis-Ist startet bei: Fach 87 · Methodik 65 · Selbst 75 · Führung 12 · Konflikt 30 · Durchsetzen 38.</div>
+        <div class="m-radar-count"><span>✓</span><span id="massnahmen-count">0 Maßnahmen aktiv</span></div>
+      </div>
+    </div>
+
     <div class="m-grid">
 
       <div class="m-card off js-massnahme" data-impact="0,4,2,20,6,8">
