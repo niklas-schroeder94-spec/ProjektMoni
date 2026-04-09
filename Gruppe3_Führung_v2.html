@@ -2237,7 +2237,7 @@
       <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20" data-coaching="true">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (6–8 Sitzungen)</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (8 Sitzungen)</div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
         <div class="m-text">Individuelle Bearbeitung von Verhaltensmustern, die in Gruppensettings oft verborgen bleiben. Die Maßnahme adressiert das Defizit im Durchsetzungsverhalten, weil persönliche Hemmungen, Konfliktmuster und Entscheidungsunsicherheit gezielt bearbeitet werden. Begleitend über die gesamte Entwicklungsphase.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2786,10 +2786,17 @@
       return ensureWeekday(candidate, 1);
     }
 
+    const MAX_NON_COACHING_DURATION_DAYS = 7;
+    const coachingPhasePlan = [
+      { startMonth: 1, endMonth: 4, slots: 4 },
+      { startMonth: 5, endMonth: 10, slots: 2 },
+      { startMonth: 11, endMonth: 18, slots: 2 }
+    ];
+
     function getPhaseMonthsByIndex(index) {
       const position = index + 1;
       if (position <= 4) return { startMonth: 1, endMonth: 4 };
-      if (position <= 10) return { startMonth: 5, endMonth: 10 };
+      if (position <= 7) return { startMonth: 5, endMonth: 10 };
       return { startMonth: 11, endMonth: 18 };
     }
 
@@ -2811,6 +2818,12 @@
       if (date < minDate) return new Date(minDate.getTime());
       if (date > maxDate) return new Date(maxDate.getTime());
       return new Date(date.getTime());
+    }
+
+    function addDays(baseDate, days) {
+      const next = new Date(baseDate.getTime());
+      next.setDate(next.getDate() + days);
+      return next;
     }
 
     function attachInputStopPropagation(input) {
@@ -2853,15 +2866,26 @@
       });
 
       if (card.dataset.coaching === 'true') {
+        const fullRange = monthWindowToDates(1, 18);
+        card.dataset.rangeMin = toDateInputValue(fullRange.minDate);
+        card.dataset.rangeMax = toDateInputValue(fullRange.maxDate);
+        startInput.min = card.dataset.rangeMin;
+        startInput.max = card.dataset.rangeMax;
+        endInput.min = card.dataset.rangeMin;
+        endInput.max = card.dataset.rangeMax;
+        startInput.disabled = true;
+        endInput.disabled = true;
+
         const coachingWrap = document.createElement('div');
         coachingWrap.className = 'coaching-schedule';
         coachingWrap.innerHTML = `
-          <div class="coaching-title">Coaching-Termine (6x Datum + Uhrzeit)</div>
+          <div class="coaching-title">Coaching-Termine (8x Datum + Uhrzeit: 4x M1–4, 2x M5–10, 2x M11–18)</div>
           <div class="coach-slots"></div>
         `;
         dateWrap.appendChild(coachingWrap);
         const slots = coachingWrap.querySelector('.coach-slots');
-        for (let i = 0; i < 6; i += 1) {
+        const totalCoachingSlots = coachingPhasePlan.reduce((sum, phase) => sum + phase.slots, 0);
+        for (let i = 0; i < totalCoachingSlots; i += 1) {
           const label = document.createElement('label');
           label.className = 'coach-slot';
           label.innerHTML = `Termin ${i + 1}<input type="datetime-local" class="coach-date-time" step="1800">`;
@@ -2887,6 +2911,10 @@
       startDate = ensureWeekday(clampDateToRange(startDate, minDate, maxDate), 1);
       endDate = ensureWeekday(clampDateToRange(endDate, minDate, maxDate), -1);
       if (endDate < startDate) endDate = new Date(startDate.getTime());
+      if (card.dataset.coaching !== 'true') {
+        const maxEnd = ensureWeekday(clampDateToRange(addDays(startDate, MAX_NON_COACHING_DURATION_DAYS - 1), startDate, maxDate), -1);
+        if (endDate > maxEnd) endDate = maxEnd;
+      }
 
       startInput.value = toDateInputValue(startDate);
       endInput.value = toDateInputValue(endDate);
@@ -2899,29 +2927,48 @@
     function applyCoachingValidation(card) {
       if (card.dataset.coaching !== 'true') return;
       const slotInputs = Array.from(card.querySelectorAll('.coach-date-time'));
-      const startDate = parseDateInput(card.dataset.startDate);
-      const endDate = parseDateInput(card.dataset.endDate);
-      if (!startDate || !endDate) return;
-
-      const startOfDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 8, 0, 0, 0);
-      const endOfDay = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 18, 0, 0, 0);
-      slotInputs.forEach((input) => {
-        input.min = toDateTimeLocalValue(startOfDay);
-        input.max = toDateTimeLocalValue(endOfDay);
+      let slotCursor = 0;
+      const slotRanges = [];
+      coachingPhasePlan.forEach((phase) => {
+        const range = monthWindowToDates(phase.startMonth, phase.endMonth);
+        for (let i = 0; i < phase.slots; i += 1) {
+          const startOfDay = new Date(range.minDate.getFullYear(), range.minDate.getMonth(), range.minDate.getDate(), 8, 0, 0, 0);
+          const endOfDay = new Date(range.maxDate.getFullYear(), range.maxDate.getMonth(), range.maxDate.getDate(), 18, 0, 0, 0);
+          slotRanges[slotCursor] = { startOfDay, endOfDay };
+          const input = slotInputs[slotCursor];
+          if (input) {
+            input.min = toDateTimeLocalValue(startOfDay);
+            input.max = toDateTimeLocalValue(endOfDay);
+          }
+          slotCursor += 1;
+        }
       });
 
       const validValues = [];
-      slotInputs.forEach((input) => {
+      slotInputs.forEach((input, slotIndex) => {
+        const range = slotRanges[slotIndex];
+        if (!range) return;
         let dt = parseDateTimeInput(input.value);
         if (!dt) return;
-        if (dt < startOfDay) dt = new Date(startOfDay.getTime());
-        if (dt > endOfDay) dt = new Date(endOfDay.getTime());
+        if (dt < range.startOfDay) dt = new Date(range.startOfDay.getTime());
+        if (dt > range.endOfDay) dt = new Date(range.endOfDay.getTime());
         const adjustedDate = ensureWeekday(new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()), 1);
         dt = new Date(adjustedDate.getFullYear(), adjustedDate.getMonth(), adjustedDate.getDate(), dt.getHours(), dt.getMinutes(), 0, 0);
+        if (dt < range.startOfDay) dt = new Date(range.startOfDay.getTime());
+        if (dt > range.endOfDay) dt = new Date(range.endOfDay.getTime());
         input.value = toDateTimeLocalValue(dt);
         validValues.push(dt);
       });
 
+      validValues.sort((a, b) => a - b);
+      if (validValues.length) {
+        card.dataset.startDate = toDateInputValue(validValues[0]);
+        card.dataset.endDate = toDateInputValue(validValues.at(-1));
+        const startInput = card.querySelector('.m-start-date');
+        const endInput = card.querySelector('.m-end-date');
+        if (startInput) startInput.value = card.dataset.startDate;
+        if (endInput) endInput.value = card.dataset.endDate;
+      }
       card.dataset.coachDates = JSON.stringify(validValues.map((date) => date.toISOString()));
     }
 
@@ -2931,7 +2978,9 @@
         const minDate = parseDateInput(card.dataset.rangeMin);
         const maxDate = parseDateInput(card.dataset.rangeMax);
         const randomStart = randomWeekday(minDate, maxDate);
-        const randomEnd = randomWeekday(randomStart, maxDate);
+        const randomEnd = randomWeekday(randomStart, card.dataset.coaching === 'true'
+          ? maxDate
+          : ensureWeekday(clampDateToRange(addDays(randomStart, MAX_NON_COACHING_DURATION_DAYS - 1), randomStart, maxDate), -1));
         const startInput = card.querySelector('.m-start-date');
         const endInput = card.querySelector('.m-end-date');
         startInput.value = toDateInputValue(randomStart);
@@ -2940,15 +2989,18 @@
 
         if (card.dataset.coaching === 'true') {
           const slotInputs = Array.from(card.querySelectorAll('.coach-date-time'));
-          const daySpan = Math.max(1, Math.round((randomEnd - randomStart) / 86400000));
-          slotInputs.forEach((input, slotIndex) => {
-            const spreadOffset = Math.round((daySpan * slotIndex) / Math.max(1, slotInputs.length - 1));
-            const candidateDay = new Date(randomStart.getTime());
-            candidateDay.setDate(candidateDay.getDate() + spreadOffset);
-            const weekdayDay = ensureWeekday(clampDateToRange(candidateDay, randomStart, randomEnd), 1);
-            const hour = 9 + (slotIndex % 5);
-            const appointment = new Date(weekdayDay.getFullYear(), weekdayDay.getMonth(), weekdayDay.getDate(), hour, 0, 0, 0);
-            input.value = toDateTimeLocalValue(appointment);
+          let slotIndex = 0;
+          coachingPhasePlan.forEach((phase) => {
+            const phaseRange = monthWindowToDates(phase.startMonth, phase.endMonth);
+            for (let i = 0; i < phase.slots; i += 1) {
+              const input = slotInputs[slotIndex];
+              if (!input) break;
+              const randomDay = randomWeekday(phaseRange.minDate, phaseRange.maxDate);
+              const hour = 9 + ((slotIndex + 1) % 6);
+              const appointment = new Date(randomDay.getFullYear(), randomDay.getMonth(), randomDay.getDate(), hour, 0, 0, 0);
+              input.value = toDateTimeLocalValue(appointment);
+              slotIndex += 1;
+            }
           });
           applyCoachingValidation(card);
         }
