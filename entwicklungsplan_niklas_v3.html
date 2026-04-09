@@ -802,6 +802,72 @@
     flex: 1;
   }
 
+  .impact-lab {
+    background: var(--white);
+    border-left: 3px solid var(--steel);
+    padding: 1rem 1.2rem;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .il-kicker {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--steel);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .il-title {
+    font-size: 0.88rem;
+    color: var(--ink);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 0.35rem;
+  }
+
+  .il-sub {
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 0.45rem;
+  }
+
+  .il-shift {
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .impact-radar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .impact-legend {
+    display: flex;
+    gap: 0.9rem;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .impact-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .impact-line {
+    width: 16px;
+    height: 0;
+    border-top: 2px solid;
+  }
+
   .m-card {
     background: var(--white);
     padding: 1.3rem;
@@ -809,6 +875,21 @@
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
+  }
+
+  .m-card[data-impact] {
+    cursor: pointer;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  .m-card[data-impact]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26,26,46,0.08);
+  }
+
+  .m-card.active-impact {
+    outline: 2px solid var(--steel);
+    outline-offset: -2px;
   }
 
   .m-card.off  { border-color: var(--accent); }
@@ -1038,6 +1119,43 @@
     flex-direction: column;
     justify-content: center;
     gap: 1.3rem;
+  }
+
+  .live-pulse {
+    background: var(--white);
+    border: 1px solid var(--light);
+    border-left: 3px solid var(--steel);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: -0.3rem;
+  }
+
+  .live-pulse-q {
+    font-size: 0.78rem;
+    color: var(--ink);
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  .live-pulse-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: flex-end;
+  }
+
+  .pulse-opt {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--steel);
+    border: 1px solid rgba(74,111,165,0.35);
+    padding: 0.22rem 0.5rem;
+    font-weight: 700;
+    white-space: nowrap;
   }
 
   .tb-eyebrow {
@@ -1786,9 +1904,48 @@
       Die Maßnahmen sind bewusst als <strong style="color:var(--ink)">off-the-job-Schwerpunkt</strong> gewählt, da insbesondere Führungs-, Konflikt- und Verhaltenskompetenzen außerhalb des operativen Drucks aufgebaut werden müssen. So können neue Muster trainiert werden, bevor sie in der Linie wirksam werden müssen.
     </div>
 
+    <div class="impact-lab">
+      <div>
+        <div class="il-kicker">Interaktiv · Kompetenzmodell</div>
+        <div class="il-title" id="impact-selected">Klicke eine Maßnahme an, um den Kompetenzzuwachs zu sehen.</div>
+        <div class="il-sub">Das Modell zeigt das Ist-Profil (blau) und den prognostizierten Effekt der gewählten Maßnahme (orange).</div>
+        <div class="il-shift" id="impact-shift">Noch keine Maßnahme ausgewählt.</div>
+      </div>
+      <div class="impact-radar-wrap">
+        <svg width="220" height="220" viewBox="0 0 220 220" aria-label="Kompetenzmodell Maßnahmeneffekt">
+          <g transform="translate(110,112)">
+            <polygon points="0,-74 64.1,-37 64.1,37 0,74 -64.1,37 -64.1,-37" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-49 42.4,-24.5 42.4,24.5 0,49 -42.4,24.5 -42.4,-24.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-24 20.8,-12 20.8,12 0,24 -20.8,12 -20.8,-12" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+
+            <line x1="0" y1="0" x2="0" y2="-74" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="64.1" y2="-37" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="64.1" y2="37" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="74" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-64.1" y2="37" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-64.1" y2="-37" stroke="#d0ccc4" stroke-width="1"/>
+
+            <polygon id="impact-ist" fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="1.8" stroke-dasharray="4,3"></polygon>
+            <polygon id="impact-proj" fill="rgba(200,75,49,0.09)" stroke="var(--accent)" stroke-width="2"></polygon>
+
+            <text x="0" y="-82" text-anchor="middle" font-size="7.5" fill="#666">Fach</text>
+            <text x="70" y="-39" text-anchor="start" font-size="7.5" fill="#666">Methodik</text>
+            <text x="70" y="43" text-anchor="start" font-size="7.5" fill="#666">Selbst</text>
+            <text x="0" y="87" text-anchor="middle" font-size="7.5" fill="#666">Führung</text>
+            <text x="-70" y="43" text-anchor="end" font-size="7.5" fill="#666">Konflikt</text>
+            <text x="-70" y="-39" text-anchor="end" font-size="7.5" fill="#666">Durchs.</text>
+          </g>
+        </svg>
+        <div class="impact-legend">
+          <span><i class="impact-line" style="border-color:var(--steel);border-style:dashed"></i> Ist</span>
+          <span><i class="impact-line" style="border-color:var(--accent)"></i> Nach Maßnahme</span>
+        </div>
+      </div>
+    </div>
+
     <div class="m-grid">
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="0,2,1,6,2,2" data-measure="Führungskräfteseminar">
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">Führungskräfteseminar „Führung im Industriebetrieb"</div>
         <div class="m-ziel">Zielkompetenz: Mitarbeiterführung, Gesprächsführung</div>
@@ -1796,7 +1953,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="0,1,2,3,2,6" data-measure="Einzelcoaching">
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">Externes Einzelcoaching (6–8 Sitzungen)</div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
@@ -1804,7 +1961,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="1,1,1,4,0,0" data-measure="AdA-Kurs (AEVO)">
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
         <div class="m-ziel">Zielkompetenz: Ausbildungskompetenz (AEVO)</div>
@@ -1812,7 +1969,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="0,1,1,1,7,1" data-measure="Konfliktmanagement-Seminar">
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Seminar „Konfliktmanagement in der Produktion"</div>
         <div class="m-ziel">Zielkompetenz: Konfliktfähigkeit, Deeskalation</div>
@@ -1820,7 +1977,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="1,2,1,1,1,4" data-measure="Planspiel Produktionssteuerung">
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
         <div class="m-ziel">Zielkompetenz: Entscheidungsstärke, wirtschaftl. Denken</div>
@@ -1828,7 +1985,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="1,1,0,3,0,2" data-measure="Workshop Arbeitsrecht">
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Workshop „Arbeitsrecht für Führungskräfte"</div>
         <div class="m-ziel">Zielkompetenz: Rechtliche Handlungssicherheit</div>
@@ -1836,7 +1993,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card near">
+      <div class="m-card near" data-impact="7,1,1,1,1,1" data-measure="Hospitation Finishing">
         <div class="m-type">Near-the-job · Priorität ●●●</div>
         <div class="m-name">Strukturierte Hospitation Finishing-Abteilung</div>
         <div class="m-ziel">Zielkompetenz: Anlagenwissen, operative Glaubwürdigkeit</div>
@@ -1844,7 +2001,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card on">
+      <div class="m-card on" data-impact="2,1,2,8,3,4" data-measure="Vertretungsmandat Finishing">
         <div class="m-type">On-the-job · Transfer · Priorität ●●●</div>
         <div class="m-name">Vertretungsmandat Leitung Finishing (schrittweise)</div>
         <div class="m-ziel">Zielkompetenz: Reale Führungserfahrung, Personalverantwortung</div>
@@ -2005,6 +2162,15 @@
       Ein wesentliches Risiko besteht darin, dass off-the-job-Maßnahmen ohne strukturierten Praxistransfer nur begrenzte Wirkung entfalten. Deshalb müssen Lern- und Anwendungssituationen systematisch verzahnt werden.
     </div>
 
+    <div class="live-pulse">
+      <div class="live-pulse-q">Live-Impuls (10 Sek.): <strong>Was ist aus Ihrer Sicht das größte Risiko für das Scheitern dieses Entwicklungsplans?</strong></div>
+      <div class="live-pulse-options">
+        <span class="pulse-opt">Zeit/Freistellung</span>
+        <span class="pulse-opt">Akzeptanz im Team</span>
+        <span class="pulse-opt">Führungspraxis</span>
+      </div>
+    </div>
+
     <div class="reflexion-layout">
       <div class="risiko-list">
 
@@ -2112,9 +2278,24 @@
     const navToggle = document.getElementById('deck-nav-toggle');
     const navPanel = document.getElementById('slide-nav');
     const progressFill = document.getElementById('deck-progress-fill');
+<<<<<<< codex/find-html-access-in-repository
+    const impactIst = document.getElementById('impact-ist');
+    const impactProj = document.getElementById('impact-proj');
+    const impactSelected = document.getElementById('impact-selected');
+    const impactShift = document.getElementById('impact-shift');
+    const measureCards = Array.from(document.querySelectorAll('.m-card[data-impact]'));
     let currentIndex = 0;
     let navItems = [];
 
+    const baseModel = [87, 65, 75, 12, 30, 38];
+    const maxModel = [95, 90, 90, 92, 88, 90];
+    const competencyNames = ['Fach', 'Methodik', 'Selbst', 'Führung', 'Konflikt', 'Durchsetzen'];
+
+=======
+    let currentIndex = 0;
+    let navItems = [];
+
+>>>>>>> main
     function getSlideTitle(slide, fallbackIndex) {
       const heading = slide.querySelector('.slide-h1');
       if (heading) return heading.textContent.trim();
@@ -2146,6 +2327,57 @@
       });
     }
 
+<<<<<<< codex/find-html-access-in-repository
+    function modelToPoints(values, radius = 74) {
+      const step = (Math.PI * 2) / 6;
+      return values
+        .map((score, i) => {
+          const angle = -Math.PI / 2 + step * i;
+          const scaled = (Math.max(0, Math.min(100, score)) / 100) * radius;
+          const x = (Math.cos(angle) * scaled).toFixed(1);
+          const y = (Math.sin(angle) * scaled).toFixed(1);
+          return `${x},${y}`;
+        })
+        .join(' ');
+    }
+
+    function describeShift(impact) {
+      return impact
+        .map((delta, idx) => ({ delta, name: competencyNames[idx] }))
+        .sort((a, b) => b.delta - a.delta)
+        .slice(0, 2)
+        .filter((entry) => entry.delta > 0)
+        .map((entry) => `${entry.name} +${entry.delta}`)
+        .join(' · ');
+    }
+
+    function updateImpactModel(card) {
+      if (!impactIst || !impactProj || !card) return;
+
+      const impact = (card.dataset.impact || '0,0,0,0,0,0')
+        .split(',')
+        .map((value) => Number(value.trim()) || 0);
+      const projected = baseModel.map((value, index) => Math.min(maxModel[index], value + (impact[index] || 0)));
+
+      impactIst.setAttribute('points', modelToPoints(baseModel));
+      impactProj.setAttribute('points', modelToPoints(projected));
+
+      measureCards.forEach((item) => item.classList.remove('active-impact'));
+      card.classList.add('active-impact');
+
+      if (impactSelected) {
+        impactSelected.textContent = `Gewählte Maßnahme: ${card.dataset.measure || 'Maßnahme'}`;
+      }
+      if (impactShift) {
+        const shiftText = describeShift(impact);
+        impactShift.textContent = shiftText
+          ? `Stärkster erwarteter Zuwachs: ${shiftText}`
+          : 'Diese Maßnahme hat nur geringe direkte Kompetenzwirkung im Modell.';
+      }
+    }
+
+=======
+>>>>>>> main
     function renderSlides() {
       slides.forEach((slide, index) => {
         slide.classList.toggle('is-hidden', index !== currentIndex);
@@ -2207,6 +2439,25 @@
       }
     });
 
+<<<<<<< codex/find-html-access-in-repository
+    measureCards.forEach((card) => {
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.addEventListener('click', () => updateImpactModel(card));
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          updateImpactModel(card);
+        }
+      });
+    });
+
+    if (measureCards.length > 0) {
+      updateImpactModel(measureCards[0]);
+    }
+
+=======
+>>>>>>> main
     renderSlideNav();
     renderSlides();
   })();
