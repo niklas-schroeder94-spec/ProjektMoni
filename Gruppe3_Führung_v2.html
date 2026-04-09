@@ -1004,6 +1004,75 @@
   .pd { width: 6px; height: 6px; border-radius: 50%; background: var(--light); }
   .pd.on { background: var(--ink); }
 
+  .m-date-fields {
+    margin-top: 0.15rem;
+    border-top: 1px solid var(--light);
+    padding-top: 0.55rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .m-date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.61rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .m-date-field input,
+  .coach-slot input {
+    font-family: 'DM Sans', sans-serif;
+    border: 1px solid #d9d3c8;
+    background: var(--white);
+    color: var(--ink);
+    padding: 0.3rem 0.35rem;
+    font-size: 0.7rem;
+  }
+
+  .m-date-hint {
+    grid-column: 1 / -1;
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  .coaching-schedule {
+    grid-column: 1 / -1;
+    border-top: 1px dashed #d7cec1;
+    padding-top: 0.45rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .coaching-title {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .coach-slots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem 0.45rem;
+  }
+
+  .coach-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.58rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
   .m-legend {
     background: var(--white);
     padding: 1.2rem 1.4rem;
@@ -1081,6 +1150,133 @@
     display: flex;
     gap: 0.8rem;
     align-items: stretch;
+  }
+
+  .selected-measures-panel {
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .selected-measures-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .selected-measures-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .selected-measures-table th,
+  .selected-measures-table td {
+    border-bottom: 1px solid var(--light);
+    padding: 0.34rem 0.3rem;
+    text-align: left;
+  }
+
+  .selected-measures-table th {
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  #timeline-container {
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 0.9rem 1rem 1rem;
+    min-height: 18.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .timeline-axis {
+    position: relative;
+    height: 2.2rem;
+    border-bottom: 2px solid var(--light);
+  }
+
+  .timeline-tick {
+    position: absolute;
+    bottom: -0.1rem;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    color: var(--muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+
+  .timeline-tick::before {
+    content: '';
+    width: 1px;
+    height: 0.45rem;
+    background: var(--light);
+  }
+
+  .timeline-bars {
+    position: relative;
+    flex: 1;
+    min-height: 11rem;
+  }
+
+  .timeline-row {
+    position: relative;
+    height: 1.55rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .timeline-row-label {
+    position: absolute;
+    left: 0;
+    top: -0.05rem;
+    font-size: 0.63rem;
+    color: var(--ink);
+    width: 10.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .timeline-track {
+    position: absolute;
+    left: 10.8rem;
+    right: 0;
+    top: 0.35rem;
+    height: 0.8rem;
+    background: #f1ede6;
+    border-radius: 999px;
+  }
+
+  .timeline-bar {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .timeline-point {
+    position: absolute;
+    top: 50%;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    background: var(--white);
+    transform: translate(-50%, -50%);
   }
 
   .p-card {
@@ -2038,7 +2234,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20">
+      <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20" data-coaching="true">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (6–8 Sitzungen)</div>
@@ -2119,6 +2315,23 @@
 
     <div class="zeitplan-logic">
       Die Sequenz folgt der Lernlogik: Zuerst off-the-job Grundlagen (Führungsmodelle, Recht, Konfliktkompetenz), dann begleiteter Near-/On-the-job-Transfer. So sinkt das operative Risiko, bevor echte Personalverantwortung schrittweise übernommen wird.
+    </div>
+
+    <div class="selected-measures-panel">
+      <div class="selected-measures-title">Ausgewählte Maßnahmen mit Terminierung</div>
+      <table class="selected-measures-table" aria-label="Gewählte Maßnahmen">
+        <thead>
+          <tr>
+            <th>Maßnahme</th>
+            <th>Start</th>
+            <th>Ende</th>
+            <th>Phase</th>
+          </tr>
+        </thead>
+        <tbody id="selected-measures-body">
+          <tr><td colspan="4">Noch keine Maßnahme ausgewählt.</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="zeitplan">
@@ -2206,6 +2419,8 @@
       </div>
 
     </div>
+
+    <div id="timeline-container" aria-label="18-Monate-Timeline"></div>
   </div>
   <div class="slide-number">08 / 10</div>
 </div>
@@ -2499,6 +2714,246 @@
     const radarProjectionPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-projektion')).at(-1) || null;
     const radarPoints = Array.from(document.querySelectorAll('#massnahmen-radar-points')).at(-1) || null;
     const measureCountLabel = Array.from(document.querySelectorAll('#massnahmen-count')).at(-1) || null;
+    const selectedMeasuresBody = document.getElementById('selected-measures-body');
+    const timelineContainer = document.getElementById('timeline-container');
+    const projectStartDate = new Date(2026, 4, 1);
+    const projectEndDate = new Date(2027, 9, 31);
+    const totalTimelineDays = Math.max(1, Math.round((projectEndDate - projectStartDate) / 86400000) + 1);
+
+    function formatDate(date) {
+      const dd = String(date.getDate()).padStart(2, '0');
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const yyyy = date.getFullYear();
+      return `${dd}.${mm}.${yyyy}`;
+    }
+
+    function toDateInputValue(date) {
+      const dd = String(date.getDate()).padStart(2, '0');
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      return `${date.getFullYear()}-${mm}-${dd}`;
+    }
+
+    function toDateTimeLocalValue(date) {
+      const base = toDateInputValue(date);
+      const hh = String(date.getHours()).padStart(2, '0');
+      const mi = String(date.getMinutes()).padStart(2, '0');
+      return `${base}T${hh}:${mi}`;
+    }
+
+    function parseDateInput(value) {
+      if (!value) return null;
+      const [year, month, day] = value.split('-').map(Number);
+      if (!year || !month || !day) return null;
+      return new Date(year, month - 1, day);
+    }
+
+    function parseDateTimeInput(value) {
+      if (!value) return null;
+      const [datePart, timePart] = value.split('T');
+      if (!datePart || !timePart) return null;
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hour, minute] = timePart.split(':').map(Number);
+      if ([year, month, day, hour, minute].some((part) => Number.isNaN(part))) return null;
+      return new Date(year, month - 1, day, hour, minute, 0, 0);
+    }
+
+    function isWeekday(date) {
+      const day = date.getDay();
+      return day >= 1 && day <= 5;
+    }
+
+    function ensureWeekday(date, direction = 1) {
+      const safeDate = new Date(date.getTime());
+      while (!isWeekday(safeDate)) {
+        safeDate.setDate(safeDate.getDate() + direction);
+      }
+      return safeDate;
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomWeekday(minDate, maxDate) {
+      const days = Math.round((maxDate - minDate) / 86400000);
+      let candidate = new Date(minDate.getTime());
+      for (let attempts = 0; attempts < 150; attempts += 1) {
+        const offset = randomInt(0, Math.max(0, days));
+        candidate = new Date(minDate.getTime());
+        candidate.setDate(candidate.getDate() + offset);
+        if (isWeekday(candidate)) return candidate;
+      }
+      return ensureWeekday(candidate, 1);
+    }
+
+    function getPhaseMonthsByIndex(index) {
+      const position = index + 1;
+      if (position <= 4) return { startMonth: 1, endMonth: 4 };
+      if (position <= 10) return { startMonth: 5, endMonth: 10 };
+      return { startMonth: 11, endMonth: 18 };
+    }
+
+    function getPhaseLabelByIndex(index) {
+      const phase = getPhaseMonthsByIndex(index);
+      return `Monat ${phase.startMonth}–${phase.endMonth}`;
+    }
+
+    function monthWindowToDates(startMonth, endMonth) {
+      const minDate = new Date(2026, 4 + (startMonth - 1), 1);
+      const maxDate = new Date(2026, 4 + endMonth, 0);
+      return {
+        minDate: ensureWeekday(minDate, 1),
+        maxDate: ensureWeekday(maxDate, -1)
+      };
+    }
+
+    function clampDateToRange(date, minDate, maxDate) {
+      if (date < minDate) return new Date(minDate.getTime());
+      if (date > maxDate) return new Date(maxDate.getTime());
+      return new Date(date.getTime());
+    }
+
+    function attachInputStopPropagation(input) {
+      ['click', 'pointerdown', 'mousedown', 'keydown'].forEach((eventName) => {
+        input.addEventListener(eventName, (event) => {
+          event.stopPropagation();
+        });
+      });
+    }
+
+    function buildDateUi(card, index) {
+      const phase = getPhaseMonthsByIndex(index);
+      const range = monthWindowToDates(phase.startMonth, phase.endMonth);
+      card.dataset.rangeMin = toDateInputValue(range.minDate);
+      card.dataset.rangeMax = toDateInputValue(range.maxDate);
+
+      const dateWrap = document.createElement('div');
+      dateWrap.className = 'm-date-fields';
+      dateWrap.innerHTML = `
+        <label class="m-date-field">Start
+          <input type="date" class="m-start-date" min="${card.dataset.rangeMin}" max="${card.dataset.rangeMax}">
+        </label>
+        <label class="m-date-field">Ende
+          <input type="date" class="m-end-date" min="${card.dataset.rangeMin}" max="${card.dataset.rangeMax}">
+        </label>
+        <div class="m-date-hint">Erlaubter Zeitraum: Monat ${phase.startMonth}–${phase.endMonth} (nur Mo–Fr)</div>
+      `;
+      card.appendChild(dateWrap);
+
+      const startInput = dateWrap.querySelector('.m-start-date');
+      const endInput = dateWrap.querySelector('.m-end-date');
+      attachInputStopPropagation(startInput);
+      attachInputStopPropagation(endInput);
+
+      [startInput, endInput].forEach((input) => {
+        input.addEventListener('change', () => {
+          applyDateValidation(card);
+          updateTimeline();
+        });
+      });
+
+      if (card.dataset.coaching === 'true') {
+        const coachingWrap = document.createElement('div');
+        coachingWrap.className = 'coaching-schedule';
+        coachingWrap.innerHTML = `
+          <div class="coaching-title">Coaching-Termine (6x Datum + Uhrzeit)</div>
+          <div class="coach-slots"></div>
+        `;
+        dateWrap.appendChild(coachingWrap);
+        const slots = coachingWrap.querySelector('.coach-slots');
+        for (let i = 0; i < 6; i += 1) {
+          const label = document.createElement('label');
+          label.className = 'coach-slot';
+          label.innerHTML = `Termin ${i + 1}<input type="datetime-local" class="coach-date-time" step="1800">`;
+          const slotInput = label.querySelector('input');
+          attachInputStopPropagation(slotInput);
+          slotInput.addEventListener('change', () => {
+            applyCoachingValidation(card);
+            updateTimeline();
+          });
+          slots.appendChild(label);
+        }
+      }
+    }
+
+    function applyDateValidation(card) {
+      const minDate = parseDateInput(card.dataset.rangeMin);
+      const maxDate = parseDateInput(card.dataset.rangeMax);
+      const startInput = card.querySelector('.m-start-date');
+      const endInput = card.querySelector('.m-end-date');
+      let startDate = parseDateInput(startInput.value) || new Date(minDate.getTime());
+      let endDate = parseDateInput(endInput.value) || new Date(startDate.getTime());
+
+      startDate = ensureWeekday(clampDateToRange(startDate, minDate, maxDate), 1);
+      endDate = ensureWeekday(clampDateToRange(endDate, minDate, maxDate), -1);
+      if (endDate < startDate) endDate = new Date(startDate.getTime());
+
+      startInput.value = toDateInputValue(startDate);
+      endInput.value = toDateInputValue(endDate);
+      card.dataset.startDate = startInput.value;
+      card.dataset.endDate = endInput.value;
+
+      applyCoachingValidation(card);
+    }
+
+    function applyCoachingValidation(card) {
+      if (card.dataset.coaching !== 'true') return;
+      const slotInputs = Array.from(card.querySelectorAll('.coach-date-time'));
+      const startDate = parseDateInput(card.dataset.startDate);
+      const endDate = parseDateInput(card.dataset.endDate);
+      if (!startDate || !endDate) return;
+
+      const startOfDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 8, 0, 0, 0);
+      const endOfDay = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 18, 0, 0, 0);
+      slotInputs.forEach((input) => {
+        input.min = toDateTimeLocalValue(startOfDay);
+        input.max = toDateTimeLocalValue(endOfDay);
+      });
+
+      const validValues = [];
+      slotInputs.forEach((input) => {
+        let dt = parseDateTimeInput(input.value);
+        if (!dt) return;
+        if (dt < startOfDay) dt = new Date(startOfDay.getTime());
+        if (dt > endOfDay) dt = new Date(endOfDay.getTime());
+        const adjustedDate = ensureWeekday(new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()), 1);
+        dt = new Date(adjustedDate.getFullYear(), adjustedDate.getMonth(), adjustedDate.getDate(), dt.getHours(), dt.getMinutes(), 0, 0);
+        input.value = toDateTimeLocalValue(dt);
+        validValues.push(dt);
+      });
+
+      card.dataset.coachDates = JSON.stringify(validValues.map((date) => date.toISOString()));
+    }
+
+    function initializeDates() {
+      measureCards.forEach((card, index) => {
+        buildDateUi(card, index);
+        const minDate = parseDateInput(card.dataset.rangeMin);
+        const maxDate = parseDateInput(card.dataset.rangeMax);
+        const randomStart = randomWeekday(minDate, maxDate);
+        const randomEnd = randomWeekday(randomStart, maxDate);
+        const startInput = card.querySelector('.m-start-date');
+        const endInput = card.querySelector('.m-end-date');
+        startInput.value = toDateInputValue(randomStart);
+        endInput.value = toDateInputValue(randomEnd);
+        applyDateValidation(card);
+
+        if (card.dataset.coaching === 'true') {
+          const slotInputs = Array.from(card.querySelectorAll('.coach-date-time'));
+          const daySpan = Math.max(1, Math.round((randomEnd - randomStart) / 86400000));
+          slotInputs.forEach((input, slotIndex) => {
+            const spreadOffset = Math.round((daySpan * slotIndex) / Math.max(1, slotInputs.length - 1));
+            const candidateDay = new Date(randomStart.getTime());
+            candidateDay.setDate(candidateDay.getDate() + spreadOffset);
+            const weekdayDay = ensureWeekday(clampDateToRange(candidateDay, randomStart, randomEnd), 1);
+            const hour = 9 + (slotIndex % 5);
+            const appointment = new Date(weekdayDay.getFullYear(), weekdayDay.getMonth(), weekdayDay.getDate(), hour, 0, 0, 0);
+            input.value = toDateTimeLocalValue(appointment);
+          });
+          applyCoachingValidation(card);
+        }
+      });
+    }
 
     function profileToPoints(profile) {
       return profile.map((value, index) => {
@@ -2535,6 +2990,85 @@
       }
     }
 
+    function getSelectedCardsSorted() {
+      return measureCards
+        .filter((card) => card.classList.contains('selected'))
+        .sort((a, b) => measureCards.indexOf(a) - measureCards.indexOf(b));
+    }
+
+    function getMeasureName(card) {
+      return card.querySelector('.m-name')?.textContent?.trim() || 'Maßnahme';
+    }
+
+    function daysFromProjectStart(date) {
+      return Math.round((date - projectStartDate) / 86400000);
+    }
+
+    function updateTimeline() {
+      const selectedCards = getSelectedCardsSorted();
+      if (selectedMeasuresBody) {
+        if (!selectedCards.length) {
+          selectedMeasuresBody.innerHTML = '<tr><td colspan="4">Noch keine Maßnahme ausgewählt.</td></tr>';
+        } else {
+          selectedMeasuresBody.innerHTML = selectedCards.map((card) => {
+            const index = measureCards.indexOf(card);
+            const startDate = parseDateInput(card.dataset.startDate);
+            const endDate = parseDateInput(card.dataset.endDate);
+            return `
+              <tr>
+                <td>${getMeasureName(card)}</td>
+                <td>${startDate ? formatDate(startDate) : '—'}</td>
+                <td>${endDate ? formatDate(endDate) : '—'}</td>
+                <td>${getPhaseLabelByIndex(index)}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      if (!timelineContainer) return;
+      const axisTicks = Array.from({ length: 18 }, (_, idx) => {
+        const pos = (idx / 17) * 100;
+        return `<div class="timeline-tick" style="left:${pos}%">M${idx + 1}</div>`;
+      }).join('');
+
+      const bars = selectedCards.map((card) => {
+        const startDate = parseDateInput(card.dataset.startDate);
+        const endDate = parseDateInput(card.dataset.endDate);
+        if (!startDate || !endDate) return '';
+        const leftPercent = (daysFromProjectStart(startDate) / totalTimelineDays) * 100;
+        const widthPercent = ((daysFromProjectStart(endDate) - daysFromProjectStart(startDate) + 1) / totalTimelineDays) * 100;
+
+        let coachingMarks = '';
+        if (card.dataset.coaching === 'true') {
+          const entries = JSON.parse(card.dataset.coachDates || '[]')
+            .map((value) => new Date(value))
+            .filter((date) => !Number.isNaN(date.getTime()));
+          coachingMarks = entries.map((date) => {
+            const relPercent = ((daysFromProjectStart(date) - daysFromProjectStart(startDate)) / Math.max(1, (daysFromProjectStart(endDate) - daysFromProjectStart(startDate)))) * 100;
+            return `<span class="timeline-point" style="left:${Math.max(0, Math.min(100, relPercent))}%"></span>`;
+          }).join('');
+        }
+
+        return `
+          <div class="timeline-row">
+            <div class="timeline-row-label">${getMeasureName(card)}</div>
+            <div class="timeline-track">
+              <div class="timeline-bar" style="left:${Math.max(0, leftPercent)}%;width:${Math.max(1.2, widthPercent)}%">
+                ${coachingMarks}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      timelineContainer.innerHTML = `
+        <div class="selected-measures-title">Grafische Timeline (Monat 1–18)</div>
+        <div class="timeline-axis">${axisTicks}</div>
+        <div class="timeline-bars">${bars || '<div class="m-date-hint">Wähle auf Folie 7 mindestens eine Maßnahme aus.</div>'}</div>
+      `;
+    }
+
     measureCards.forEach((card) => {
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
@@ -2543,6 +3077,7 @@
         card.classList.toggle('selected');
         card.setAttribute('aria-pressed', card.classList.contains('selected') ? 'true' : 'false');
         renderRadarFromSelection();
+        updateTimeline();
       });
       card.addEventListener('keydown', (event) => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -2557,7 +3092,9 @@
 
     renderSlideNav();
     renderSlides();
+    initializeDates();
     renderRadarFromSelection();
+    updateTimeline();
   })();
 </script>
 
