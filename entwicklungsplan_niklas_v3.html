@@ -820,9 +820,20 @@
     border: 1px solid var(--light);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 0.6rem;
+  }
+
+  .m-radar-copy {
+    width: 100%;
+    font-size: 0.73rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .m-radar-copy strong {
+    color: var(--ink);
   }
 
   .m-card {
@@ -1974,6 +1985,10 @@
             <text x="-90" y="-50" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Durchsetzen</text>
           </g>
         </svg>
+        <div class="m-radar-copy">
+          <strong>Simulation:</strong> Wähle Maßnahmen aus. Das blaue Ist-Profil verschiebt sich entsprechend der Kompetenzwirkung.<br>
+          Basis-Ist startet bei: Fach 87 · Methodik 65 · Selbst 75 · Führung 12 · Konflikt 30 · Durchsetzen 38.
+        </div>
         <div class="m-radar-count"><span>✓</span><span id="massnahmen-count">0 Maßnahmen aktiv</span></div>
       </div>
 
