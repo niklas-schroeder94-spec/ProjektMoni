@@ -63,6 +63,88 @@
     flex-shrink: 0;
   }
 
+  .deck-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .deck-btn {
+    border: 1px solid var(--light);
+    background: var(--white);
+    color: var(--ink);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    padding: 0.28rem 0.55rem;
+    cursor: pointer;
+  }
+
+  .deck-btn:hover {
+    border-color: var(--steel);
+    color: var(--steel);
+  }
+
+  .slide-nav {
+    position: fixed;
+    top: 2.9rem;
+    right: 1.6rem;
+    z-index: 1100;
+    width: 23rem;
+    max-height: min(72vh, 38rem);
+    overflow: auto;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid var(--light);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    padding: 0.7rem;
+    display: none;
+  }
+
+  .slide-nav.is-open {
+    display: block;
+  }
+
+  .slide-nav-item {
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 0.55rem 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.7rem;
+    cursor: pointer;
+  }
+
+  .slide-nav-item:hover {
+    border-color: var(--light);
+    background: var(--paper);
+  }
+
+  .slide-nav-item.active {
+    border-color: var(--accent);
+    background: rgba(200,75,49,0.08);
+  }
+
+  .sn-num {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    min-width: 2.3rem;
+    flex-shrink: 0;
+  }
+
+  .sn-title {
+    font-size: 0.75rem;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.35;
+    flex: 1;
+  }
+
   /* ── SLIDE BASE ── */
   .slide {
     width: 100%;
@@ -1076,8 +1158,12 @@
 <body>
 <div class="deck-header">
   <div class="deck-meta">Führung · DHBW SST · Niklas Schröder &amp; Angelina Diesterweg</div>
-  <div class="deck-page" id="deck-page">01 / 10</div>
+  <div class="deck-controls">
+    <button class="deck-btn" id="deck-nav-toggle" type="button">Agenda</button>
+    <div class="deck-page" id="deck-page">01 / 10</div>
+  </div>
 </div>
+<div class="slide-nav" id="slide-nav" aria-label="Foliennavigation"></div>
 
 <!-- ════════════════════════════════════════
      FOLIE 1 — TITELFOLIE
@@ -2003,7 +2089,41 @@
   (function () {
     const slides = Array.from(document.querySelectorAll('.slide'));
     const pageIndicator = document.getElementById('deck-page');
+    const navToggle = document.getElementById('deck-nav-toggle');
+    const navPanel = document.getElementById('slide-nav');
     let currentIndex = 0;
+    let navItems = [];
+
+    function getSlideTitle(slide, fallbackIndex) {
+      const heading = slide.querySelector('.slide-h1');
+      if (heading) return heading.textContent.trim();
+      const coverTitle = slide.querySelector('.cover-title');
+      if (coverTitle) return coverTitle.textContent.replace(/\s+/g, ' ').trim();
+      const fazitTitle = slide.querySelector('.fazit-heading');
+      if (fazitTitle) return fazitTitle.textContent.trim();
+      return `Folie ${fallbackIndex + 1}`;
+    }
+
+    function renderSlideNav() {
+      if (!navPanel) return;
+
+      navPanel.innerHTML = '';
+      navItems = slides.map((slide, index) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'slide-nav-item';
+        item.innerHTML = `
+          <span class="sn-num">${String(index + 1).padStart(2, '0')}</span>
+          <span class="sn-title">${getSlideTitle(slide, index)}</span>
+        `;
+        item.addEventListener('click', () => {
+          goToSlide(index);
+          navPanel.classList.remove('is-open');
+        });
+        navPanel.appendChild(item);
+        return item;
+      });
+    }
 
     function renderSlides() {
       slides.forEach((slide, index) => {
@@ -2014,6 +2134,9 @@
         const total = String(slides.length).padStart(2, '0');
         pageIndicator.textContent = `${current} / ${total}`;
       }
+      navItems.forEach((item, index) => {
+        item.classList.toggle('active', index === currentIndex);
+      });
     }
 
     function goToSlide(nextIndex) {
@@ -2038,9 +2161,28 @@
       } else if (event.key === 'End') {
         event.preventDefault();
         goToSlide(slides.length - 1);
+      } else if (event.key.toLowerCase() === 'm') {
+        event.preventDefault();
+        navPanel.classList.toggle('is-open');
+      } else if (event.key === 'Escape') {
+        navPanel.classList.remove('is-open');
       }
     });
 
+    navToggle?.addEventListener('click', () => {
+      navPanel.classList.toggle('is-open');
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!navPanel || !navToggle) return;
+      const clickedInsideMenu = navPanel.contains(event.target);
+      const clickedToggle = navToggle.contains(event.target);
+      if (!clickedInsideMenu && !clickedToggle) {
+        navPanel.classList.remove('is-open');
+      }
+    });
+
+    renderSlideNav();
     renderSlides();
   })();
 </script>
