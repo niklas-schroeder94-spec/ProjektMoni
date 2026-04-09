@@ -145,6 +145,23 @@
     flex: 1;
   }
 
+  .deck-progress {
+    position: fixed;
+    top: 2.6rem;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(236, 234, 228, 0.9);
+    z-index: 1050;
+  }
+
+  .deck-progress-fill {
+    height: 100%;
+    width: 10%;
+    background: linear-gradient(to right, var(--steel), var(--accent));
+    transition: width 220ms ease;
+  }
+
   /* ── SLIDE BASE ── */
   .slide {
     width: 100%;
@@ -155,7 +172,7 @@
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-top: 2.6rem;
+    padding-top: 2.9rem;
     page-break-after: always;
   }
 
@@ -1163,6 +1180,9 @@
     <div class="deck-page" id="deck-page">01 / 10</div>
   </div>
 </div>
+<div class="deck-progress" aria-hidden="true">
+  <div class="deck-progress-fill" id="deck-progress-fill"></div>
+</div>
 <div class="slide-nav" id="slide-nav" aria-label="Foliennavigation"></div>
 
 <!-- ════════════════════════════════════════
@@ -2091,6 +2111,7 @@
     const pageIndicator = document.getElementById('deck-page');
     const navToggle = document.getElementById('deck-nav-toggle');
     const navPanel = document.getElementById('slide-nav');
+    const progressFill = document.getElementById('deck-progress-fill');
     let currentIndex = 0;
     let navItems = [];
 
@@ -2133,6 +2154,10 @@
         const current = String(currentIndex + 1).padStart(2, '0');
         const total = String(slides.length).padStart(2, '0');
         pageIndicator.textContent = `${current} / ${total}`;
+      }
+      if (progressFill) {
+        const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+        progressFill.style.width = `${progressPercent}%`;
       }
       navItems.forEach((item, index) => {
         item.classList.toggle('active', index === currentIndex);
