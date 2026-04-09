@@ -24,28 +24,165 @@
     font-family: 'DM Sans', sans-serif;
     background: var(--paper);
     color: var(--ink);
+    overflow: hidden;
+  }
+
+  .deck-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5000;
+    height: 2.6rem;
+    padding: 0.55rem 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(247, 244, 239, 0.92);
+    border-bottom: 1px solid var(--light);
+    backdrop-filter: blur(3px);
+  }
+
+  .deck-meta {
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 1rem;
+  }
+
+  .deck-page {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+
+  .deck-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .deck-btn {
+    border: 1px solid var(--light);
+    background: var(--white);
+    color: var(--ink);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    padding: 0.28rem 0.55rem;
+    cursor: pointer;
+  }
+
+  .deck-btn:hover {
+    border-color: var(--steel);
+    color: var(--steel);
+  }
+
+  .slide-nav {
+    position: fixed;
+    top: 2.9rem;
+    right: 1.6rem;
+    z-index: 5100;
+    width: 23rem;
+    max-height: min(72vh, 38rem);
+    overflow: auto;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid var(--light);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    padding: 0.7rem;
+    display: none;
+  }
+
+  .slide-nav.is-open {
+    display: block;
+  }
+
+  .slide-nav-item {
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 0.55rem 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.7rem;
+    cursor: pointer;
+  }
+
+  .slide-nav-item:hover {
+    border-color: var(--light);
+    background: var(--paper);
+  }
+
+  .slide-nav-item.active {
+    border-color: var(--accent);
+    background: rgba(200,75,49,0.08);
+  }
+
+  .sn-num {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    min-width: 2.3rem;
+    flex-shrink: 0;
+  }
+
+  .sn-title {
+    font-size: 0.75rem;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.35;
+    flex: 1;
+  }
+
+  .deck-progress {
+    position: fixed;
+    top: 2.6rem;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(236, 234, 228, 0.9);
+    z-index: 1050;
+  }
+
+  .deck-progress-fill {
+    height: 100%;
+    width: 10%;
+    background: linear-gradient(to right, var(--steel), var(--accent));
+    transition: width 220ms ease;
   }
 
   /* ── SLIDE BASE ── */
   .slide {
     width: 100%;
     min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    z-index: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 2.9rem;
     page-break-after: always;
   }
 
+  .slide.is-hidden {
+    display: none;
+  }
+
   .slide-number {
-    position: absolute;
-    bottom: 1.8rem;
-    right: 2.5rem;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    color: var(--muted);
-    text-transform: uppercase;
+    display: none;
   }
 
   /* ── INNER WRAPPER ── */
@@ -53,7 +190,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 3.2rem 4.8rem;
+    padding: 3.2rem 4.8rem 4.8rem;
     gap: 1.8rem;
   }
 
@@ -96,7 +233,7 @@
     color: var(--white);
     justify-content: center;
     align-items: flex-start;
-    padding: 5rem 6rem;
+    padding: 5rem 6rem 6.2rem;
   }
 
   .cover-eyebrow {
@@ -666,6 +803,72 @@
     flex: 1;
   }
 
+  .impact-lab {
+    background: var(--white);
+    border-left: 3px solid var(--steel);
+    padding: 1rem 1.2rem;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .il-kicker {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--steel);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .il-title {
+    font-size: 0.88rem;
+    color: var(--ink);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 0.35rem;
+  }
+
+  .il-sub {
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 0.45rem;
+  }
+
+  .il-shift {
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .impact-radar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .impact-legend {
+    display: flex;
+    gap: 0.9rem;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .impact-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .impact-line {
+    width: 16px;
+    height: 0;
+    border-top: 2px solid;
+  }
+
   .m-card {
     background: var(--white);
     padding: 1.3rem;
@@ -673,6 +876,21 @@
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
+  }
+
+  .m-card[data-impact] {
+    cursor: pointer;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  .m-card[data-impact]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26,26,46,0.08);
+  }
+
+  .m-card.active-impact {
+    outline: 2px solid var(--steel);
+    outline-offset: -2px;
   }
 
   .m-card.off  { border-color: var(--accent); }
@@ -904,6 +1122,43 @@
     gap: 1.3rem;
   }
 
+  .live-pulse {
+    background: var(--white);
+    border: 1px solid var(--light);
+    border-left: 3px solid var(--steel);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: -0.3rem;
+  }
+
+  .live-pulse-q {
+    font-size: 0.78rem;
+    color: var(--ink);
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  .live-pulse-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: flex-end;
+  }
+
+  .pulse-opt {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--steel);
+    border: 1px solid rgba(74,111,165,0.35);
+    padding: 0.22rem 0.5rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
   .tb-eyebrow {
     font-size: 0.62rem;
     letter-spacing: 0.25em;
@@ -961,7 +1216,7 @@
     background: var(--ink);
     color: var(--white);
     justify-content: center;
-    padding: 4.5rem 5.5rem;
+    padding: 4.5rem 5.5rem 6.2rem;
     gap: 0;
   }
 
@@ -1037,6 +1292,17 @@
 </style>
 </head>
 <body>
+<div class="deck-header">
+  <div class="deck-meta">Führung · DHBW SST · Niklas Schröder &amp; Angelina Diesterweg</div>
+  <div class="deck-controls">
+    <button class="deck-btn" id="deck-nav-toggle" type="button">Agenda</button>
+    <div class="deck-page" id="deck-page">01 / 10</div>
+  </div>
+</div>
+<div class="deck-progress" aria-hidden="true">
+  <div class="deck-progress-fill" id="deck-progress-fill"></div>
+</div>
+<div class="slide-nav" id="slide-nav" aria-label="Foliennavigation"></div>
 
 <!-- ════════════════════════════════════════
      FOLIE 1 — TITELFOLIE
@@ -1639,9 +1905,48 @@
       Die Maßnahmen sind bewusst als <strong style="color:var(--ink)">off-the-job-Schwerpunkt</strong> gewählt, da insbesondere Führungs-, Konflikt- und Verhaltenskompetenzen außerhalb des operativen Drucks aufgebaut werden müssen. So können neue Muster trainiert werden, bevor sie in der Linie wirksam werden müssen.
     </div>
 
+    <div class="impact-lab">
+      <div>
+        <div class="il-kicker">Interaktiv · Kompetenzmodell</div>
+        <div class="il-title" id="impact-selected">Klicke eine Maßnahme an, um den Kompetenzzuwachs zu sehen.</div>
+        <div class="il-sub">Das Modell zeigt das Ist-Profil (blau) und den prognostizierten Effekt der gewählten Maßnahme (orange).</div>
+        <div class="il-shift" id="impact-shift">Noch keine Maßnahme ausgewählt.</div>
+      </div>
+      <div class="impact-radar-wrap">
+        <svg width="220" height="220" viewBox="0 0 220 220" aria-label="Kompetenzmodell Maßnahmeneffekt">
+          <g transform="translate(110,112)">
+            <polygon points="0,-74 64.1,-37 64.1,37 0,74 -64.1,37 -64.1,-37" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-49 42.4,-24.5 42.4,24.5 0,49 -42.4,24.5 -42.4,-24.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-24 20.8,-12 20.8,12 0,24 -20.8,12 -20.8,-12" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+
+            <line x1="0" y1="0" x2="0" y2="-74" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="64.1" y2="-37" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="64.1" y2="37" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="74" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-64.1" y2="37" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-64.1" y2="-37" stroke="#d0ccc4" stroke-width="1"/>
+
+            <polygon id="impact-ist" fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="1.8" stroke-dasharray="4,3"></polygon>
+            <polygon id="impact-proj" fill="rgba(200,75,49,0.09)" stroke="var(--accent)" stroke-width="2"></polygon>
+
+            <text x="0" y="-82" text-anchor="middle" font-size="7.5" fill="#666">Fach</text>
+            <text x="70" y="-39" text-anchor="start" font-size="7.5" fill="#666">Methodik</text>
+            <text x="70" y="43" text-anchor="start" font-size="7.5" fill="#666">Selbst</text>
+            <text x="0" y="87" text-anchor="middle" font-size="7.5" fill="#666">Führung</text>
+            <text x="-70" y="43" text-anchor="end" font-size="7.5" fill="#666">Konflikt</text>
+            <text x="-70" y="-39" text-anchor="end" font-size="7.5" fill="#666">Durchs.</text>
+          </g>
+        </svg>
+        <div class="impact-legend">
+          <span><i class="impact-line" style="border-color:var(--steel);border-style:dashed"></i> Ist</span>
+          <span><i class="impact-line" style="border-color:var(--accent)"></i> Nach Maßnahme</span>
+        </div>
+      </div>
+    </div>
+
     <div class="m-grid">
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="0,2,1,6,2,2" data-measure="Führungskräfteseminar">
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">Führungskräfteseminar „Führung im Industriebetrieb"</div>
         <div class="m-ziel">Zielkompetenz: Mitarbeiterführung, Gesprächsführung</div>
@@ -1649,7 +1954,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="0,1,2,3,2,6" data-measure="Einzelcoaching">
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">Externes Einzelcoaching (6–8 Sitzungen)</div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
@@ -1657,7 +1962,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="1,1,1,4,0,0" data-measure="AdA-Kurs (AEVO)">
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
         <div class="m-ziel">Zielkompetenz: Ausbildungskompetenz (AEVO)</div>
@@ -1665,7 +1970,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="0,1,1,1,7,1" data-measure="Konfliktmanagement-Seminar">
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Seminar „Konfliktmanagement in der Produktion"</div>
         <div class="m-ziel">Zielkompetenz: Konfliktfähigkeit, Deeskalation</div>
@@ -1673,7 +1978,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="1,2,1,1,1,4" data-measure="Planspiel Produktionssteuerung">
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
         <div class="m-ziel">Zielkompetenz: Entscheidungsstärke, wirtschaftl. Denken</div>
@@ -1681,7 +1986,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off" data-impact="1,1,0,3,0,2" data-measure="Workshop Arbeitsrecht">
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Workshop „Arbeitsrecht für Führungskräfte"</div>
         <div class="m-ziel">Zielkompetenz: Rechtliche Handlungssicherheit</div>
@@ -1689,7 +1994,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card near">
+      <div class="m-card near" data-impact="7,1,1,1,1,1" data-measure="Hospitation Finishing">
         <div class="m-type">Near-the-job · Priorität ●●●</div>
         <div class="m-name">Strukturierte Hospitation Finishing-Abteilung</div>
         <div class="m-ziel">Zielkompetenz: Anlagenwissen, operative Glaubwürdigkeit</div>
@@ -1697,7 +2002,7 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card on">
+      <div class="m-card on" data-impact="2,1,2,8,3,4" data-measure="Vertretungsmandat Finishing">
         <div class="m-type">On-the-job · Transfer · Priorität ●●●</div>
         <div class="m-name">Vertretungsmandat Leitung Finishing (schrittweise)</div>
         <div class="m-ziel">Zielkompetenz: Reale Führungserfahrung, Personalverantwortung</div>
@@ -1858,6 +2163,15 @@
       Ein wesentliches Risiko besteht darin, dass off-the-job-Maßnahmen ohne strukturierten Praxistransfer nur begrenzte Wirkung entfalten. Deshalb müssen Lern- und Anwendungssituationen systematisch verzahnt werden.
     </div>
 
+    <div class="live-pulse">
+      <div class="live-pulse-q">Live-Impuls (10 Sek.): <strong>Was ist aus Ihrer Sicht das größte Risiko für das Scheitern dieses Entwicklungsplans?</strong></div>
+      <div class="live-pulse-options">
+        <span class="pulse-opt">Zeit/Freistellung</span>
+        <span class="pulse-opt">Akzeptanz im Team</span>
+        <span class="pulse-opt">Führungspraxis</span>
+      </div>
+    </div>
+
     <div class="reflexion-layout">
       <div class="risiko-list">
 
@@ -1957,6 +2271,190 @@
   <div class="fazit-footer">Personalentwicklung · Kompetenzmanagement · Führung · Entwicklungsplan Niklas S.</div>
   <div class="slide-number" style="color:rgba(255,255,255,0.25)">10 / 10</div>
 </div>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const pageIndicator = document.getElementById('deck-page');
+    const navToggle = document.getElementById('deck-nav-toggle');
+    const navPanel = document.getElementById('slide-nav');
+    const progressFill = document.getElementById('deck-progress-fill');
+    const impactIst = document.getElementById('impact-ist');
+    const impactProj = document.getElementById('impact-proj');
+    const impactSelected = document.getElementById('impact-selected');
+    const impactShift = document.getElementById('impact-shift');
+    const measureCards = Array.from(document.querySelectorAll('.m-card[data-impact]'));
+    let currentIndex = 0;
+    let navItems = [];
+
+    const baseModel = [87, 65, 75, 12, 30, 38];
+    const maxModel = [95, 90, 90, 92, 88, 90];
+    const competencyNames = ['Fach', 'Methodik', 'Selbst', 'Führung', 'Konflikt', 'Durchsetzen'];
+
+    function getSlideTitle(slide, fallbackIndex) {
+      const heading = slide.querySelector('.slide-h1');
+      if (heading) return heading.textContent.trim();
+      const coverTitle = slide.querySelector('.cover-title');
+      if (coverTitle) return coverTitle.textContent.replace(/\s+/g, ' ').trim();
+      const fazitTitle = slide.querySelector('.fazit-heading');
+      if (fazitTitle) return fazitTitle.textContent.trim();
+      return `Folie ${fallbackIndex + 1}`;
+    }
+
+    function renderSlideNav() {
+      if (!navPanel) return;
+
+      navPanel.innerHTML = '';
+      navItems = slides.map((slide, index) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'slide-nav-item';
+        item.innerHTML = `
+          <span class="sn-num">${String(index + 1).padStart(2, '0')}</span>
+          <span class="sn-title">${getSlideTitle(slide, index)}</span>
+        `;
+        item.addEventListener('click', () => {
+          goToSlide(index);
+          navPanel.classList.remove('is-open');
+        });
+        navPanel.appendChild(item);
+        return item;
+      });
+    }
+
+    function modelToPoints(values, radius = 74) {
+      const step = (Math.PI * 2) / 6;
+      return values
+        .map((score, i) => {
+          const angle = -Math.PI / 2 + step * i;
+          const scaled = (Math.max(0, Math.min(100, score)) / 100) * radius;
+          const x = (Math.cos(angle) * scaled).toFixed(1);
+          const y = (Math.sin(angle) * scaled).toFixed(1);
+          return `${x},${y}`;
+        })
+        .join(' ');
+    }
+
+    function describeShift(impact) {
+      return impact
+        .map((delta, idx) => ({ delta, name: competencyNames[idx] }))
+        .sort((a, b) => b.delta - a.delta)
+        .slice(0, 2)
+        .filter((entry) => entry.delta > 0)
+        .map((entry) => `${entry.name} +${entry.delta}`)
+        .join(' · ');
+    }
+
+    function updateImpactModel(card) {
+      if (!impactIst || !impactProj || !card) return;
+
+      const impact = (card.dataset.impact || '0,0,0,0,0,0')
+        .split(',')
+        .map((value) => Number(value.trim()) || 0);
+      const projected = baseModel.map((value, index) => Math.min(maxModel[index], value + (impact[index] || 0)));
+
+      impactIst.setAttribute('points', modelToPoints(baseModel));
+      impactProj.setAttribute('points', modelToPoints(projected));
+
+      measureCards.forEach((item) => item.classList.remove('active-impact'));
+      card.classList.add('active-impact');
+
+      if (impactSelected) {
+        impactSelected.textContent = `Gewählte Maßnahme: ${card.dataset.measure || 'Maßnahme'}`;
+      }
+      if (impactShift) {
+        const shiftText = describeShift(impact);
+        impactShift.textContent = shiftText
+          ? `Stärkster erwarteter Zuwachs: ${shiftText}`
+          : 'Diese Maßnahme hat nur geringe direkte Kompetenzwirkung im Modell.';
+      }
+    }
+
+    function renderSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('is-hidden', index !== currentIndex);
+      });
+      if (pageIndicator) {
+        const current = String(currentIndex + 1).padStart(2, '0');
+        const total = String(slides.length).padStart(2, '0');
+        pageIndicator.textContent = `${current} / ${total}`;
+      }
+      if (progressFill) {
+        const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+      }
+      navItems.forEach((item, index) => {
+        item.classList.toggle('active', index === currentIndex);
+      });
+    }
+
+    function goToSlide(nextIndex) {
+      if (nextIndex < 0 || nextIndex >= slides.length) return;
+      currentIndex = nextIndex;
+      renderSlides();
+      slides[currentIndex].scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+
+    function handleDeckKeydown(event) {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') {
+        event.preventDefault();
+        goToSlide(currentIndex + 1);
+      } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+        event.preventDefault();
+        goToSlide(currentIndex - 1);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        goToSlide(0);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        goToSlide(slides.length - 1);
+      } else if (event.key && event.key.toLowerCase() === 'm') {
+        event.preventDefault();
+        if (navPanel) navPanel.classList.toggle('is-open');
+      } else if (event.key === 'Escape') {
+        if (navPanel) navPanel.classList.remove('is-open');
+      }
+    }
+
+    window.addEventListener('keydown', handleDeckKeydown, true);
+
+    if (navToggle && navPanel) {
+      navToggle.addEventListener('click', () => {
+        navPanel.classList.toggle('is-open');
+      });
+    }
+
+    document.addEventListener('click', (event) => {
+      if (!navPanel || !navToggle) return;
+      const clickedInsideMenu = navPanel.contains(event.target);
+      const clickedToggle = navToggle.contains(event.target);
+      if (!clickedInsideMenu && !clickedToggle) {
+        navPanel.classList.remove('is-open');
+      }
+    });
+
+    measureCards.forEach((card) => {
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.addEventListener('click', () => updateImpactModel(card));
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          updateImpactModel(card);
+        }
+      });
+    });
+
+    if (measureCards.length > 0) {
+      updateImpactModel(measureCards[0]);
+    }
+
+    renderSlideNav();
+    renderSlides();
+  })();
+</script>
 
 </body>
 </html>
