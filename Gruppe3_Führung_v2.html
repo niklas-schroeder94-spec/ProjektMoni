@@ -176,7 +176,7 @@
 
   .deck-progress-fill {
     height: 100%;
-    width: calc(100% / 11);
+    width: calc(100% / 10);
     background: linear-gradient(to right, var(--steel), var(--accent));
     transition: width 220ms ease;
   }
@@ -1657,10 +1657,17 @@
     font-size: 2.15rem;
   }
 
+  .finale-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+  }
+
   .finale-compare {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.1rem;
+    gap: 1rem;
   }
 
   .finale-radar-card {
@@ -1691,13 +1698,61 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 18.4rem;
+    min-height: 16.8rem;
+  }
+
+  .finale-takeaways {
+    background: linear-gradient(155deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(140, 182, 234, 0.45);
+    border-radius: 12px;
+    padding: 1rem 1rem 1.1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .finale-takeaways-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #b9d8ff;
+    font-weight: 700;
+  }
+
+  .finale-takeaway-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .finale-takeaway-list li {
+    font-size: 0.71rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.86);
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .finale-takeaway-list li::before {
+    content: "✓";
+    color: var(--gold);
+    font-weight: 700;
   }
 
   .finale-actions {
-    margin-top: 0.2rem;
+    margin-top: 0.05rem;
     display: flex;
     justify-content: center;
+  }
+
+  .finale-cta-shell {
+    background: radial-gradient(circle at 50% 30%, rgba(212,168,83,0.25), rgba(212,168,83,0.05) 60%);
+    border: 1px solid rgba(212,168,83,0.45);
+    border-radius: 999px;
+    padding: 0.45rem;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 8px 28px rgba(0,0,0,0.3);
   }
 
   .mission-button {
@@ -1796,7 +1851,7 @@
     <button class="deck-btn nav-arrow" id="deck-prev" type="button" aria-label="Vorherige Folie">←</button>
     <button class="deck-btn nav-arrow" id="deck-next" type="button" aria-label="Nächste Folie">→</button>
     <button class="deck-btn" id="deck-nav-toggle" type="button">Agenda</button>
-    <div class="deck-page" id="deck-page">01 / 11</div>
+    <div class="deck-page" id="deck-page">01 / 10</div>
   </div>
 </div>
 <div class="deck-progress" aria-hidden="true">
@@ -1831,7 +1886,7 @@
     </div>
   </div>
   <div class="cover-stripe"></div>
-  <div class="slide-number" style="color:rgba(255,255,255,0.25)">01 / 11</div>
+  <div class="slide-number" style="color:rgba(255,255,255,0.25)">01 / 10</div>
 </div>
 
 
@@ -1891,7 +1946,7 @@
       <div class="otj-banner-text"><strong>Warum off-the-job für Führungskräfteentwicklung?</strong> Führungskompetenzen erfordern kognitive Auseinandersetzung mit Modellen, kritische Selbstreflexion und das Einüben neuer Verhaltensmuster in geschütztem Rahmen. All das ist im laufenden Schichtbetrieb strukturell nicht leistbar. Off-the-job schafft den notwendigen Lern- und Reflexionsraum — z. B. durch <span class="inline-icon mini" aria-hidden="true">📘</span>Seminare und <span class="inline-icon mini" aria-hidden="true">💬</span>Coaching.</div>
     </div>
   </div>
-  <div class="slide-number">02 / 11</div>
+  <div class="slide-number">02 / 10</div>
 </div>
 
 
@@ -1993,7 +2048,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">03 / 11</div>
+  <div class="slide-number">03 / 10</div>
 </div>
 
 
@@ -2119,7 +2174,7 @@
 
     </div>
   </div>
-  <div class="slide-number">04 / 11</div>
+  <div class="slide-number">04 / 10</div>
 </div>
 
 
@@ -2242,7 +2297,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">05 / 11</div>
+  <div class="slide-number">05 / 10</div>
 </div>
 
 
@@ -2397,7 +2452,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">06 / 11</div>
+  <div class="slide-number">06 / 10</div>
 </div>
 
 
@@ -2521,7 +2576,7 @@
 
     </div>
   </div>
-  <div class="slide-number">07 / 11</div>
+  <div class="slide-number">07 / 10</div>
 </div>
 
 
@@ -2645,7 +2700,7 @@
     <div id="timeline-container" aria-label="18-Monate-Timeline"></div>
 
   </div>
-  <div class="slide-number">08 / 11</div>
+  <div class="slide-number">08 / 10</div>
 </div>
 
 
@@ -2761,123 +2816,95 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">09 / 11</div>
+  <div class="slide-number">09 / 10</div>
 </div>
 
 
 <!-- ════════════════════════════════════════
-     FOLIE 10 — FAZIT
-════════════════════════════════════════ -->
-<div class="slide slide-fazit">
-  <div class="fazit-eyebrow">Zusammenfassung · Entwicklungsplan Niklas S.</div>
-  <div class="fazit-heading">Strukturierte Entwicklung statt Zufallserfahrung.</div>
-
-  <div class="fazit-cards">
-    <div class="fazit-card">
-      <div class="fc-num">6</div>
-      <div class="fc-label">Off-the-job-Maßnahmen</div>
-      <div class="fc-text">Seminar, Coaching, AdA-Kurs, Konflikttraining, Planspiel, Arbeitsrecht — der Entwicklungsschwerpunkt liegt bewusst außerhalb des Tagesgeschäfts.</div>
-    </div>
-    <div class="fazit-card">
-      <div class="fc-num">4</div>
-      <div class="fc-label">Kritische Kompetenzlücken</div>
-      <div class="fc-text">Mitarbeiterführung, Durchsetzungsvermögen, Konfliktfähigkeit und Ausbildereignung müssen gezielt geschlossen werden — sie sind k.o.-Kriterien für die Zielposition.</div>
-    </div>
-    <div class="fazit-card">
-      <div class="fc-num">AdA</div>
-      <div class="fc-label">Ausbilderschein als Pflichtbaustein</div>
-      <div class="fc-text">Ohne bestandene Ausbildereignungsprüfung (AEVO) ist die Führung einer ausbildenden Abteilung rechtlich nicht möglich. Kein optionaler, sondern ein formaler Pflichtbaustein.</div>
-    </div>
-    <div class="fazit-card">
-      <div class="fc-num">18</div>
-      <div class="fc-label">Monate realistischer Zeithorizont</div>
-      <div class="fc-text">Erst Kompetenzaufbau (off-the-job), dann Transfer (on-the-job). Die Reihenfolge ist kein Detail — sie ist die Grundlage für nachhaltigen Entwicklungserfolg.</div>
-    </div>
-  </div>
-
-  <div style="font-size:0.92rem;line-height:1.7;color:rgba(255,255,255,0.78);max-width:78%;margin-bottom:2rem">
-    Der Entwicklungsplan baut gezielt auf bestehenden fachlichen Stärken auf und adressiert systematisch die für die Zielrolle kritischen Führungsdefizite. Dadurch wird der Übergang von einer analytisch starken Stabsfunktion in eine operativ wirksame Linienführung strukturiert vorbereitet.
-  </div>
-
-  <div class="fazit-footer">Personalentwicklung · Kompetenzmanagement · Führung · Entwicklungsplan Niklas S.</div>
-  <div class="slide-number" style="color:rgba(255,255,255,0.25)">10 / 11</div>
-</div>
-
-<!-- ════════════════════════════════════════
-     FOLIE 11 — GRAND FINALE
+     FOLIE 10 — GRAND FINALE
 ════════════════════════════════════════ -->
 <div class="slide slide-finale" id="slide-finale">
   <canvas class="finale-canvas" id="finale-canvas" aria-hidden="true"></canvas>
   <div class="slide-inner">
     <div class="slide-header">
       <span class="slide-tag">Grand Finale</span>
-      <h1 class="slide-h1">Transformation: Von der Fachkraft zur Führungspersönlichkeit</h1>
+      <h1 class="slide-h1">Vorher-Nachher Vergleich & Key-Takeaways</h1>
     </div>
 
-    <div class="finale-compare">
-      <div class="finale-radar-card">
-        <div class="finale-radar-title">Vorher · Ist-Zustand</div>
-        <div class="finale-radar-wrap">
-          <svg viewBox="-130 -130 260 260" width="100%" height="280" aria-label="Radarchart Ist-Zustand">
-            <g stroke="rgba(255,255,255,0.18)" fill="none">
-              <polygon points="0,-108 93,-54 93,54 0,108 -93,54 -93,-54"/>
-              <polygon points="0,-86 74,-43 74,43 0,86 -74,43 -74,-43"/>
-              <polygon points="0,-64 55,-32 55,32 0,64 -55,32 -55,-32"/>
-              <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21"/>
-              <polygon points="0,-20 17,-10 17,10 0,20 -17,10 -17,-10"/>
-            </g>
-            <g stroke="rgba(255,255,255,0.28)">
-              <line x1="0" y1="0" x2="0" y2="-108"/><line x1="0" y1="0" x2="93" y2="-54"/>
-              <line x1="0" y1="0" x2="93" y2="54"/><line x1="0" y1="0" x2="0" y2="108"/>
-              <line x1="0" y1="0" x2="-93" y2="54"/><line x1="0" y1="0" x2="-93" y2="-54"/>
-            </g>
-            <polygon id="finale-ist-polygon" fill="rgba(212,168,83,0.44)" stroke="var(--gold)" stroke-width="2"></polygon>
-            <g fill="#f4ede1" font-family="DM Sans" font-size="9">
-              <text x="0" y="-118" text-anchor="middle">Fach</text>
-              <text x="101" y="-58">Methodik</text>
-              <text x="103" y="58">Selbst</text>
-              <text x="0" y="122" text-anchor="middle">Pers.führung</text>
-              <text x="-99" y="58" text-anchor="end">Konflikt</text>
-              <text x="-99" y="-50" text-anchor="end">Durchsetzen</text>
-            </g>
-          </svg>
+    <div class="finale-layout">
+      <div class="finale-compare">
+        <div class="finale-radar-card">
+          <div class="finale-radar-title">Vorher · Ist-Zustand</div>
+          <div class="finale-radar-wrap">
+            <svg viewBox="-130 -130 260 260" width="100%" height="280" aria-label="Radarchart Ist-Zustand">
+              <g stroke="rgba(255,255,255,0.18)" fill="none">
+                <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5"/>
+                <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5"/>
+                <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5"/>
+              </g>
+              <g stroke="rgba(255,255,255,0.28)">
+                <line x1="0" y1="0" x2="0" y2="-95"/><line x1="0" y1="0" x2="82.2" y2="-47.5"/>
+                <line x1="0" y1="0" x2="82.2" y2="47.5"/><line x1="0" y1="0" x2="0" y2="95"/>
+                <line x1="0" y1="0" x2="-82.2" y2="47.5"/><line x1="0" y1="0" x2="-82.2" y2="-47.5"/>
+              </g>
+              <polygon id="finale-ist-polygon" fill="rgba(212,168,83,0.44)" stroke="var(--gold)" stroke-width="2"></polygon>
+              <g fill="#f4ede1" font-family="DM Sans" font-size="9">
+                <text x="0" y="-103" text-anchor="middle">Fach</text>
+                <text x="90" y="-50">Methodik</text>
+                <text x="90" y="53">Selbst</text>
+                <text x="0" y="110" text-anchor="middle">Pers.führung</text>
+                <text x="-90" y="53" text-anchor="end">Konflikt</text>
+                <text x="-90" y="-50" text-anchor="end">Durchsetzen</text>
+              </g>
+            </svg>
+          </div>
+          <div class="finale-radar-sub">Ist-Werte identisch zu Folie 5 (Fach 87, Methodik 65, Selbst 75, Personalführung 12, Konflikt 30, Durchsetzen 38).</div>
         </div>
-        <div class="finale-radar-sub">Startprofil als Basis der Reise — Fokus auf fachliche Stärke, mit klaren Führungs-Gaps.</div>
+
+        <div class="finale-radar-card">
+          <div class="finale-radar-title">Nach 18 Monaten · Soll-Projektion</div>
+          <div class="finale-radar-wrap">
+            <svg viewBox="-130 -130 260 260" width="100%" height="280" aria-label="Radarchart Soll-Zustand">
+              <g stroke="rgba(255,255,255,0.18)" fill="none">
+                <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5"/>
+                <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5"/>
+                <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5"/>
+              </g>
+              <g stroke="rgba(255,255,255,0.28)">
+                <line x1="0" y1="0" x2="0" y2="-95"/><line x1="0" y1="0" x2="82.2" y2="-47.5"/>
+                <line x1="0" y1="0" x2="82.2" y2="47.5"/><line x1="0" y1="0" x2="0" y2="95"/>
+                <line x1="0" y1="0" x2="-82.2" y2="47.5"/><line x1="0" y1="0" x2="-82.2" y2="-47.5"/>
+              </g>
+              <polygon id="finale-soll-polygon" fill="rgba(74,111,165,0.5)" stroke="#8cb6ea" stroke-width="2"></polygon>
+              <g fill="#f4ede1" font-family="DM Sans" font-size="9">
+                <text x="0" y="-103" text-anchor="middle">Fach</text>
+                <text x="90" y="-50">Methodik</text>
+                <text x="90" y="53">Selbst</text>
+                <text x="0" y="110" text-anchor="middle">Pers.führung</text>
+                <text x="-90" y="53" text-anchor="end">Konflikt</text>
+                <text x="-90" y="-50" text-anchor="end">Durchsetzen</text>
+              </g>
+            </svg>
+          </div>
+          <div class="finale-radar-sub">Zielkurve wird aus den gewählten Maßnahmen abgeleitet und bleibt auf Folie 7 synchron.</div>
+        </div>
       </div>
 
-      <div class="finale-radar-card">
-        <div class="finale-radar-title">Nach 18 Monaten · Soll-Projektion</div>
-        <div class="finale-radar-wrap">
-          <svg viewBox="-130 -130 260 260" width="100%" height="280" aria-label="Radarchart Soll-Zustand">
-            <g stroke="rgba(255,255,255,0.18)" fill="none">
-              <polygon points="0,-108 93,-54 93,54 0,108 -93,54 -93,-54"/>
-              <polygon points="0,-86 74,-43 74,43 0,86 -74,43 -74,-43"/>
-              <polygon points="0,-64 55,-32 55,32 0,64 -55,32 -55,-32"/>
-              <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21"/>
-              <polygon points="0,-20 17,-10 17,10 0,20 -17,10 -17,-10"/>
-            </g>
-            <g stroke="rgba(255,255,255,0.28)">
-              <line x1="0" y1="0" x2="0" y2="-108"/><line x1="0" y1="0" x2="93" y2="-54"/>
-              <line x1="0" y1="0" x2="93" y2="54"/><line x1="0" y1="0" x2="0" y2="108"/>
-              <line x1="0" y1="0" x2="-93" y2="54"/><line x1="0" y1="0" x2="-93" y2="-54"/>
-            </g>
-            <polygon id="finale-soll-polygon" fill="rgba(74,111,165,0.5)" stroke="#8cb6ea" stroke-width="2"></polygon>
-            <g fill="#f4ede1" font-family="DM Sans" font-size="9">
-              <text x="0" y="-118" text-anchor="middle">Fach</text>
-              <text x="101" y="-58">Methodik</text>
-              <text x="103" y="58">Selbst</text>
-              <text x="0" y="122" text-anchor="middle">Pers.führung</text>
-              <text x="-99" y="58" text-anchor="end">Konflikt</text>
-              <text x="-99" y="-50" text-anchor="end">Durchsetzen</text>
-            </g>
-          </svg>
-        </div>
-        <div class="finale-radar-sub">Dynamische Zielkurve auf Basis der gewählten Maßnahmen von Folie 7.</div>
-      </div>
+      <aside class="finale-takeaways" aria-label="Key-Takeaways">
+        <div class="finale-takeaways-title">Key-Takeaways</div>
+        <ul class="finale-takeaway-list">
+          <li>6 Off-the-job-Maßnahmen bilden den strukturierten Kompetenzaufbau vor dem Praxistransfer.</li>
+          <li>4 kritische Führungs-Gaps (Personalführung, Durchsetzen, Konflikt, AdA) werden gezielt adressiert.</li>
+          <li>AdA/AEVO ist Pflichtbaustein – ohne Nachweis keine ausbildende Führungsrolle.</li>
+          <li>18 Monate: erst Aufbau, dann Transfer. Reihenfolge sichert nachhaltige Wirksamkeit.</li>
+        </ul>
+      </aside>
     </div>
 
     <div class="finale-actions">
-      <button class="mission-button" id="mission-start" type="button">Mission Starten</button>
+      <div class="finale-cta-shell">
+        <button class="mission-button" id="mission-start" type="button">Mission Starten</button>
+      </div>
     </div>
   </div>
 
@@ -2887,7 +2914,7 @@
     <div class="commitment-sub">Der Entwicklungsplan wird verbindlich gestartet. Fokus: sichtbarer Kompetenzaufbau, konsequenter Transfer und verantwortliche Führungsübernahme in 18 Monaten.</div>
   </div>
 
-  <div class="slide-number" style="color:rgba(255,255,255,0.25)">11 / 11</div>
+  <div class="slide-number" style="color:rgba(255,255,255,0.25)">10 / 10</div>
 </div>
 
 
@@ -2915,10 +2942,8 @@
       if (heading) return heading.textContent.trim();
       const coverTitle = slide.querySelector('.cover-title');
       if (coverTitle) return coverTitle.textContent.replace(/\s+/g, ' ').trim();
-      const fazitTitle = slide.querySelector('.fazit-heading');
-      if (fazitTitle) return fazitTitle.textContent.trim();
       const missionTitle = slide.querySelector('#mission-start');
-      if (missionTitle) return 'Transformation: Von der Fachkraft zur Führungspersönlichkeit';
+      if (missionTitle) return 'Vorher-Nachher Vergleich & Key-Takeaways';
       return `Folie ${fallbackIndex + 1}`;
     }
 
