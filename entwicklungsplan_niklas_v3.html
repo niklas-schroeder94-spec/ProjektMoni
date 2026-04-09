@@ -24,17 +24,24 @@
     font-family: 'DM Sans', sans-serif;
     background: var(--paper);
     color: var(--ink);
+    overflow: hidden;
   }
 
   /* ── SLIDE BASE ── */
   .slide {
     width: 100%;
     min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     page-break-after: always;
+  }
+
+  .slide.is-hidden {
+    display: none;
   }
 
   .slide-number {
@@ -53,7 +60,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 3.2rem 4.8rem;
+    padding: 3.2rem 4.8rem 4.8rem;
     gap: 1.8rem;
   }
 
@@ -96,7 +103,7 @@
     color: var(--white);
     justify-content: center;
     align-items: flex-start;
-    padding: 5rem 6rem;
+    padding: 5rem 6rem 6.2rem;
   }
 
   .cover-eyebrow {
@@ -961,7 +968,7 @@
     background: var(--ink);
     color: var(--white);
     justify-content: center;
-    padding: 4.5rem 5.5rem;
+    padding: 4.5rem 5.5rem 6.2rem;
     gap: 0;
   }
 
@@ -1957,6 +1964,46 @@
   <div class="fazit-footer">Personalentwicklung · Kompetenzmanagement · Führung · Entwicklungsplan Niklas S.</div>
   <div class="slide-number" style="color:rgba(255,255,255,0.25)">10 / 10</div>
 </div>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let currentIndex = 0;
+
+    function renderSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('is-hidden', index !== currentIndex);
+      });
+    }
+
+    function goToSlide(nextIndex) {
+      if (nextIndex < 0 || nextIndex >= slides.length) return;
+      currentIndex = nextIndex;
+      renderSlides();
+      slides[currentIndex].scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') {
+        event.preventDefault();
+        goToSlide(currentIndex + 1);
+      } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+        event.preventDefault();
+        goToSlide(currentIndex - 1);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        goToSlide(0);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        goToSlide(slides.length - 1);
+      }
+    });
+
+    renderSlides();
+  })();
+</script>
 
 </body>
 </html>
