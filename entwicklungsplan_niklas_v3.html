@@ -802,6 +802,43 @@
     flex: 1;
   }
 
+  .m-radar-panel {
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 1rem 1.2rem;
+    margin-top: 0.2rem;
+    display: grid;
+    grid-template-columns: 310px 1fr;
+    gap: 1.2rem;
+    align-items: center;
+  }
+
+  .m-radar-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .m-radar-meta strong {
+    color: var(--ink);
+    font-size: 0.78rem;
+  }
+
+  .m-radar-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 0.2rem;
+  }
+
   .m-card {
     background: var(--white);
     padding: 1.3rem;
@@ -809,11 +846,45 @@
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
+    position: relative;
+    cursor: pointer;
+    transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
   }
 
   .m-card.off  { border-color: var(--accent); }
   .m-card.near { border-color: var(--steel); }
   .m-card.on   { border-color: var(--gold); }
+
+  .m-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  }
+
+  .m-card.selected {
+    box-shadow: 0 0 0 2px rgba(200,75,49,0.2);
+  }
+
+  .m-check {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.75rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 1px solid #cfc9bf;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: transparent;
+    background: var(--white);
+  }
+
+  .m-card.selected .m-check {
+    border-color: var(--green);
+    background: rgba(46,125,50,0.12);
+    color: var(--green);
+  }
 
   .m-type {
     font-size: 0.6rem;
@@ -1653,8 +1724,8 @@
         <div class="bar-wrap">
           <div class="bar-legend-txt">Ist</div>
           <div class="ab-bar">
-            <div class="ab-ist-fill" style="width:55%"></div>
-            <div class="ab-soll-line" style="left:85%"></div>
+            <div class="ab-ist-fill" style="width:70%"></div>
+            <div class="ab-soll-line" style="left:70%"></div>
           </div>
         </div>
         <div class="ab-status s-teil">△ Teilweise</div>
@@ -1786,9 +1857,43 @@
       Die Maßnahmen sind bewusst als <strong style="color:var(--ink)">off-the-job-Schwerpunkt</strong> gewählt, da insbesondere Führungs-, Konflikt- und Verhaltenskompetenzen außerhalb des operativen Drucks aufgebaut werden müssen. So können neue Muster trainiert werden, bevor sie in der Linie wirksam werden müssen.
     </div>
 
+    <div class="m-radar-panel">
+      <div class="soll-radar" style="gap:0.75rem">
+        <div class="radar-lbl">Interaktive Entwicklung — Ist-Verlauf</div>
+        <svg id="massnahmen-radar" width="270" height="270" viewBox="0 0 270 270" style="overflow:visible">
+          <g transform="translate(135,138)">
+            <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="-95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <polygon id="massnahmen-radar-soll" points="0,-92 79,-46 79,46 0,92 -79,46 -79,-46" fill="rgba(200,75,49,0.07)" stroke="var(--accent)" stroke-width="2"/>
+            <polygon id="massnahmen-radar-ist" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
+            <g id="massnahmen-radar-points"></g>
+            <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
+            <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
+            <text x="90" y="53" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Selbst</text>
+            <text x="0" y="110" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Pers.führung</text>
+            <text x="-90" y="53" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Konflikt</text>
+            <text x="-90" y="-50" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Durchsetzen</text>
+          </g>
+        </svg>
+      </div>
+      <div class="m-radar-meta">
+        <strong>Simulation:</strong> Wähle Maßnahmen aus. Das blaue Ist-Profil verschiebt sich entsprechend der Kompetenzwirkung.
+        <div>Basis-Ist startet bei: Fach 87 · Methodik 65 · Selbst 75 · Führung 12 · Konflikt 30 · Durchsetzen 38.</div>
+        <div class="m-radar-count"><span>✓</span><span id="massnahmen-count">0 Maßnahmen aktiv</span></div>
+      </div>
+    </div>
+
     <div class="m-grid">
 
-      <div class="m-card off">
+      <div class="m-card off js-massnahme" data-impact="0,4,2,20,6,8">
+        <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">Führungskräfteseminar „Führung im Industriebetrieb"</div>
         <div class="m-ziel">Zielkompetenz: Mitarbeiterführung, Gesprächsführung</div>
@@ -1796,7 +1901,8 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20">
+        <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">Externes Einzelcoaching (6–8 Sitzungen)</div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
@@ -1804,7 +1910,8 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off js-massnahme" data-impact="2,4,3,6,2,4">
+        <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name">AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
         <div class="m-ziel">Zielkompetenz: Ausbildungskompetenz (AEVO)</div>
@@ -1812,7 +1919,8 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off js-massnahme" data-impact="0,3,2,6,24,8">
+        <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Seminar „Konfliktmanagement in der Produktion"</div>
         <div class="m-ziel">Zielkompetenz: Konfliktfähigkeit, Deeskalation</div>
@@ -1820,7 +1928,8 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off js-massnahme" data-impact="0,18,8,4,2,12">
+        <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
         <div class="m-ziel">Zielkompetenz: Entscheidungsstärke, wirtschaftl. Denken</div>
@@ -1828,7 +1937,8 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off">
+      <div class="m-card off js-massnahme" data-impact="0,6,6,10,4,12">
+        <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name">Workshop „Arbeitsrecht für Führungskräfte"</div>
         <div class="m-ziel">Zielkompetenz: Rechtliche Handlungssicherheit</div>
@@ -1836,7 +1946,8 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card near">
+      <div class="m-card near js-massnahme" data-impact="18,8,4,6,2,4">
+        <div class="m-check">✓</div>
         <div class="m-type">Near-the-job · Priorität ●●●</div>
         <div class="m-name">Strukturierte Hospitation Finishing-Abteilung</div>
         <div class="m-ziel">Zielkompetenz: Anlagenwissen, operative Glaubwürdigkeit</div>
@@ -1844,7 +1955,8 @@
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card on">
+      <div class="m-card on js-massnahme" data-impact="4,10,8,35,12,20">
+        <div class="m-check">✓</div>
         <div class="m-type">On-the-job · Transfer · Priorität ●●●</div>
         <div class="m-name">Vertretungsmandat Leitung Finishing (schrittweise)</div>
         <div class="m-ziel">Zielkompetenz: Reale Führungserfahrung, Personalverantwortung</div>
@@ -2207,8 +2319,75 @@
       }
     });
 
+    const baseIstProfile = [87, 65, 75, 12, 30, 38];
+    const radarVectors = [
+      [0, -1],
+      [0.866, -0.5],
+      [0.866, 0.5],
+      [0, 1],
+      [-0.866, 0.5],
+      [-0.866, -0.5]
+    ];
+    const maxRadius = 95;
+    const measureCards = Array.from(document.querySelectorAll('.js-massnahme'));
+    const radarIstPolygon = document.getElementById('massnahmen-radar-ist');
+    const radarPoints = document.getElementById('massnahmen-radar-points');
+    const measureCountLabel = document.getElementById('massnahmen-count');
+
+    function profileToPoints(profile) {
+      return profile.map((value, index) => {
+        const [vx, vy] = radarVectors[index];
+        const radius = (Math.max(0, Math.min(100, value)) / 100) * maxRadius;
+        return `${(vx * radius).toFixed(1)},${(vy * radius).toFixed(1)}`;
+      });
+    }
+
+    function renderRadarFromSelection() {
+      if (!radarIstPolygon || !radarPoints) return;
+
+      const selectedCards = measureCards.filter((card) => card.classList.contains('selected'));
+      const nextProfile = [...baseIstProfile];
+
+      selectedCards.forEach((card) => {
+        const impact = (card.dataset.impact || '').split(',').map((value) => Number(value.trim()) || 0);
+        for (let i = 0; i < nextProfile.length; i += 1) {
+          nextProfile[i] += impact[i] || 0;
+        }
+      });
+
+      const points = profileToPoints(nextProfile.map((value) => Math.min(100, value)));
+      radarIstPolygon.setAttribute('points', points.join(' '));
+      radarPoints.innerHTML = points
+        .map((point) => {
+          const [cx, cy] = point.split(',');
+          return `<circle cx="${cx}" cy="${cy}" r="3.2" fill="var(--steel)"></circle>`;
+        })
+        .join('');
+
+      if (measureCountLabel) {
+        measureCountLabel.textContent = `${selectedCards.length} Maßnahme${selectedCards.length === 1 ? '' : 'n'} aktiv`;
+      }
+    }
+
+    measureCards.forEach((card) => {
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-pressed', 'false');
+      card.addEventListener('click', () => {
+        card.classList.toggle('selected');
+        card.setAttribute('aria-pressed', card.classList.contains('selected') ? 'true' : 'false');
+        renderRadarFromSelection();
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        card.click();
+      });
+    });
+
     renderSlideNav();
     renderSlides();
+    renderRadarFromSelection();
   })();
 </script>
 
