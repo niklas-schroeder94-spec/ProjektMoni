@@ -35,7 +35,8 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     page-break-after: always;
   }
 
@@ -59,7 +60,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 3.2rem 4.8rem;
+    padding: 3.2rem 4.8rem 4.8rem;
     gap: 1.8rem;
   }
 
@@ -102,7 +103,7 @@
     color: var(--white);
     justify-content: center;
     align-items: flex-start;
-    padding: 5rem 6rem;
+    padding: 5rem 6rem 6.2rem;
   }
 
   .cover-eyebrow {
@@ -967,7 +968,7 @@
     background: var(--ink);
     color: var(--white);
     justify-content: center;
-    padding: 4.5rem 5.5rem;
+    padding: 4.5rem 5.5rem 6.2rem;
     gap: 0;
   }
 
@@ -1979,6 +1980,7 @@
       if (nextIndex < 0 || nextIndex >= slides.length) return;
       currentIndex = nextIndex;
       renderSlides();
+      slides[currentIndex].scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }
 
     document.addEventListener('keydown', (event) => {
@@ -1998,14 +2000,6 @@
         goToSlide(slides.length - 1);
       }
     });
-
-    document.addEventListener(
-      'wheel',
-      (event) => {
-        event.preventDefault();
-      },
-      { passive: false }
-    );
 
     renderSlides();
   })();
