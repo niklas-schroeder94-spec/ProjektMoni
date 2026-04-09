@@ -27,6 +27,42 @@
     overflow: hidden;
   }
 
+  .deck-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 2.6rem;
+    padding: 0.55rem 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(247, 244, 239, 0.92);
+    border-bottom: 1px solid var(--light);
+    backdrop-filter: blur(3px);
+  }
+
+  .deck-meta {
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 1rem;
+  }
+
+  .deck-page {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+
   /* ── SLIDE BASE ── */
   .slide {
     width: 100%;
@@ -37,6 +73,7 @@
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-top: 2.6rem;
     page-break-after: always;
   }
 
@@ -45,14 +82,7 @@
   }
 
   .slide-number {
-    position: absolute;
-    bottom: 1.8rem;
-    right: 2.5rem;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    color: var(--muted);
-    text-transform: uppercase;
+    display: none;
   }
 
   /* ── INNER WRAPPER ── */
@@ -1044,6 +1074,10 @@
 </style>
 </head>
 <body>
+<div class="deck-header">
+  <div class="deck-meta">Führung · DHBW SST · Niklas Schröder &amp; Angelina Diesterweg</div>
+  <div class="deck-page" id="deck-page">01 / 10</div>
+</div>
 
 <!-- ════════════════════════════════════════
      FOLIE 1 — TITELFOLIE
@@ -1968,12 +2002,18 @@
 <script>
   (function () {
     const slides = Array.from(document.querySelectorAll('.slide'));
+    const pageIndicator = document.getElementById('deck-page');
     let currentIndex = 0;
 
     function renderSlides() {
       slides.forEach((slide, index) => {
         slide.classList.toggle('is-hidden', index !== currentIndex);
       });
+      if (pageIndicator) {
+        const current = String(currentIndex + 1).padStart(2, '0');
+        const total = String(slides.length).padStart(2, '0');
+        pageIndicator.textContent = `${current} / ${total}`;
+      }
     }
 
     function goToSlide(nextIndex) {
