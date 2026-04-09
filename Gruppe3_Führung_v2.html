@@ -352,6 +352,30 @@
     line-height: 1.2;
   }
 
+  .otj-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .otj-icon {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    flex-shrink: 0;
+  }
+  .otj-card.near .otj-icon,
+  .otj-card.on .otj-icon {
+    background: var(--paper);
+    border-color: #ddd7cd;
+  }
+
   .otj-def {
     font-size: 0.86rem;
     line-height: 1.7;
@@ -485,41 +509,65 @@
   /* ── TIMELINE ── */
   .timeline {
     position: relative;
-    padding-left: 1.6rem;
-    display: flex;
-    flex-direction: column;
+    padding: 2.2rem 0.4rem 0.3rem;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.6rem;
+    align-items: start;
   }
 
   .timeline::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0.7rem;
-    bottom: 0.7rem;
-    width: 2px;
-    background: linear-gradient(to bottom,
+    left: 0.7rem;
+    right: 0.7rem;
+    top: 2rem;
+    height: 4px;
+    border-radius: 99px;
+    background: linear-gradient(to right,
       var(--muted) 0%,
-      var(--steel) 25%,
-      var(--steel) 55%,
-      var(--gold) 75%,
+      var(--steel) 28%,
+      var(--steel) 52%,
+      var(--gold) 78%,
       var(--accent) 100%);
+  }
+
+  .timeline::after {
+    content: 'Weg nach oben';
+    position: absolute;
+    right: 0.6rem;
+    top: 0.2rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
   }
 
   .tl-item {
     position: relative;
-    padding: 0.65rem 0 0.65rem 1.6rem;
+    padding-top: 0.95rem;
   }
 
   .tl-dot {
     position: absolute;
-    left: -0.42rem;
-    top: 1rem;
-    width: 0.8rem;
-    height: 0.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -0.68rem;
+    width: 0.86rem;
+    height: 0.86rem;
     border-radius: 50%;
     background: var(--white);
     border: 2px solid var(--muted);
+    z-index: 1;
   }
+
+  .tl-item.lvl-1 { margin-top: 4.3rem; }
+  .tl-item.lvl-2 { margin-top: 3.4rem; }
+  .tl-item.lvl-3 { margin-top: 2.7rem; }
+  .tl-item.lvl-4 { margin-top: 1.9rem; }
+  .tl-item.lvl-5 { margin-top: 1.2rem; }
+  .tl-item.lvl-6 { margin-top: 0.3rem; }
 
   .tl-dot.d-steel  { border-color: var(--steel); }
   .tl-dot.d-gold   { border-color: var(--gold); }
@@ -546,6 +594,13 @@
     color: var(--muted);
     margin-top: 0.08rem;
     line-height: 1.4;
+  }
+
+  .tl-body {
+    background: var(--white);
+    padding: 0.65rem 0.62rem;
+    border-top: 2px solid var(--light);
+    min-height: 8.9rem;
   }
 
   /* ════════════════════════════════════════
@@ -949,6 +1004,24 @@
     font-weight: 700;
     line-height: 1.3;
     color: var(--ink);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .m-icon {
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    border: 1px solid #d8d2c8;
+    background: var(--paper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 0.02rem;
   }
 
   .m-ziel {
@@ -1403,22 +1476,22 @@
       <!-- Hauptkarte -->
       <div class="otj-card main">
         <div class="otj-badge">Schwerpunkt dieser Präsentation</div>
-        <div class="otj-title">Off-the-job</div>
+        <div class="otj-title-row"><span class="otj-icon">🎯</span><div class="otj-title">Off-the-job</div></div>
         <div class="otj-def">Maßnahmen, die vollständig außerhalb des Arbeitsplatzes stattfinden — räumlich und zeitlich vom Produktionsprozess entkoppelt. Der Lernende ist aus dem Tagesgeschäft herausgezogen; es besteht maximaler Raum für Reflexion, Verhaltenserprobung und konzeptionelle Auseinandersetzung.</div>
         <div class="otj-examples">
-          <span class="chip">Seminar</span>
-          <span class="chip">Coaching (extern)</span>
-          <span class="chip">Planspiel</span>
-          <span class="chip">Workshop</span>
-          <span class="chip">AdA-Kurs (IHK)</span>
-          <span class="chip">Studienreise</span>
+          <span class="chip">📘 Seminar</span>
+          <span class="chip">💬 Coaching (extern)</span>
+          <span class="chip">🎲 Planspiel</span>
+          <span class="chip">🧩 Workshop</span>
+          <span class="chip">📜 AdA-Kurs (IHK)</span>
+          <span class="chip">✈️ Studienreise</span>
         </div>
       </div>
 
       <!-- Near -->
       <div class="otj-card near">
         <div class="otj-badge">Ergänzend · Near-the-job</div>
-        <div class="otj-title">Near-the-job</div>
+        <div class="otj-title-row"><span class="otj-icon">🔍</span><div class="otj-title">Near-the-job</div></div>
         <div class="otj-def">Am betrieblichen Kontext ausgerichtet, aber zeitlich aus dem Tagesgeschäft herausgelöst. Verbindet praktische Relevanz mit erhöhter Reflexionstiefe. Sinnvoll zur Vorbereitung auf den Realtransfer.</div>
         <div class="otj-examples">
           <span class="chip">Hospitation (strukturiert)</span>
@@ -1430,7 +1503,7 @@
       <!-- On -->
       <div class="otj-card on">
         <div class="otj-badge">Transfer · On-the-job</div>
-        <div class="otj-title">On-the-job</div>
+        <div class="otj-title-row"><span class="otj-icon">⚙️</span><div class="otj-title">On-the-job</div></div>
         <div class="otj-def">Lernen direkt am Arbeitsplatz im laufenden Prozess. Unmittelbarer Transfer, aber kaum Reflexionsraum. Für Führungsentwicklung als alleinige Methode nicht ausreichend — dient der Anwendung zuvor erworbener Kompetenzen.</div>
         <div class="otj-examples">
           <span class="chip">Vertretungsmandat</span>
@@ -1491,54 +1564,54 @@
 
       <!-- TIMELINE — chronologisch korrekt -->
       <div class="timeline">
-        <div class="tl-item">
+        <div class="tl-item lvl-1">
           <div class="tl-dot"></div>
-          <div>
+          <div class="tl-body">
             <div class="tl-phase">Akademisches Fundament</div>
             <div class="tl-title">Studium Bauingenieurwesen — RWTH Aachen</div>
             <div class="tl-sub">Analytisch-mathematische Grundlage · Strukturiertes Denken in komplexen Systemen</div>
           </div>
         </div>
 
-        <div class="tl-item">
+        <div class="tl-item lvl-2">
           <div class="tl-dot d-steel"></div>
-          <div>
+          <div class="tl-body">
             <div class="tl-phase">Fachliche Grundausbildung · verkürzt · 2 Jahre</div>
             <div class="tl-title">Ausbildung zum Papiertechnologen</div>
             <div class="tl-sub">Prozesswissen Papierherstellung · Maschinenverständnis · Materialkunde</div>
           </div>
         </div>
 
-        <div class="tl-item">
+        <div class="tl-item lvl-3">
           <div class="tl-dot d-steel"></div>
-          <div>
+          <div class="tl-body">
             <div class="tl-phase">Operativer Einstieg · Kartonmaschine</div>
             <div class="tl-title">Maschinenführergehilfe → Streicher</div>
             <div class="tl-sub">Erste Praxisverantwortung · Einarbeitung in den laufenden Schichtbetrieb</div>
           </div>
         </div>
 
-        <div class="tl-item">
+        <div class="tl-item lvl-4">
           <div class="tl-dot d-gold"></div>
-          <div>
+          <div class="tl-body">
             <div class="tl-phase">Eigenverantwortung · Kartonmaschine</div>
             <div class="tl-title">Eigenverantwortlicher Maschinenführer</div>
             <div class="tl-sub">Selbstständige Anlagensteuerung · Verantwortung für Produktqualität und Maschinenlauf</div>
           </div>
         </div>
 
-        <div class="tl-item">
+        <div class="tl-item lvl-5">
           <div class="tl-dot d-gold"></div>
-          <div>
+          <div class="tl-body">
             <div class="tl-phase">Berufsbegleitendes Studium</div>
             <div class="tl-title">Duales Studium B.Sc. (SST) — DHBW</div>
             <div class="tl-sub">Systemisches Management-Wissen · Projekt- und Problemlösungsmethoden · Verzahnung von Theorie und Betriebspraxis</div>
           </div>
         </div>
 
-        <div class="tl-item">
+        <div class="tl-item lvl-6">
           <div class="tl-dot d-accent"></div>
-          <div>
+          <div class="tl-body">
             <div class="tl-phase">Heute · Stabsfunktion</div>
             <div class="tl-title" style="color:var(--accent)">Assistent der Produktionsleitung</div>
             <div class="tl-sub">Überblickfunktion über gesamte Wertschöpfungskette · analytische Aufgaben · keine direkte Führungsverantwortung</div>
@@ -1979,8 +2052,9 @@
             <line x1="0" y1="0" x2="0" y2="95" stroke="#d0ccc4" stroke-width="1"/>
             <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
             <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <polygon id="massnahmen-radar-baseline" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(140,140,140,0.14)" stroke="#8f8f8f" stroke-width="1.6"/>
             <polygon id="massnahmen-radar-soll" points="0,-92 79,-46 79,46 0,92 -79,46 -79,-46" fill="rgba(200,75,49,0.07)" stroke="var(--accent)" stroke-width="2"/>
-            <polygon id="massnahmen-radar-ist" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
+            <polygon id="massnahmen-radar-projektion" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.2)" stroke="var(--steel)" stroke-width="2.2"/>
             <g id="massnahmen-radar-points"></g>
             <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
             <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
@@ -1992,8 +2066,18 @@
         </svg>
       </div>
       <div class="m-radar-meta">
-        <strong>Simulation:</strong> Wähle Maßnahmen aus. Das blaue Ist-Profil verschiebt sich entsprechend der Kompetenzwirkung.
+        <strong>Simulation:</strong> Wähle Maßnahmen aus. Das graue Ist-Profil bleibt als Referenz fix, während sich das farbige Projektions-Profil entsprechend der Kompetenzwirkung ausbreitet.
         <div>Basis-Ist startet bei: Fach 87 · Methodik 65 · Selbst 75 · Führung 12 · Konflikt 30 · Durchsetzen 38.</div>
+        <div class="radar-legend">
+          <div class="rleg">
+            <div style="width:22px;height:0;border-top:2px solid #8f8f8f"></div>
+            Ist-Profil (fix)
+          </div>
+          <div class="rleg">
+            <div style="width:22px;height:0;border-top:2px solid var(--steel)"></div>
+            Projektions-Profil
+          </div>
+        </div>
         <div class="m-radar-count"><span>✓</span><span id="massnahmen-count">0 Maßnahmen aktiv</span></div>
       </div>
     </div>
@@ -2003,7 +2087,7 @@
       <div class="m-card off js-massnahme" data-impact="0,4,2,20,6,8">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name">Führungskräfteseminar „Führung im Industriebetrieb"</div>
+        <div class="m-name"><span class="m-icon">📘</span><span>Führungskräfteseminar „Führung im Industriebetrieb"</span></div>
         <div class="m-ziel">Zielkompetenz: Mitarbeiterführung, Gesprächsführung</div>
         <div class="m-text">Konzeptionelle Grundlagen (situatives Führen, transaktional/transformational) und Rollenspiele zu Kritik-, Zielvereinbarungs- und Rückkehrgesprächen. Die Maßnahme schließt die Lücke in der direkten Mitarbeiterführung, weil Führungsverhalten in einem geschützten Rahmen eingeübt und reflektiert werden kann.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2012,7 +2096,7 @@
       <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name">Externes Einzelcoaching (6–8 Sitzungen)</div>
+        <div class="m-name"><span class="m-icon">💬</span><span>Externes Einzelcoaching (6–8 Sitzungen)</span></div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
         <div class="m-text">Individuelle Bearbeitung von Verhaltensmustern, die in Gruppensettings oft verborgen bleiben. Die Maßnahme adressiert das Defizit im Durchsetzungsverhalten, weil persönliche Hemmungen, Konfliktmuster und Entscheidungsunsicherheit gezielt bearbeitet werden. Begleitend über die gesamte Entwicklungsphase.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2021,7 +2105,7 @@
       <div class="m-card off js-massnahme" data-impact="2,4,3,6,2,4">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
-        <div class="m-name">AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
+        <div class="m-name"><span class="m-icon">📜</span><span>AdA-Kurs — Ausbildereignungsprüfung (IHK)</span></div>
         <div class="m-ziel">Zielkompetenz: Ausbildungskompetenz (AEVO)</div>
         <div class="m-text">Rechtliche Pflichtvoraussetzung: Ohne bestandene Ausbildereignungsprüfung ist die Durchführung der Berufsausbildung in der Abteilung unzulässig. Die Maßnahme schließt damit nicht nur eine Kompetenz-, sondern eine formale Zulassungslücke der Zielposition.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2030,7 +2114,7 @@
       <div class="m-card off js-massnahme" data-impact="0,3,2,6,24,8">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
-        <div class="m-name">Seminar „Konfliktmanagement in der Produktion"</div>
+        <div class="m-name"><span class="m-icon">🗣️</span><span>Seminar „Konfliktmanagement in der Produktion"</span></div>
         <div class="m-ziel">Zielkompetenz: Konfliktfähigkeit, Deeskalation</div>
         <div class="m-text">Modelle und Methoden der Konfliktklärung (z. B. Harvard-Konzept, Gewaltfreie Kommunikation) sowie Simulation von Schicht-, Übergabe- und Teamkonflikten. Die Maßnahme ist geeignet, weil Konfliktverhalten trainiert werden kann, ohne dass reale Produktionsbeziehungen beschädigt werden.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
@@ -2039,7 +2123,7 @@
       <div class="m-card off js-massnahme" data-impact="0,18,8,4,2,12">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
-        <div class="m-name">Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
+        <div class="m-name"><span class="m-icon">🎲</span><span>Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</span></div>
         <div class="m-ziel">Zielkompetenz: Entscheidungsstärke, wirtschaftl. Denken</div>
         <div class="m-text">Simulation von Schichtplanung, KPI-Steuerung und Budgetentscheidungen in komprimierter Form. Die Maßnahme entwickelt Entscheidungsstärke, weil Konsequenzen von Priorisierungen und Fehlentscheidungen unmittelbar sichtbar werden – jedoch ohne reales Betriebsrisiko.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
@@ -2048,7 +2132,7 @@
       <div class="m-card off js-massnahme" data-impact="0,6,6,10,4,12">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
-        <div class="m-name">Workshop „Arbeitsrecht für Führungskräfte"</div>
+        <div class="m-name"><span class="m-icon">⚖️</span><span>Workshop „Arbeitsrecht für Führungskräfte"</span></div>
         <div class="m-ziel">Zielkompetenz: Rechtliche Handlungssicherheit</div>
         <div class="m-text">Grundlagen zu BetrVG, ArbZG, Abmahnung und Kündigung. Die Maßnahme stärkt Handlungssicherheit, weil Durchsetzung in Führungsrollen nur dann wirksam ist, wenn sie rechtlich sauber und belastbar erfolgt.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
@@ -2057,7 +2141,7 @@
       <div class="m-card near js-massnahme" data-impact="18,8,4,6,2,4">
         <div class="m-check">✓</div>
         <div class="m-type">Near-the-job · Priorität ●●●</div>
-        <div class="m-name">Strukturierte Hospitation Finishing-Abteilung</div>
+        <div class="m-name"><span class="m-icon">🏭</span><span>Strukturierte Hospitation Finishing-Abteilung</span></div>
         <div class="m-ziel">Zielkompetenz: Anlagenwissen, operative Glaubwürdigkeit</div>
         <div class="m-text">4–6 Wochen, alle Schichten, mit dokumentiertem Lernauftrag und Abschlusspräsentation. Die Maßnahme schließt die Glaubwürdigkeitslücke, weil ohne Anlagenkenntnisse zu Rollenschneider, Querschneider und Palettierer die Akzeptanz als zukünftige Führungskraft im Team begrenzt bleibt.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2066,7 +2150,7 @@
       <div class="m-card on js-massnahme" data-impact="4,10,8,35,12,20">
         <div class="m-check">✓</div>
         <div class="m-type">On-the-job · Transfer · Priorität ●●●</div>
-        <div class="m-name">Vertretungsmandat Leitung Finishing (schrittweise)</div>
+        <div class="m-name"><span class="m-icon">🚀</span><span>Vertretungsmandat Leitung Finishing (schrittweise)</span></div>
         <div class="m-ziel">Zielkompetenz: Reale Führungserfahrung, Personalverantwortung</div>
         <div class="m-text">Erst nach Abschluss der off-the-job-Grundlagen: zunächst Schichtleitungsvertretung, dann Urlaubsvertretung. Die Maßnahme überführt Lernen in reale Führungsverantwortung; das begleitende Coaching sichert Reflexion und verhindert, dass neue Führungsanforderungen nur situativ statt systematisch bewältigt werden.</div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
@@ -2466,7 +2550,7 @@
     ];
     const maxRadius = 95;
     const measureCards = Array.from(document.querySelectorAll('.js-massnahme'));
-    const radarIstPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-ist')).at(-1) || null;
+    const radarProjectionPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-projektion')).at(-1) || null;
     const radarPoints = Array.from(document.querySelectorAll('#massnahmen-radar-points')).at(-1) || null;
     const measureCountLabel = Array.from(document.querySelectorAll('#massnahmen-count')).at(-1) || null;
 
@@ -2479,7 +2563,7 @@
     }
 
     function renderRadarFromSelection() {
-      if (!radarIstPolygon || !radarPoints) return;
+      if (!radarProjectionPolygon || !radarPoints) return;
 
       const selectedCards = measureCards.filter((card) => card.classList.contains('selected'));
       const nextProfile = [...baseIstProfile];
@@ -2492,7 +2576,7 @@
       });
 
       const points = profileToPoints(nextProfile.map((value) => Math.min(100, value)));
-      radarIstPolygon.setAttribute('points', points.join(' '));
+      radarProjectionPolygon.setAttribute('points', points.join(' '));
       radarPoints.innerHTML = points
         .map((point) => {
           const [cx, cy] = point.split(',');
