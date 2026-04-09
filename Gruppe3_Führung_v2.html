@@ -2845,47 +2845,24 @@
       { startMonth: 11, endMonth: 18, slots: 1 }
     ];
 
-    const fixedTermineByMeasure = {
-      'Führungskräfteseminar „Führung im Industriebetrieb"': [
-        { start: '2026-05-11', end: '2026-05-13' },
-        { start: '2026-06-15', end: '2026-06-17' },
-        { start: '2026-08-03', end: '2026-08-05' }
-      ],
-      'AdA-Kurs — Ausbildereignungsprüfung (IHK)': [
-        { start: '2026-05-25', end: '2026-05-29' },
-        { start: '2026-07-06', end: '2026-07-10' },
-        { start: '2026-08-17', end: '2026-08-21' }
-      ],
-      'Seminar „Konfliktmanagement in der Produktion"': [
-        { start: '2026-06-22', end: '2026-06-24' },
-        { start: '2026-07-20', end: '2026-07-22' },
-        { start: '2026-08-10', end: '2026-08-12' }
-      ],
-      'Planspiel „Produktionssteuerung & Wirtschaftlichkeit"': [
-        { start: '2026-09-14', end: '2026-09-16' },
-        { start: '2026-11-09', end: '2026-11-11' },
-        { start: '2027-01-18', end: '2027-01-20' }
-      ],
-      'Workshop „Arbeitsrecht für Führungskräfte"': [
-        { start: '2026-10-05', end: '2026-10-06' },
-        { start: '2026-12-07', end: '2026-12-08' },
-        { start: '2027-02-01', end: '2027-02-02' }
-      ],
-      'Strukturierte Hospitation Finishing-Abteilung': [
-        { start: '2026-05-18', end: '2026-06-12' },
-        { start: '2026-06-29', end: '2026-07-24' },
-        { start: '2026-07-27', end: '2026-08-21' }
-      ],
-      'Vertretungsmandat Leitung Finishing (schrittweise)': [
-        { start: '2026-09-07', end: '2026-10-16' },
-        { start: '2026-11-02', end: '2026-12-18' },
-        { start: '2027-01-11', end: '2027-02-26' }
-      ]
+    const dateRangeDurationDaysByMeasure = {
+      'Führungskräfteseminar „Führung im Industriebetrieb"': 3,
+      'AdA-Kurs — Ausbildereignungsprüfung (IHK)': 5,
+      'Seminar „Konfliktmanagement in der Produktion"': 3,
+      'Planspiel „Produktionssteuerung & Wirtschaftlichkeit"': 3,
+      'Workshop „Arbeitsrecht für Führungskräfte"': 2,
+      'Strukturierte Hospitation Finishing-Abteilung': 26,
+      'Vertretungsmandat Leitung Finishing (schrittweise)': 40
     };
+    const generatedTermineByMeasure = new Map();
+
+    function normalizeMeasureName(name) {
+      return (name || '').replace(/^[^\p{L}\p{N}]+/u, '').trim();
+    }
 
     function getPhaseMonthsByIndex(index) {
       const card = measureCards[index];
-      const name = getMeasureName(card);
+      const name = normalizeMeasureName(getMeasureName(card));
       if (
         name === 'Führungskräfteseminar „Führung im Industriebetrieb"'
         || name === 'AdA-Kurs — Ausbildereignungsprüfung (IHK)'
@@ -2928,6 +2905,51 @@
       const next = new Date(baseDate.getTime());
       next.setDate(next.getDate() + days);
       return next;
+    }
+
+    function randomIntInclusive(min, max) {
+      if (max <= min) return min;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateRandomDateRanges(startMonth, endMonth, durationDays, count = 3) {
+      const { minDate, maxDate } = monthWindowToDates(startMonth, endMonth);
+      const latestPossibleStart = addDays(maxDate, -(Math.max(1, durationDays) - 1));
+      if (latestPossibleStart < minDate) {
+        return [{ start: toDateInputValue(minDate), end: toDateInputValue(maxDate) }];
+      }
+
+      const minTime = minDate.getTime();
+      const maxStartTime = latestPossibleStart.getTime();
+      const uniqueRanges = new Map();
+      let attempts = 0;
+      while (uniqueRanges.size < count && attempts < 200) {
+        attempts += 1;
+        const randomStartMs = randomIntInclusive(minTime, maxStartTime);
+        let startDate = ensureWeekday(new Date(randomStartMs), 1);
+        if (startDate > latestPossibleStart) startDate = new Date(latestPossibleStart.getTime());
+
+        let endDate = addDays(startDate, durationDays - 1);
+        endDate = ensureWeekday(clampDateToRange(endDate, startDate, maxDate), -1);
+        if (endDate < startDate) continue;
+
+        const key = `${toDateInputValue(startDate)}_${toDateInputValue(endDate)}`;
+        uniqueRanges.set(key, { start: toDateInputValue(startDate), end: toDateInputValue(endDate) });
+      }
+
+      return Array.from(uniqueRanges.values()).sort((a, b) => a.start.localeCompare(b.start));
+    }
+
+    function getDateOptionsForCard(card, index) {
+      if (card.dataset.coaching === 'true') return [];
+      const measureName = normalizeMeasureName(getMeasureName(card));
+      if (!generatedTermineByMeasure.has(measureName)) {
+        const phase = getPhaseMonthsByIndex(index);
+        const duration = dateRangeDurationDaysByMeasure[measureName] || 3;
+        const randomOptions = generateRandomDateRanges(phase.startMonth, phase.endMonth, duration, 3);
+        generatedTermineByMeasure.set(measureName, randomOptions);
+      }
+      return generatedTermineByMeasure.get(measureName) || [];
     }
 
     function attachInputStopPropagation(input) {
@@ -2979,7 +3001,7 @@
           slots.appendChild(label);
         }
       } else {
-        const options = fixedTermineByMeasure[getMeasureName(card)] || [];
+        const options = getDateOptionsForCard(card, index);
         const selectLabel = document.createElement('label');
         selectLabel.className = 'm-date-field';
         selectLabel.innerHTML = 'Starttermin wählen';
@@ -3004,7 +3026,8 @@
 
     function applyFixedDateSelection(card) {
       if (card.dataset.coaching === 'true') return;
-      const options = fixedTermineByMeasure[getMeasureName(card)] || [];
+      const index = measureCards.indexOf(card);
+      const options = getDateOptionsForCard(card, index);
       const select = card.querySelector('.m-date-select');
       if (!options.length || !select) return;
       const selectedIndex = Number(select.value) || 0;
