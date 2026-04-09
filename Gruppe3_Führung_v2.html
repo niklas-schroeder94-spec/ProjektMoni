@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entwicklungsplan – Niklas S.</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #1a1a2e;
+    --paper:  #f7f4ef;
+    --accent: #c84b31;
+    --gold:   #d4a853;
+    --steel:  #4a6fa5;
+    --green:  #2e7d32;
+    --muted:  #7a7a7a;
+    --light:  #eceae4;
+    --white:  #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  .deck-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 2.6rem;
+    padding: 0.55rem 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(247, 244, 239, 0.92);
+    border-bottom: 1px solid var(--light);
+    backdrop-filter: blur(3px);
+  }
+
+  .deck-meta {
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 1rem;
+  }
+
+  .deck-page {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+
+  .deck-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .deck-btn {
+    border: 1px solid var(--light);
+    background: var(--white);
+    color: var(--ink);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    padding: 0.28rem 0.55rem;
+    cursor: pointer;
+  }
+
+  .deck-btn:hover {
+    border-color: var(--steel);
+    color: var(--steel);
+  }
+
+  .deck-btn.nav-arrow {
+    min-width: 1.8rem;
+    padding: 0.28rem 0.4rem;
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+
+  .slide-nav {
+    position: fixed;
+    top: 2.9rem;
+    right: 1.6rem;
+    z-index: 1100;
+    width: 23rem;
+    max-height: min(72vh, 38rem);
+    overflow: auto;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid var(--light);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    padding: 0.7rem;
+    display: none;
+  }
+
+  .slide-nav.is-open {
+    display: block;
+  }
+
+  .slide-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1090;
+    background: rgba(0,0,0,0.08);
+    display: none;
+  }
+
+  .slide-nav-overlay.is-open {
+    display: block;
+  }
+
+  .slide-nav-item {
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 0.55rem 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.7rem;
+    cursor: pointer;
+  }
+
+  .slide-nav-item:hover {
+    border-color: var(--light);
+    background: var(--paper);
+  }
+
+  .slide-nav-item.active {
+    border-color: var(--accent);
+    background: rgba(200,75,49,0.08);
+  }
+
+  .sn-num {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    min-width: 2.3rem;
+    flex-shrink: 0;
+  }
+
+  .sn-title {
+    font-size: 0.75rem;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.35;
+    flex: 1;
+  }
+
+  .deck-progress {
+    position: fixed;
+    top: 2.6rem;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(236, 234, 228, 0.9);
+    z-index: 1050;
+  }
+
+  .deck-progress-fill {
+    height: 100%;
+    width: calc(100% / 10);
+    background: linear-gradient(to right, var(--steel), var(--accent));
+    transition: width 220ms ease;
+  }
+
+  /* ── SLIDE BASE ── */
+  .slide {
+    width: 100%;
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 2.9rem;
+    page-break-after: always;
+  }
+
+  .slide.is-hidden {
+    display: none;
+  }
+
+  .slide-number {
+    display: none;
+  }
+
+  /* ── INNER WRAPPER ── */
+  .slide-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 3.2rem 4.8rem 4.8rem;
+    gap: 1.8rem;
+  }
+
+  /* ── HEADER ── */
+  .slide-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.4rem;
+    border-bottom: 1px solid var(--light);
+    padding-bottom: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .slide-tag {
+    font-size: 0.64rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    padding: 0.28rem 0.65rem;
+    border: 1px solid var(--accent);
+    white-space: nowrap;
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .slide-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 1 — TITEL
+  ════════════════════════════════════════ */
+  .slide-cover {
+    background: var(--ink);
+    color: var(--white);
+    justify-content: center;
+    align-items: flex-start;
+    padding: 5rem 6rem 6.2rem;
+  }
+
+  .cover-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 1.6rem;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1.0;
+    margin-bottom: 0.9rem;
+    color: var(--white);
+  }
+
+  .cover-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--gold);
+    margin-bottom: 3rem;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .cover-meta-item {
+    border-left: 2px solid var(--accent);
+    padding-left: 1rem;
+  }
+
+  .cover-meta-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .cover-meta-value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .cover-stripe {
+    position: absolute;
+    right: 0; top: 0;
+    width: 5px; height: 100%;
+    background: linear-gradient(to bottom, var(--accent), var(--gold));
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 2 — OFF-THE-JOB
+  ════════════════════════════════════════ */
+  .otj-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 1.4rem;
+    flex: 1;
+  }
+
+  .otj-card {
+    background: var(--white);
+    padding: 1.8rem;
+    border-top: 3px solid;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .otj-card.main  { border-color: var(--accent); background: var(--ink); color: var(--white); }
+  .otj-card.near  { border-color: var(--steel); }
+  .otj-card.on    { border-color: var(--muted); }
+
+  .otj-badge {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .otj-card.main .otj-badge { color: var(--gold); }
+  .otj-card.near .otj-badge { color: var(--steel); }
+  .otj-card.on   .otj-badge { color: var(--muted); }
+
+  .otj-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .otj-def {
+    font-size: 0.86rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .otj-card.main .otj-def { color: rgba(255,255,255,0.68); }
+
+  .otj-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.38rem;
+    margin-top: auto;
+  }
+
+  .chip {
+    font-size: 0.7rem;
+    padding: 0.18rem 0.55rem;
+    background: var(--light);
+    color: var(--ink);
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .otj-card.main .chip { background: rgba(255,255,255,0.1); color: var(--white); }
+
+  .otj-banner {
+    background: var(--accent);
+    color: var(--white);
+    padding: 1.2rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .otj-banner-text {
+    font-size: 0.87rem;
+    line-height: 1.6;
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 3 — PERSON & WERDEGANG
+  ════════════════════════════════════════ */
+  .person-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.55fr;
+    gap: 2.8rem;
+    flex: 1;
+  }
+
+  .person-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+  }
+
+  .person-profile {
+    background: var(--ink);
+    padding: 1.8rem 2rem;
+    color: var(--white);
+  }
+
+  .person-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+
+  .person-pos {
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .person-desc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+
+  .pos-arrow {
+    background: var(--white);
+    border-left: 3px solid var(--accent);
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .pa-col { flex: 1; }
+
+  .pa-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.15rem;
+  }
+
+  .pa-value {
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .pa-sym {
+    font-size: 1.3rem;
+    color: var(--accent);
+    font-weight: 300;
+  }
+
+  .lang-row {
+    display: flex;
+    gap: 0.7rem;
+  }
+
+  .lang-badge {
+    flex: 1;
+    padding: 0.55rem 0.9rem;
+    background: var(--white);
+    text-align: center;
+    font-size: 0.76rem;
+    font-weight: 600;
+    border-top: 2px solid var(--steel);
+    line-height: 1.4;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 1.6rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.7rem;
+    bottom: 0.7rem;
+    width: 2px;
+    background: linear-gradient(to bottom,
+      var(--muted) 0%,
+      var(--steel) 25%,
+      var(--steel) 55%,
+      var(--gold) 75%,
+      var(--accent) 100%);
+  }
+
+  .tl-item {
+    position: relative;
+    padding: 0.65rem 0 0.65rem 1.6rem;
+  }
+
+  .tl-dot {
+    position: absolute;
+    left: -0.42rem;
+    top: 1rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--muted);
+  }
+
+  .tl-dot.d-steel  { border-color: var(--steel); }
+  .tl-dot.d-gold   { border-color: var(--gold); }
+  .tl-dot.d-accent { border-color: var(--accent); background: var(--accent); }
+
+  .tl-phase {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 0.12rem;
+  }
+
+  .tl-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .tl-sub {
+    font-size: 0.76rem;
+    color: var(--muted);
+    margin-top: 0.08rem;
+    line-height: 1.4;
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 4 — IST-KOMPETENZPROFIL
+  ════════════════════════════════════════ */
+  .komp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.3rem;
+    flex: 1;
+  }
+
+  .komp-card {
+    background: var(--white);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .kc-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .kc-icon {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .kc-title {
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .kc-bars { display: flex; flex-direction: column; gap: 0.45rem; }
+
+  .kc-row { display: flex; flex-direction: column; gap: 0.18rem; }
+
+  .kc-lbl {
+    font-size: 0.74rem;
+    color: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .kc-lbl em {
+    font-style: normal;
+    font-size: 0.66rem;
+    color: var(--muted);
+  }
+
+  .bar-bg {
+    height: 5px;
+    background: var(--light);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bar-fill { height: 100%; border-radius: 2px; }
+
+  .kc-gap {
+    font-size: 0.73rem;
+    color: var(--accent);
+    font-weight: 600;
+    padding: 0.38rem 0.6rem;
+    background: rgba(200,75,49,0.07);
+    border-left: 2px solid var(--accent);
+    margin-top: 0.3rem;
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 5 — SOLL-KOMPETENZEN
+  ════════════════════════════════════════ */
+  .soll-layout {
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    gap: 2.5rem;
+    flex: 1;
+  }
+
+  .soll-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .soll-item {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    background: var(--white);
+    padding: 0.8rem 1rem;
+  }
+
+  .soll-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--light);
+    line-height: 1;
+    min-width: 1.4rem;
+  }
+
+  .soll-label {
+    font-size: 0.83rem;
+    font-weight: 700;
+    margin-bottom: 0.08rem;
+    color: var(--ink);
+  }
+
+  .soll-desc {
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .soll-radar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+  }
+
+  .radar-lbl {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .radar-legend {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .rleg {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 6 — IST-SOLL-ABGLEICH
+  ════════════════════════════════════════ */
+  .abgleich-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ab-head-row {
+    display: grid;
+    grid-template-columns: 1.7fr 2.8fr 1fr;
+    gap: 1rem;
+    padding: 0 1.2rem 0.6rem;
+  }
+
+  .ab-head {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .ab-row {
+    display: grid;
+    grid-template-columns: 1.7fr 2.8fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    background: var(--white);
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 0.6rem;
+    border-left: 3px solid transparent;
+  }
+
+  .ab-row.gap-row { border-left-color: var(--accent); }
+
+  .ab-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .ab-row.gap-row .ab-label { color: var(--accent); }
+
+  .bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .bar-legend-txt {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    min-width: 1.5rem;
+  }
+
+  .ab-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--light);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .ab-ist-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--steel);
+    opacity: 0.75;
+  }
+
+  .ab-soll-line {
+    position: absolute;
+    top: -3px;
+    height: 14px;
+    width: 2px;
+    background: var(--accent);
+  }
+
+  .ab-status {
+    font-size: 0.69rem;
+    font-weight: 700;
+    padding: 0.22rem 0.55rem;
+    border-radius: 2px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .s-stark    { background: #e8f5e9; color: #2e7d32; }
+  .s-teil     { background: #fff3e0; color: #e65100; }
+  .s-luecke   { background: #fce4ec; color: #c62828; }
+
+  .ab-values {
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 0.2rem;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+  }
+
+  .ab-legend-row {
+    display: flex;
+    gap: 1.8rem;
+    justify-content: flex-end;
+    padding-top: 0.5rem;
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 7 — MASSNAHMEN
+  ════════════════════════════════════════ */
+  .m-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .m-radar-panel {
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 1rem 1.2rem;
+    display: grid;
+    grid-template-columns: 310px 1fr;
+    gap: 1.2rem;
+    align-items: center;
+  }
+
+  .m-radar-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.42rem;
+    font-size: 0.73rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .m-radar-meta strong {
+    color: var(--ink);
+  }
+
+  .m-radar-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 0.2rem;
+  }
+
+  .m-radar-card {
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .m-radar-copy {
+    width: 100%;
+    font-size: 0.73rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .m-radar-copy strong {
+    color: var(--ink);
+  }
+
+  .inline-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    background: rgba(74,111,165,0.1);
+    color: var(--steel);
+    font-size: 0.76rem;
+    line-height: 1;
+    margin-right: 0.35rem;
+    vertical-align: text-top;
+  }
+
+  .inline-icon.mini {
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.68rem;
+    margin-right: 0.3rem;
+  }
+
+  .m-name .inline-icon {
+    background: rgba(200,75,49,0.1);
+    color: var(--accent);
+    margin-right: 0.42rem;
+  }
+
+  .m-card {
+    background: var(--white);
+    padding: 1.3rem;
+    border-top: 3px solid;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    position: relative;
+    cursor: pointer;
+    transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  }
+
+  .m-card.off  { border-color: var(--accent); }
+  .m-card.near { border-color: var(--steel); }
+  .m-card.on   { border-color: var(--gold); }
+
+  .m-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  }
+
+  .m-card.selected {
+    box-shadow: 0 0 0 2px rgba(200,75,49,0.2);
+  }
+
+  .m-check {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.75rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 1px solid #cfc9bf;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: transparent;
+    background: var(--white);
+  }
+
+  .m-card.selected .m-check {
+    border-color: var(--green);
+    background: rgba(46,125,50,0.12);
+    color: var(--green);
+  }
+
+  .m-type {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .m-card.off  .m-type { color: var(--accent); }
+  .m-card.near .m-type { color: var(--steel); }
+  .m-card.on   .m-type { color: #b8860b; }
+
+  .m-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .m-ziel {
+    font-size: 0.72rem;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .m-text {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .m-prio {
+    display: flex;
+    gap: 3px;
+    padding-top: 0.2rem;
+    border-top: 1px solid var(--light);
+    margin-top: auto;
+  }
+
+  .pd { width: 6px; height: 6px; border-radius: 50%; background: var(--light); }
+  .pd.on { background: var(--ink); }
+
+  .m-legend {
+    background: var(--white);
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.7rem;
+  }
+
+  .ml-title {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .ml-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .ml-bar { width: 3px; height: 18px; flex-shrink: 0; }
+  .ml-name { font-size: 0.78rem; font-weight: 600; }
+  .ml-desc { font-size: 0.68rem; color: var(--muted); }
+
+  /* ════════════════════════════════════════
+     FOLIE 8 — ZEITPLAN
+  ════════════════════════════════════════ */
+  .zeitplan {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .phase-row {
+    flex: 1;
+    display: flex;
+    gap: 1.3rem;
+    align-items: stretch;
+  }
+
+  .phase-col {
+    width: 7.5rem;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 0.4rem;
+    border-right: 2px solid var(--light);
+    padding-right: 1rem;
+  }
+
+  .phase-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.18rem;
+  }
+
+  .phase-period {
+    font-size: 0.64rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .phase-cards {
+    flex: 1;
+    display: flex;
+    gap: 0.8rem;
+    align-items: stretch;
+  }
+
+  .p-card {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    background: var(--white);
+    border-left: 3px solid;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .p-card.c-off  { border-color: var(--accent); }
+  .p-card.c-near { border-color: var(--steel); }
+  .p-card.c-on   { border-color: var(--gold); }
+  .p-card.c-ms   { border-color: var(--ink); background: var(--ink); }
+
+  .p-type {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .p-card.c-ms .p-type { color: var(--gold); }
+
+  .p-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .p-card.c-ms .p-name { color: var(--white); }
+
+  .zeitplan-note {
+    background: var(--white);
+    border-left: 3px solid var(--gold);
+    padding: 0.9rem 1.4rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 9 — KRITISCHE REFLEXION
+  ════════════════════════════════════════ */
+  .reflexion-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2.2rem;
+    flex: 1;
+  }
+
+  .risiko-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .risiko-item {
+    background: var(--white);
+    padding: 1.1rem 1.3rem;
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .risiko-icon {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    background: rgba(200,75,49,0.1);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .risiko-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    color: var(--ink);
+  }
+
+  .risiko-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .transfer-box {
+    background: var(--ink);
+    color: var(--white);
+    padding: 2.2rem 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.3rem;
+  }
+
+  .tb-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .tb-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .tb-text {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.7;
+  }
+
+  .tb-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+  }
+
+  .tb-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-size: 0.79rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+  }
+
+  .tb-num {
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.62rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ════════════════════════════════════════
+     FOLIE 10 — FAZIT
+  ════════════════════════════════════════ */
+  .slide-fazit {
+    background: var(--ink);
+    color: var(--white);
+    justify-content: center;
+    padding: 4.5rem 5.5rem 6.2rem;
+    gap: 0;
+  }
+
+  .fazit-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 1.3rem;
+  }
+
+  .fazit-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 900;
+    line-height: 1.1;
+    max-width: 68%;
+    margin-bottom: 3rem;
+  }
+
+  .fazit-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .fazit-card {
+    padding: 1.3rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .fc-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .fc-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.3;
+  }
+
+  .fc-text {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+
+  .zeitplan-logic {
+    background: #f9f7f2;
+    border-left: 3px solid var(--gold);
+    padding: 0.75rem 1rem;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    color: #5f5a53;
+    margin-bottom: 0.8rem;
+  }
+
+  .risiko-matrix {
+    margin-top: 0.9rem;
+    background: #f9f7f2;
+    border: 1px solid var(--light);
+    padding: 0.8rem;
+    color: var(--ink);
+  }
+
+  .risiko-matrix-title {
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .risiko-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.68rem;
+  }
+
+  .risiko-table th,
+  .risiko-table td {
+    border-bottom: 1px solid #e6e1d9;
+    padding: 0.35rem 0.25rem;
+    text-align: left;
+    color: var(--ink);
+  }
+
+  .risiko-table th {
+    color: var(--muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .risk-prio {
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .fazit-footer {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.5rem;
+  }
+
+  /* ── MISC ── */
+  .divider {
+    height: 1px;
+    background: var(--light);
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+<div class="deck-header">
+  <div class="deck-meta">Gruppe 3 · Führung · DHBW SST</div>
+  <div class="deck-controls">
+    <button class="deck-btn nav-arrow" id="deck-prev" type="button" aria-label="Vorherige Folie">←</button>
+    <button class="deck-btn nav-arrow" id="deck-next" type="button" aria-label="Nächste Folie">→</button>
+    <button class="deck-btn" id="deck-nav-toggle" type="button">Agenda</button>
+    <div class="deck-page" id="deck-page">01 / 10</div>
+  </div>
+</div>
+<div class="deck-progress" aria-hidden="true">
+  <div class="deck-progress-fill" id="deck-progress-fill"></div>
+</div>
+<div class="slide-nav-overlay" id="slide-nav-overlay" aria-hidden="true"></div>
+<div class="slide-nav" id="slide-nav" aria-label="Foliennavigation"></div>
+
+<!-- ════════════════════════════════════════
+     FOLIE 1 — TITELFOLIE
+════════════════════════════════════════ -->
+<div class="slide slide-cover">
+  <div class="cover-eyebrow">Personalentwicklung · Führung · Off-the-job</div>
+  <div class="cover-title">Entwicklungs&shy;plan</div>
+  <div class="cover-subtitle">Niklas S.</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Aktuelle Position</div>
+      <div class="cover-meta-value">Assistent der Produktionsleitung</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Entwicklungsziel</div>
+      <div class="cover-meta-value">Leitung Ausrüstung / Finishing</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Zeithorizont</div>
+      <div class="cover-meta-value">18 Monate</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Schwerpunkt</div>
+      <div class="cover-meta-value">Off-the-job-Maßnahmen</div>
+    </div>
+  </div>
+  <div class="cover-stripe"></div>
+  <div class="slide-number" style="color:rgba(255,255,255,0.25)">01 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 2 — DEFINITION: OFF-THE-JOB
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Begriff</span>
+      <h1 class="slide-h1">Was ist „off-the-job"?</h1>
+    </div>
+
+    <div class="otj-grid">
+      <!-- Hauptkarte -->
+      <div class="otj-card main">
+        <div class="otj-badge">Schwerpunkt dieser Präsentation</div>
+        <div class="otj-title">Off-the-job</div>
+        <div class="otj-def">Maßnahmen, die vollständig außerhalb des Arbeitsplatzes stattfinden — räumlich und zeitlich vom Produktionsprozess entkoppelt. Der Lernende ist aus dem Tagesgeschäft herausgezogen; es besteht maximaler Raum für Reflexion, Verhaltenserprobung und konzeptionelle Auseinandersetzung.</div>
+        <div class="otj-examples">
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">📘</span>Seminar</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">💬</span>Coaching (extern)</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">🎯</span>Planspiel</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">🛠</span>Workshop</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">🎓</span>AdA-Kurs (IHK)</span>
+          <span class="chip"><span class="inline-icon mini" aria-hidden="true">✈️</span>Studienreise</span>
+        </div>
+      </div>
+
+      <!-- Near -->
+      <div class="otj-card near">
+        <div class="otj-badge">Ergänzend · Near-the-job</div>
+        <div class="otj-title">Near-the-job</div>
+        <div class="otj-def">Am betrieblichen Kontext ausgerichtet, aber zeitlich aus dem Tagesgeschäft herausgelöst. Verbindet praktische Relevanz mit erhöhter Reflexionstiefe. Sinnvoll zur Vorbereitung auf den Realtransfer.</div>
+        <div class="otj-examples">
+          <span class="chip">Hospitation (strukturiert)</span>
+          <span class="chip">Qualitätszirkel</span>
+          <span class="chip">Action-Learning-Set</span>
+        </div>
+      </div>
+
+      <!-- On -->
+      <div class="otj-card on">
+        <div class="otj-badge">Transfer · On-the-job</div>
+        <div class="otj-title">On-the-job</div>
+        <div class="otj-def">Lernen direkt am Arbeitsplatz im laufenden Prozess. Unmittelbarer Transfer, aber kaum Reflexionsraum. Für Führungsentwicklung als alleinige Methode nicht ausreichend — dient der Anwendung zuvor erworbener Kompetenzen.</div>
+        <div class="otj-examples">
+          <span class="chip">Vertretungsmandat</span>
+          <span class="chip">Erweiterte Aufgaben</span>
+          <span class="chip">Mentoring</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="otj-banner">
+      <div style="font-size:1.6rem;flex-shrink:0">↗</div>
+      <div class="otj-banner-text"><strong>Warum off-the-job für Führungskräfteentwicklung?</strong> Führungskompetenzen erfordern kognitive Auseinandersetzung mit Modellen, kritische Selbstreflexion und das Einüben neuer Verhaltensmuster in geschütztem Rahmen. All das ist im laufenden Schichtbetrieb strukturell nicht leistbar. Off-the-job schafft den notwendigen Lern- und Reflexionsraum — z. B. durch <span class="inline-icon mini" aria-hidden="true">📘</span>Seminare und <span class="inline-icon mini" aria-hidden="true">💬</span>Coaching.</div>
+    </div>
+  </div>
+  <div class="slide-number">02 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 3 — PERSON & WERDEGANG
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Person</span>
+      <h1 class="slide-h1">Niklas S. — Ausgangssituation</h1>
+    </div>
+
+    <div class="person-layout">
+      <div class="person-left">
+        <div class="person-profile">
+          <div class="person-name">Niklas S.</div>
+          <div class="person-pos">Assistent der Produktionsleitung</div>
+          <div class="person-desc">Verbindet akademische Analysefähigkeit mit fundierter operativer Praxis in der Karton- und Papierindustrie. Aktuell in Stabsfunktion ohne direkte Personalverantwortung.</div>
+        </div>
+
+        <div class="pos-arrow">
+          <div class="pa-col">
+            <div class="pa-label">Heute</div>
+            <div class="pa-value">Assistent der Produktionsleitung</div>
+          </div>
+          <div class="pa-sym">→</div>
+          <div class="pa-col">
+            <div class="pa-label">Ziel</div>
+            <div class="pa-value">Leitung Ausrüstung / Finishing</div>
+          </div>
+        </div>
+
+        <div style="background:var(--white);padding:1rem 1.1rem;border-left:3px solid var(--steel);font-size:0.78rem;line-height:1.6;color:var(--muted)">
+          <strong style="color:var(--ink)">Entwicklungslogik:</strong> Theorie → Ausbildung → Operative Praxis → Studium → Führungsnähe. Der Werdegang zeigt schrittweise wachsende Verantwortung — der Sprung in die Linienführung ist der nächste konsequente Schritt.
+        </div>
+
+        <div class="lang-row">
+          <div class="lang-badge">🇩🇪 Deutsch<br><span style="font-weight:400;font-size:0.7rem">verhandlungssicher</span></div>
+          <div class="lang-badge">🇬🇧 Englisch<br><span style="font-weight:400;font-size:0.7rem">verhandlungssicher</span></div>
+        </div>
+      </div>
+
+      <!-- TIMELINE — chronologisch korrekt -->
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div>
+            <div class="tl-phase">Akademisches Fundament</div>
+            <div class="tl-title">Studium Bauingenieurwesen — RWTH Aachen</div>
+            <div class="tl-sub">Analytisch-mathematische Grundlage · Strukturiertes Denken in komplexen Systemen</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot d-steel"></div>
+          <div>
+            <div class="tl-phase">Fachliche Grundausbildung · verkürzt · 2 Jahre</div>
+            <div class="tl-title">Ausbildung zum Papiertechnologen</div>
+            <div class="tl-sub">Prozesswissen Papierherstellung · Maschinenverständnis · Materialkunde</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot d-steel"></div>
+          <div>
+            <div class="tl-phase">Operativer Einstieg · Kartonmaschine</div>
+            <div class="tl-title">Maschinenführergehilfe → Streicher</div>
+            <div class="tl-sub">Erste Praxisverantwortung · Einarbeitung in den laufenden Schichtbetrieb</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot d-gold"></div>
+          <div>
+            <div class="tl-phase">Eigenverantwortung · Kartonmaschine</div>
+            <div class="tl-title">Eigenverantwortlicher Maschinenführer</div>
+            <div class="tl-sub">Selbstständige Anlagensteuerung · Verantwortung für Produktqualität und Maschinenlauf</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot d-gold"></div>
+          <div>
+            <div class="tl-phase">Berufsbegleitendes Studium</div>
+            <div class="tl-title">Duales Studium B.Sc. (SST) — DHBW</div>
+            <div class="tl-sub">Systemisches Management-Wissen · Projekt- und Problemlösungsmethoden · Verzahnung von Theorie und Betriebspraxis</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot d-accent"></div>
+          <div>
+            <div class="tl-phase">Heute · Stabsfunktion</div>
+            <div class="tl-title" style="color:var(--accent)">Assistent der Produktionsleitung</div>
+            <div class="tl-sub">Überblickfunktion über gesamte Wertschöpfungskette · analytische Aufgaben · keine direkte Führungsverantwortung</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">03 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 4 — IST-KOMPETENZPROFIL
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Ist-Profil</span>
+      <h1 class="slide-h1">Heutige Kompetenzen — Stärken und Entwicklungsfelder</h1>
+    </div>
+
+    <div class="komp-grid">
+
+      <!-- FACHKOMPETENZ -->
+      <div class="komp-card">
+        <div class="kc-head">
+          <div class="kc-icon" style="background:#e8f0fb;color:var(--steel)">📐</div>
+          <div class="kc-title">Fachkompetenz</div>
+        </div>
+        <div class="kc-bars">
+          <div class="kc-row">
+            <div class="kc-lbl">Kartonerzeugung / Stoffaufbereitung <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:90%;background:var(--steel)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Wertschöpfungskette Faser → Versand <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:82%;background:var(--steel)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Datenanalyse · Excel · digitale Tools <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:88%;background:var(--steel)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Finishing-Anlagenwissen (Rollenschneider, Palettierer) <em>mittel</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:55%;background:var(--steel)"></div></div>
+          </div>
+        </div>
+        <div class="kc-gap">↳ Entwicklungsfeld: Anlagenwissen Ausrüstung vorhanden, aber noch nicht auf Leitungsniveau</div>
+      </div>
+
+      <!-- METHODENKOMPETENZ -->
+      <div class="komp-card">
+        <div class="kc-head">
+          <div class="kc-icon" style="background:#fff8e1;color:var(--gold)">🧩</div>
+          <div class="kc-title">Methodenkompetenz</div>
+        </div>
+        <div class="kc-bars">
+          <div class="kc-row">
+            <div class="kc-lbl">Selbst- und Zeitmanagement <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:88%;background:var(--gold)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Strukturiertes Priorisieren <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:84%;background:var(--gold)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Theoret. Projekt- und Problemlösungswissen <em>mittel</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:70%;background:var(--gold)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Operative Anwendung (8D, A3, PDCA) in der Produktion <em>gering</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:35%;background:#bbb"></div></div>
+          </div>
+        </div>
+        <div class="kc-gap">↳ Entwicklungsfeld: Überführung theoretischer Methoden in laufenden Betrieb</div>
+      </div>
+
+      <!-- SELBSTKOMPETENZ -->
+      <div class="komp-card">
+        <div class="kc-head">
+          <div class="kc-icon" style="background:#fce4ec;color:var(--accent)">🧠</div>
+          <div class="kc-title">Selbstkompetenz</div>
+        </div>
+        <div class="kc-bars">
+          <div class="kc-row">
+            <div class="kc-lbl">Belastbarkeit unter Termin- und Ergebnisdruck <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:92%;background:var(--accent)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Kritikfähigkeit und Reflexionsbereitschaft <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:87%;background:var(--accent)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Eigenverantwortliches Handeln <em>mittel-hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:78%;background:var(--accent)"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Entscheidungsfreudigkeit unter Unsicherheit (Schichtbetrieb) <em>gering</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:38%;background:#bbb"></div></div>
+          </div>
+        </div>
+        <div class="kc-gap">↳ Entwicklungsfeld: Führungsentscheidungen unter operativem Zeitdruck treffen</div>
+      </div>
+
+      <!-- SOZIALKOMPETENZ & FÜHRUNGSPOTENZIAL -->
+      <div class="komp-card">
+        <div class="kc-head">
+          <div class="kc-icon" style="background:#e8f5e9;color:var(--green)">🤝</div>
+          <div class="kc-title">Sozialkompetenz & Führungspotenzial</div>
+        </div>
+        <div class="kc-bars">
+          <div class="kc-row">
+            <div class="kc-lbl">Abteilungsübergr. Vernetzung und Akzeptanz <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:90%;background:#4caf50"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Empathie und Kommunikationsfähigkeit <em>hoch</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:88%;background:#4caf50"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Durchsetzungsvermögen in Führungssituationen <em>im Aufbau</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:35%;background:#bbb"></div></div>
+          </div>
+          <div class="kc-row">
+            <div class="kc-lbl">Direkte Mitarbeiterführung / Personalverantwortung <em>nicht vorhanden</em></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:10%;background:#bbb"></div></div>
+          </div>
+        </div>
+        <div class="kc-gap">↳ Kritischstes Entwicklungsfeld: Führungsautorität und Personalverantwortung fehlen gänzlich</div>
+      </div>
+
+    </div>
+  </div>
+  <div class="slide-number">04 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 5 — SOLL-KOMPETENZEN
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Zielposition</span>
+      <h1 class="slide-h1">Anforderungsprofil: Leitung Ausrüstung / Finishing</h1>
+    </div>
+
+    <div class="soll-layout">
+      <div class="soll-list">
+        <div class="soll-item">
+          <div class="soll-num">01</div>
+          <div>
+            <div class="soll-label">Mitarbeiterführung & Personalverantwortung</div>
+            <div class="soll-desc">Disziplinarische Führung eines schichtbetriebenen Teams; Beurteilungs-, Kritik- und Rückkehrgespräche; Zielvereinbarungen</div>
+          </div>
+        </div>
+        <div class="soll-item">
+          <div class="soll-num">02</div>
+          <div>
+            <div class="soll-label">Durchsetzungsvermögen & Entscheidungsstärke</div>
+            <div class="soll-desc">Konsequentes Handeln unter operativem Zeitdruck; Sofortentscheidungen bei Störungen, Qualitätsproblemen, Personalausfällen</div>
+          </div>
+        </div>
+        <div class="soll-item">
+          <div class="soll-num">03</div>
+          <div>
+            <div class="soll-label">Konfliktfähigkeit & Deeskalation</div>
+            <div class="soll-desc">Frühzeitige Konflikterkennung in Schichtteams; konstruktive Klärung auch bei hierarchischem Widerstand</div>
+          </div>
+        </div>
+        <div class="soll-item">
+          <div class="soll-num">04</div>
+          <div>
+            <div class="soll-label">Produktions- und Prozesssteuerung (OEE, KPI)</div>
+            <div class="soll-desc">Schichtbericht, Produktionsplanung, Rüstzeitoptimierung, Anlagenverfügbarkeit; KPI-orientierte Steuerung der Abteilungsleistung</div>
+          </div>
+        </div>
+        <div class="soll-item">
+          <div class="soll-num">05</div>
+          <div>
+            <div class="soll-label">Schnittstellenmanagement</div>
+            <div class="soll-desc">Koordination zu QS, Versand, Maintenance und PM-Betrieb; Vertretung der Abteilungsinteressen nach oben und seitwärts</div>
+          </div>
+        </div>
+        <div class="soll-item">
+          <div class="soll-num">06</div>
+          <div>
+            <div class="soll-label">Wirtschaftliches Denken & Budgetverantwortung</div>
+            <div class="soll-desc">Kostenbewusstsein für Material, Personal und Energie; Abteilungsbudget kennen und eigenverantwortlich steuern</div>
+          </div>
+        </div>
+        <div class="soll-item">
+          <div class="soll-num">07</div>
+          <div>
+            <div class="soll-label">Ausbildungskompetenz (AdA / AEVO)</div>
+            <div class="soll-desc">Rechtliche Voraussetzung zur Berufsausbildung in der Abteilung; ohne Ausbilderschein keine Ausbildungsverantwortung möglich</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radar SVG -->
+      <div class="soll-radar">
+        <div class="radar-lbl">Kompetenzprofil — Ist vs. Soll</div>
+        <svg width="270" height="270" viewBox="0 0 270 270" style="overflow:visible">
+          <g transform="translate(135,138)">
+            <!-- Gitterlinien -->
+            <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <!-- Achsen -->
+            <line x1="0" y1="0" x2="0" y2="-95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <!-- IST: Fach 87%, Methodik 65%, Selbst 75%, Führung/Personal 12%, Konflikt 30%, Durchsetzen 38% -->
+            <polygon
+              points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0"
+              fill="rgba(74,111,165,0.14)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
+            <!-- SOLL -->
+            <polygon
+              points="0,-92 79,-46 79,46 0,92 -79,46 -79,-46"
+              fill="rgba(200,75,49,0.07)" stroke="var(--accent)" stroke-width="2"/>
+            <!-- IST-Punkte -->
+            <circle cx="0" cy="-82.7" r="3.5" fill="var(--steel)"/>
+            <circle cx="52.0" cy="-32.5" r="3.5" fill="var(--steel)"/>
+            <circle cx="61.7" cy="35.6" r="3.5" fill="var(--steel)"/>
+            <circle cx="0" cy="11.4" r="3.5" fill="var(--steel)"/>
+            <circle cx="-24.7" cy="15.0" r="3.5" fill="var(--steel)"/>
+            <circle cx="-31.2" cy="-19.0" r="3.5" fill="var(--steel)"/>
+            <!-- Beschriftungen -->
+            <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
+            <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
+            <text x="90" y="53" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Selbst</text>
+            <text x="0" y="110" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Pers.führung</text>
+            <text x="-90" y="53" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Konflikt</text>
+            <text x="-90" y="-50" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Durchsetzen</text>
+          </g>
+        </svg>
+        <div class="radar-legend">
+          <div class="rleg">
+            <div style="width:22px;height:0;border-top:2px dashed var(--steel)"></div>
+            Ist-Profil
+          </div>
+          <div class="rleg">
+            <div style="width:22px;height:0;border-top:2px solid var(--accent)"></div>
+            Soll-Anforderung
+          </div>
+        </div>
+        <div style="font-size:0.72rem;color:var(--muted);text-align:center;line-height:1.5;padding:0 0.5rem">
+          Das Radardiagramm zeigt deutlich: Die größten Lücken liegen im Bereich Personalführung, Konfliktfähigkeit und Durchsetzungsvermögen.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">05 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 6 — IST-SOLL-ABGLEICH
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Analyse</span>
+      <h1 class="slide-h1">Ist-Soll-Abgleich — Kompetenzlücken im Überblick</h1>
+    </div>
+
+    <div style="background:var(--white);border-left:3px solid var(--accent);padding:0.9rem 1.2rem;font-size:0.8rem;line-height:1.6;color:var(--muted);margin-top:-0.2rem">
+      <strong style="color:var(--ink)">Kernaussage:</strong> Die zentrale Entwicklungslücke liegt nicht im Fachwissen, sondern in der fehlenden Führungs- und Durchsetzungswirksamkeit im operativen Kontext. Genau hier muss der Entwicklungsplan ansetzen.
+    </div>
+
+    <div class="abgleich-wrap">
+      <div class="ab-head-row">
+        <div class="ab-head">Kompetenz</div>
+        <div class="ab-head">Ausprägung Ist (blau) vs. Soll-Anforderung (rot)</div>
+        <div class="ab-head">Bewertung</div>
+      </div>
+
+      <!-- Teilweise -->
+      <div class="ab-row">
+        <div class="ab-label">Fachwissen Ausrüstung / Finishing</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:70%"></div>
+            <div class="ab-soll-line" style="left:70%"></div>
+          </div>
+          <div class="ab-values">70 → 70</div>
+        </div>
+        <div class="ab-status s-stark">✓ Ausreichend</div>
+      </div>
+
+      <div class="ab-row">
+        <div class="ab-label">Analytik & Digitalkompetenzen</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:86%"></div>
+            <div class="ab-soll-line" style="left:75%"></div>
+          </div>
+          <div class="ab-values">86 → 75</div>
+        </div>
+        <div class="ab-status s-stark">✓ Ausreichend</div>
+      </div>
+
+      <div class="ab-row">
+        <div class="ab-label">Selbstorganisation & Belastbarkeit</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:90%"></div>
+            <div class="ab-soll-line" style="left:80%"></div>
+          </div>
+          <div class="ab-values">90 → 80</div>
+        </div>
+        <div class="ab-status s-stark">✓ Ausreichend</div>
+      </div>
+
+      <!-- Teilweise -->
+      <div class="ab-row">
+        <div class="ab-label">Schnittstellenmanagement</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:55%"></div>
+            <div class="ab-soll-line" style="left:85%"></div>
+          </div>
+          <div class="ab-values">55 → 85</div>
+        </div>
+        <div class="ab-status s-teil">◑ Ausbaubedarf</div>
+      </div>
+
+      <div class="ab-row">
+        <div class="ab-label">Operative Problemlösung (8D, PDCA)</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:40%"></div>
+            <div class="ab-soll-line" style="left:80%"></div>
+          </div>
+          <div class="ab-values">40 → 80</div>
+        </div>
+        <div class="ab-status s-teil">◑ Ausbaubedarf</div>
+      </div>
+
+      <!-- Lücken -->
+      <div class="ab-row gap-row">
+        <div class="ab-label">Durchsetzungsvermögen / Führungsautorität</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:35%;background:var(--accent)"></div>
+            <div class="ab-soll-line" style="left:88%"></div>
+          </div>
+          <div class="ab-values">35 → 88</div>
+        </div>
+        <div class="ab-status s-luecke">⚠ Lücke</div>
+      </div>
+
+      <div class="ab-row gap-row">
+        <div class="ab-label">Konfliktmanagement (hierarchisch)</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:28%;background:var(--accent)"></div>
+            <div class="ab-soll-line" style="left:85%"></div>
+          </div>
+          <div class="ab-values">28 → 85</div>
+        </div>
+        <div class="ab-status s-luecke">⚠ Lücke</div>
+      </div>
+
+      <div class="ab-row gap-row">
+        <div class="ab-label">Direkte Mitarbeiterführung / Personalverantwortung</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:10%;background:var(--accent)"></div>
+            <div class="ab-soll-line" style="left:92%"></div>
+          </div>
+          <div class="ab-values">10 → 92</div>
+        </div>
+        <div class="ab-status s-luecke">⚠ Kritische Lücke</div>
+      </div>
+
+      <div class="ab-row gap-row">
+        <div class="ab-label">Ausbildereignung (AdA / AEVO)</div>
+        <div class="bar-wrap">
+          <div class="bar-legend-txt">Ist</div>
+          <div class="ab-bar">
+            <div class="ab-ist-fill" style="width:0%;background:var(--accent)"></div>
+            <div class="ab-soll-line" style="left:92%"></div>
+          </div>
+          <div class="ab-values">0 → 92</div>
+        </div>
+        <div class="ab-status s-luecke">⚠ Fehlt vollständig</div>
+      </div>
+    </div>
+
+    <div class="ab-legend-row">
+      <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.7rem;color:var(--muted)">
+        <div style="width:14px;height:8px;background:var(--steel);opacity:0.75;border-radius:2px"></div> Ist-Ausprägung
+      </div>
+      <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.7rem;color:var(--muted)">
+        <div style="width:2px;height:14px;background:var(--accent)"></div> Soll-Anforderung (Minimum)
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">06 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 7 — MASSNAHMEN
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Entwicklungsplan</span>
+      <h1 class="slide-h1">Maßnahmen — Schwerpunkt off-the-job</h1>
+    </div>
+
+    <div class="m-radar-panel">
+      <div class="soll-radar" style="gap:0.75rem">
+        <div class="radar-lbl">Interaktive Entwicklung — Ist-Profil (grau) vs. Projektion (blau)</div>
+        <svg id="massnahmen-radar" width="270" height="270" viewBox="0 0 270 270" style="overflow:visible">
+          <g transform="translate(135,138)">
+            <polygon points="0,-95 82.2,-47.5 82.2,47.5 0,95 -82.2,47.5 -82.2,-47.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5" fill="none" stroke="#e0ddd6" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="-95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="95" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <line x1="0" y1="0" x2="-82.2" y2="-47.5" stroke="#d0ccc4" stroke-width="1"/>
+            <polygon id="massnahmen-radar-soll" points="0,-92 79,-46 79,46 0,92 -79,46 -79,-46" fill="rgba(200,75,49,0.07)" stroke="var(--accent)" stroke-width="2"/>
+            <polygon id="massnahmen-radar-ist-baseline" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(120,120,120,0.18)" stroke="rgba(115,115,115,0.9)" stroke-width="1.8"/>
+            <polygon id="massnahmen-radar-projektion" points="0,-82.7 52.0,-32.5 61.7,35.6 0,11.4 -24.7,15.0 -31.2,-19.0" fill="rgba(74,111,165,0.23)" stroke="var(--steel)" stroke-width="2" stroke-dasharray="5,3"/>
+            <g id="massnahmen-radar-points"></g>
+            <text x="0" y="-103" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Fachkomp.</text>
+            <text x="90" y="-50" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Methodik</text>
+            <text x="90" y="53" text-anchor="start" font-size="8.5" fill="#555" font-family="DM Sans">Selbst</text>
+            <text x="0" y="110" text-anchor="middle" font-size="8.5" fill="#555" font-family="DM Sans">Pers.führung</text>
+            <text x="-90" y="53" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Konflikt</text>
+            <text x="-90" y="-50" text-anchor="end" font-size="8.5" fill="#555" font-family="DM Sans">Durchsetzen</text>
+          </g>
+        </svg>
+      </div>
+      <div class="m-radar-meta">
+        <strong>Simulation:</strong> Wähle Maßnahmen aus. Das graue Ist-Profil bleibt als Ausgangsbasis sichtbar, während das blaue Projektions-Profil die erwartete Entwicklung zeigt.
+        <div>Basis-Ist startet bei: Fach 87 · Methodik 65 · Selbst 75 · Führung 12 · Konflikt 30 · Durchsetzen 38.</div>
+        <div class="m-radar-count"><span>✓</span><span id="massnahmen-count">0 Maßnahmen aktiv</span></div>
+      </div>
+    </div>
+
+    <div class="m-grid">
+
+      <div class="m-card off js-massnahme" data-impact="0,4,2,20,6,8">
+        <div class="m-check">✓</div>
+        <div class="m-type">Off-the-job · Priorität ●●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">📘</span>Führungskräfteseminar „Führung im Industriebetrieb"</div>
+        <div class="m-ziel">Zielkompetenz: Mitarbeiterführung, Gesprächsführung</div>
+        <div class="m-text">Konzeptionelle Grundlagen (situatives Führen, transaktional/transformational) und Rollenspiele zu Kritik-, Zielvereinbarungs- und Rückkehrgesprächen. Die Maßnahme schließt die Lücke in der direkten Mitarbeiterführung, weil Führungsverhalten in einem geschützten Rahmen eingeübt und reflektiert werden kann.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
+      </div>
+
+      <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20">
+        <div class="m-check">✓</div>
+        <div class="m-type">Off-the-job · Priorität ●●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (6–8 Sitzungen)</div>
+        <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
+        <div class="m-text">Individuelle Bearbeitung von Verhaltensmustern, die in Gruppensettings oft verborgen bleiben. Die Maßnahme adressiert das Defizit im Durchsetzungsverhalten, weil persönliche Hemmungen, Konfliktmuster und Entscheidungsunsicherheit gezielt bearbeitet werden. Begleitend über die gesamte Entwicklungsphase.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
+      </div>
+
+      <div class="m-card off js-massnahme" data-impact="2,4,3,6,2,4">
+        <div class="m-check">✓</div>
+        <div class="m-type">Off-the-job · Priorität ●●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🎓</span>AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
+        <div class="m-ziel">Zielkompetenz: Ausbildungskompetenz (AEVO)</div>
+        <div class="m-text">Rechtliche Pflichtvoraussetzung: Ohne bestandene Ausbildereignungsprüfung ist die Durchführung der Berufsausbildung in der Abteilung unzulässig. Die Maßnahme schließt damit nicht nur eine Kompetenz-, sondern eine formale Zulassungslücke der Zielposition.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
+      </div>
+
+      <div class="m-card off js-massnahme" data-impact="0,3,2,6,24,8">
+        <div class="m-check">✓</div>
+        <div class="m-type">Off-the-job · Priorität ●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">⚖️</span>Seminar „Konfliktmanagement in der Produktion"</div>
+        <div class="m-ziel">Zielkompetenz: Konfliktfähigkeit, Deeskalation</div>
+        <div class="m-text">Modelle und Methoden der Konfliktklärung (z. B. Harvard-Konzept, Gewaltfreie Kommunikation) sowie Simulation von Schicht-, Übergabe- und Teamkonflikten. Die Maßnahme ist geeignet, weil Konfliktverhalten trainiert werden kann, ohne dass reale Produktionsbeziehungen beschädigt werden.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
+      </div>
+
+      <div class="m-card off js-massnahme" data-impact="0,18,8,4,2,12">
+        <div class="m-check">✓</div>
+        <div class="m-type">Off-the-job · Priorität ●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🎯</span>Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
+        <div class="m-ziel">Zielkompetenz: Entscheidungsstärke, wirtschaftl. Denken</div>
+        <div class="m-text">Simulation von Schichtplanung, KPI-Steuerung und Budgetentscheidungen in komprimierter Form. Die Maßnahme entwickelt Entscheidungsstärke, weil Konsequenzen von Priorisierungen und Fehlentscheidungen unmittelbar sichtbar werden – jedoch ohne reales Betriebsrisiko.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
+      </div>
+
+      <div class="m-card off js-massnahme" data-impact="0,6,6,10,4,12">
+        <div class="m-check">✓</div>
+        <div class="m-type">Off-the-job · Priorität ●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🛠</span>Workshop „Arbeitsrecht für Führungskräfte"</div>
+        <div class="m-ziel">Zielkompetenz: Rechtliche Handlungssicherheit</div>
+        <div class="m-text">Grundlagen zu BetrVG, ArbZG, Abmahnung und Kündigung. Die Maßnahme stärkt Handlungssicherheit, weil Durchsetzung in Führungsrollen nur dann wirksam ist, wenn sie rechtlich sauber und belastbar erfolgt.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
+      </div>
+
+      <div class="m-card near js-massnahme" data-impact="18,8,4,6,2,4">
+        <div class="m-check">✓</div>
+        <div class="m-type">Near-the-job · Priorität ●●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">👀</span>Strukturierte Hospitation Finishing-Abteilung</div>
+        <div class="m-ziel">Zielkompetenz: Anlagenwissen, operative Glaubwürdigkeit</div>
+        <div class="m-text">4–6 Wochen, alle Schichten, mit dokumentiertem Lernauftrag und Abschlusspräsentation. Die Maßnahme schließt die Glaubwürdigkeitslücke, weil ohne Anlagenkenntnisse zu Rollenschneider, Querschneider und Palettierer die Akzeptanz als zukünftige Führungskraft im Team begrenzt bleibt.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
+      </div>
+
+      <div class="m-card on js-massnahme" data-impact="4,10,8,35,12,20">
+        <div class="m-check">✓</div>
+        <div class="m-type">On-the-job · Transfer · Priorität ●●●</div>
+        <div class="m-name"><span class="inline-icon" aria-hidden="true">🏭</span>Vertretungsmandat Leitung Finishing (schrittweise)</div>
+        <div class="m-ziel">Zielkompetenz: Reale Führungserfahrung, Personalverantwortung</div>
+        <div class="m-text">Erst nach Abschluss der off-the-job-Grundlagen: zunächst Schichtleitungsvertretung, dann Urlaubsvertretung. Die Maßnahme überführt Lernen in reale Führungsverantwortung; das begleitende Coaching sichert Reflexion und verhindert, dass neue Führungsanforderungen nur situativ statt systematisch bewältigt werden.</div>
+        <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="slide-number">07 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 8 — ZEITLICHER FAHRPLAN
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Zeitplanung</span>
+      <h1 class="slide-h1">Zeitlicher Fahrplan — Aufbau vor Transfer</h1>
+    </div>
+
+    <div class="zeitplan-logic">
+      Die Sequenz folgt der Lernlogik: Zuerst off-the-job Grundlagen (Führungsmodelle, Recht, Konfliktkompetenz), dann begleiteter Near-/On-the-job-Transfer. So sinkt das operative Risiko, bevor echte Personalverantwortung schrittweise übernommen wird.
+    </div>
+
+    <div class="zeitplan">
+
+      <!-- Phase 1 -->
+      <div class="phase-row">
+        <div class="phase-col">
+          <div class="phase-name">Kurzfristig</div>
+          <div class="phase-period">Monat 1–4</div>
+        </div>
+        <div class="phase-cards">
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">Führungs&shy;kräfte&shy;seminar</div>
+          </div>
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">Coaching (Start)</div>
+          </div>
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">AdA-Kurs IHK</div>
+          </div>
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">Arbeitsrecht&shy;workshop</div>
+          </div>
+          <div class="p-card c-near">
+            <div class="p-type">Near-the-job</div>
+            <div class="p-name">Hospitation Finishing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Phase 2 -->
+      <div class="phase-row">
+        <div class="phase-col">
+          <div class="phase-name">Mittel&shy;fristig</div>
+          <div class="phase-period">Monat 5–10</div>
+        </div>
+        <div class="phase-cards">
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">Konflikt&shy;management-Seminar</div>
+          </div>
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">Planspiel Produktions&shy;steuerung</div>
+          </div>
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">Coaching (Vertiefung)</div>
+          </div>
+          <div class="p-card c-on">
+            <div class="p-type">On-the-job · Transfer</div>
+            <div class="p-name">Vertretungs&shy;mandat Schicht&shy;leitung</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Phase 3 -->
+      <div class="phase-row">
+        <div class="phase-col">
+          <div class="phase-name">Lang&shy;fristig</div>
+          <div class="phase-period">Monat 11–18</div>
+        </div>
+        <div class="phase-cards">
+          <div class="p-card c-on">
+            <div class="p-type">On-the-job · Transfer</div>
+            <div class="p-name">Erweitertes Vertretungs&shy;mandat (Leitungsvertretung)</div>
+          </div>
+          <div class="p-card c-off">
+            <div class="p-type">Off-the-job</div>
+            <div class="p-name">Coaching (bedarfs&shy;orientiert)</div>
+          </div>
+          <div class="p-card c-ms">
+            <div class="p-type">Meilenstein</div>
+            <div class="p-name">360°-Kompetenz&shy;bewertung → Entscheidung Übernahme</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="slide-number">08 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 9 — KRITISCHE REFLEXION
+════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-tag">Reflexion</span>
+      <h1 class="slide-h1">Kritische Würdigung — Risiken und Grenzen</h1>
+    </div>
+
+    <div style="background:var(--white);border-left:3px solid var(--accent);padding:0.9rem 1.2rem;font-size:0.8rem;line-height:1.6;color:var(--muted);margin-top:-0.2rem">
+      Ein wesentliches Risiko besteht darin, dass off-the-job-Maßnahmen ohne strukturierten Praxistransfer nur begrenzte Wirkung entfalten. Deshalb müssen Lern- und Anwendungssituationen systematisch verzahnt werden.
+    </div>
+
+    <div class="reflexion-layout">
+      <div class="risiko-list">
+
+        <div class="risiko-item">
+          <div class="risiko-icon">⚡</div>
+          <div>
+            <div class="risiko-title">Transferproblem: Off-the-job allein reicht nicht</div>
+            <div class="risiko-text">Der klassische Fehlschlag von Seminarentwicklung: Gelerntes wird im Betriebsalltag nicht angewendet, weil gewohnte Verhaltensmuster dominieren. <strong>Gegenmaßnahme:</strong> Coaching als explizite Transferbrücke; Seminarinhalte werden in konkreten Alltagssituationen systematisch reflektiert.</div>
+          </div>
+        </div>
+
+        <div class="risiko-item">
+          <div class="risiko-icon">🔍</div>
+          <div>
+            <div class="risiko-title">Durchsetzungsproblem strukturell tiefer</div>
+            <div class="risiko-text">Fehlendes Durchsetzungsvermögen kann auf eine konfliktvermeidende Grundstruktur zurückgehen, die durch Seminare allein nicht veränderbar ist. <strong>Gegenmaßnahme:</strong> Einzelcoaching als zentrales Format; die Bereitschaft zur Verhaltensänderung ist Grundvoraussetzung — und muss vorab geklärt werden.</div>
+          </div>
+        </div>
+
+        <div class="risiko-item">
+          <div class="risiko-icon">⏱</div>
+          <div>
+            <div class="risiko-title">Betriebliche Freistellung als systemische Bedingung</div>
+            <div class="risiko-text">Als Assistent der Produktionsleitung ist Niklas S. operativ stark eingebunden. Off-the-job setzt Freistellung voraus. <strong>Gegenmaßnahme:</strong> Explizites Commitment der Produktionsleitung; ohne organisatorische Unterstützung scheitert der Plan nicht an der Person, sondern an der Struktur.</div>
+          </div>
+        </div>
+
+        <div class="risiko-item">
+          <div class="risiko-icon">🏭</div>
+          <div>
+            <div class="risiko-title">Akzeptanz ohne Finishing-Fachkompetenz gefährdet</div>
+            <div class="risiko-text">Langjährige Anlagenfahrer akzeptieren eine Führungskraft nicht automatisch aufgrund ihrer formalen Rolle. Fehlendes Anlagenwissen wird als Schwäche wahrgenommen. <strong>Gegenmaßnahme:</strong> Hospitation ist nicht optional, sondern Akzeptanzvoraussetzung — und muss vor dem Vertretungsmandat abgeschlossen sein.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="transfer-box">
+        <div class="tb-eyebrow">Kernaussage</div>
+        <div class="tb-heading">Warum reines Seminarlernen scheitert</div>
+        <div class="tb-text">Führungskompetenzen entstehen nicht durch das Hören von Führungsmodellen. Sie erfordern Erprobung, Fehler, Rückmeldung und Reflexion. Off-the-job schafft den nötigen Rahmen — aber nur die Verzahnung aller drei Lernformen erzeugt nachhaltigen Kompetenzzuwachs.</div>
+        <div class="tb-steps">
+          <div class="tb-step">
+            <div class="tb-num">1</div>
+            <div><strong>Off-the-job:</strong> Konzepte erwerben, Muster erkennen, Verhalten in sicherer Umgebung erproben</div>
+          </div>
+          <div class="tb-step">
+            <div class="tb-num">2</div>
+            <div><strong>Coaching:</strong> Transfer aktiv gestalten, individuelle Verhaltensmuster bearbeiten</div>
+          </div>
+          <div class="tb-step">
+            <div class="tb-num">3</div>
+            <div><strong>On-the-job:</strong> Im kontrollierten Ernstfall anwenden — mit Reflexionsschleife</div>
+          </div>
+        </div>
+
+        <div class="risiko-matrix">
+          <div class="risiko-matrix-title">Priorisierungsmatrix (Wahrscheinlichkeit × Auswirkung)</div>
+          <table class="risiko-table" aria-label="Risikomatrix">
+            <thead>
+              <tr>
+                <th>Risiko</th>
+                <th>Wahrsch.</th>
+                <th>Auswirkung</th>
+                <th>Priorität</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Transferproblem</td>
+                <td>4/5</td>
+                <td>5/5</td>
+                <td class="risk-prio">20 (sehr hoch)</td>
+              </tr>
+              <tr>
+                <td>Durchsetzungsproblem</td>
+                <td>3/5</td>
+                <td>5/5</td>
+                <td class="risk-prio">15 (hoch)</td>
+              </tr>
+              <tr>
+                <td>Freistellung</td>
+                <td>4/5</td>
+                <td>4/5</td>
+                <td class="risk-prio">16 (hoch)</td>
+              </tr>
+              <tr>
+                <td>Akzeptanz Finishing</td>
+                <td>3/5</td>
+                <td>4/5</td>
+                <td class="risk-prio">12 (mittel-hoch)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">09 / 10</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FOLIE 10 — FAZIT
+════════════════════════════════════════ -->
+<div class="slide slide-fazit">
+  <div class="fazit-eyebrow">Zusammenfassung · Entwicklungsplan Niklas S.</div>
+  <div class="fazit-heading">Strukturierte Entwicklung statt Zufallserfahrung.</div>
+
+  <div class="fazit-cards">
+    <div class="fazit-card">
+      <div class="fc-num">6</div>
+      <div class="fc-label">Off-the-job-Maßnahmen</div>
+      <div class="fc-text">Seminar, Coaching, AdA-Kurs, Konflikttraining, Planspiel, Arbeitsrecht — der Entwicklungsschwerpunkt liegt bewusst außerhalb des Tagesgeschäfts.</div>
+    </div>
+    <div class="fazit-card">
+      <div class="fc-num">4</div>
+      <div class="fc-label">Kritische Kompetenzlücken</div>
+      <div class="fc-text">Mitarbeiterführung, Durchsetzungsvermögen, Konfliktfähigkeit und Ausbildereignung müssen gezielt geschlossen werden — sie sind k.o.-Kriterien für die Zielposition.</div>
+    </div>
+    <div class="fazit-card">
+      <div class="fc-num">AdA</div>
+      <div class="fc-label">Ausbilderschein als Pflichtbaustein</div>
+      <div class="fc-text">Ohne bestandene Ausbildereignungsprüfung (AEVO) ist die Führung einer ausbildenden Abteilung rechtlich nicht möglich. Kein optionaler, sondern ein formaler Pflichtbaustein.</div>
+    </div>
+    <div class="fazit-card">
+      <div class="fc-num">18</div>
+      <div class="fc-label">Monate realistischer Zeithorizont</div>
+      <div class="fc-text">Erst Kompetenzaufbau (off-the-job), dann Transfer (on-the-job). Die Reihenfolge ist kein Detail — sie ist die Grundlage für nachhaltigen Entwicklungserfolg.</div>
+    </div>
+  </div>
+
+  <div style="font-size:0.92rem;line-height:1.7;color:rgba(255,255,255,0.78);max-width:78%;margin-bottom:2rem">
+    Der Entwicklungsplan baut gezielt auf bestehenden fachlichen Stärken auf und adressiert systematisch die für die Zielrolle kritischen Führungsdefizite. Dadurch wird der Übergang von einer analytisch starken Stabsfunktion in eine operativ wirksame Linienführung strukturiert vorbereitet.
+  </div>
+
+  <div class="fazit-footer">Personalentwicklung · Kompetenzmanagement · Führung · Entwicklungsplan Niklas S.</div>
+  <div class="slide-number" style="color:rgba(255,255,255,0.25)">10 / 10</div>
+</div>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const pageIndicator = document.getElementById('deck-page');
+    const navToggle = document.getElementById('deck-nav-toggle');
+    const prevButton = document.getElementById('deck-prev');
+    const nextButton = document.getElementById('deck-next');
+    const navPanel = document.getElementById('slide-nav');
+    const navOverlay = document.getElementById('slide-nav-overlay');
+    const progressFill = document.getElementById('deck-progress-fill');
+    let currentIndex = 0;
+    let navItems = [];
+
+    function getSlideTitle(slide, fallbackIndex) {
+      const heading = slide.querySelector('.slide-h1');
+      if (heading) return heading.textContent.trim();
+      const coverTitle = slide.querySelector('.cover-title');
+      if (coverTitle) return coverTitle.textContent.replace(/\s+/g, ' ').trim();
+      const fazitTitle = slide.querySelector('.fazit-heading');
+      if (fazitTitle) return fazitTitle.textContent.trim();
+      return `Folie ${fallbackIndex + 1}`;
+    }
+
+    function setNavOpen(isOpen) {
+      navPanel?.classList.toggle('is-open', isOpen);
+      navOverlay?.classList.toggle('is-open', isOpen);
+    }
+
+    function renderSlideNav() {
+      if (!navPanel) return;
+
+      navPanel.innerHTML = '';
+      navItems = slides.map((slide, index) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'slide-nav-item';
+        item.innerHTML = `
+          <span class="sn-num">${String(index + 1).padStart(2, '0')}</span>
+          <span class="sn-title">${getSlideTitle(slide, index)}</span>
+        `;
+        item.addEventListener('click', () => {
+          goToSlide(index);
+          setNavOpen(false);
+        });
+        navPanel.appendChild(item);
+        return item;
+      });
+    }
+
+    function renderSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('is-hidden', index !== currentIndex);
+      });
+      if (pageIndicator) {
+        const current = String(currentIndex + 1).padStart(2, '0');
+        const total = String(slides.length).padStart(2, '0');
+        pageIndicator.textContent = `${current} / ${total}`;
+      }
+      if (progressFill) {
+        const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+      }
+      navItems.forEach((item, index) => {
+        item.classList.toggle('active', index === currentIndex);
+      });
+    }
+
+    function goToSlide(nextIndex) {
+      if (nextIndex < 0 || nextIndex >= slides.length) return;
+      currentIndex = nextIndex;
+      renderSlides();
+      setNavOpen(false);
+      slides[currentIndex].scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') {
+        event.preventDefault();
+        goToSlide(currentIndex + 1);
+      } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+        event.preventDefault();
+        goToSlide(currentIndex - 1);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        goToSlide(0);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        goToSlide(slides.length - 1);
+      } else if (event.key.toLowerCase() === 'm') {
+        event.preventDefault();
+        setNavOpen(!navPanel?.classList.contains('is-open'));
+      } else if (event.key === 'Escape') {
+        setNavOpen(false);
+      }
+    });
+
+    navToggle?.addEventListener('click', () => {
+      setNavOpen(!navPanel?.classList.contains('is-open'));
+    });
+
+    prevButton?.addEventListener('click', () => goToSlide(currentIndex - 1));
+    nextButton?.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+    navOverlay?.addEventListener('click', () => {
+      setNavOpen(false);
+    });
+
+    window.addEventListener('click', (event) => {
+      if (!navPanel || !navToggle) return;
+      const clickedInsideMenu = navPanel.contains(event.target);
+      const clickedToggle = navToggle.contains(event.target);
+      const clickedOverlay = navOverlay?.contains(event.target);
+      if (!clickedInsideMenu && !clickedToggle && !clickedOverlay) {
+        setNavOpen(false);
+      }
+    });
+
+    const baseIstProfile = [87, 65, 75, 12, 30, 38];
+    const radarVectors = [
+      [0, -1],
+      [0.866, -0.5],
+      [0.866, 0.5],
+      [0, 1],
+      [-0.866, 0.5],
+      [-0.866, -0.5]
+    ];
+    const maxRadius = 95;
+    const measureCards = Array.from(document.querySelectorAll('.js-massnahme'));
+    const radarBasePolygon = Array.from(document.querySelectorAll('#massnahmen-radar-ist-baseline')).at(-1) || null;
+    const radarProjectionPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-projektion')).at(-1) || null;
+    const radarPoints = Array.from(document.querySelectorAll('#massnahmen-radar-points')).at(-1) || null;
+    const measureCountLabel = Array.from(document.querySelectorAll('#massnahmen-count')).at(-1) || null;
+
+    function profileToPoints(profile) {
+      return profile.map((value, index) => {
+        const [vx, vy] = radarVectors[index];
+        const radius = (Math.max(0, Math.min(100, value)) / 100) * maxRadius;
+        return `${(vx * radius).toFixed(1)},${(vy * radius).toFixed(1)}`;
+      });
+    }
+
+    function renderRadarFromSelection() {
+      if (!radarProjectionPolygon || !radarPoints) return;
+
+      const selectedCards = measureCards.filter((card) => card.classList.contains('selected'));
+      const nextProfile = [...baseIstProfile];
+
+      selectedCards.forEach((card) => {
+        const impact = (card.dataset.impact || '').split(',').map((value) => Number(value.trim()) || 0);
+        for (let i = 0; i < nextProfile.length; i += 1) {
+          nextProfile[i] += impact[i] || 0;
+        }
+      });
+
+      const points = profileToPoints(nextProfile.map((value) => Math.min(100, value)));
+      radarProjectionPolygon.setAttribute('points', points.join(' '));
+      radarPoints.innerHTML = points
+        .map((point) => {
+          const [cx, cy] = point.split(',');
+          return `<circle cx="${cx}" cy="${cy}" r="3.2" fill="var(--steel)"></circle>`;
+        })
+        .join('');
+
+      if (measureCountLabel) {
+        measureCountLabel.textContent = `${selectedCards.length} Maßnahme${selectedCards.length === 1 ? '' : 'n'} aktiv`;
+      }
+    }
+
+    measureCards.forEach((card) => {
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-pressed', 'false');
+      card.addEventListener('click', () => {
+        card.classList.toggle('selected');
+        card.setAttribute('aria-pressed', card.classList.contains('selected') ? 'true' : 'false');
+        renderRadarFromSelection();
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        card.click();
+      });
+    });
+
+    if (radarBasePolygon) {
+      radarBasePolygon.setAttribute('points', profileToPoints(baseIstProfile).join(' '));
+    }
+
+    renderSlideNav();
+    renderSlides();
+    renderRadarFromSelection();
+  })();
+</script>
+
+</body>
+</html>
