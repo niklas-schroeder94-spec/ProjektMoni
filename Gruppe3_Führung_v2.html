@@ -1004,6 +1004,48 @@
   .pd { width: 6px; height: 6px; border-radius: 50%; background: var(--light); }
   .pd.on { background: var(--ink); }
 
+  .measure-dates {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+    margin-top: 0.35rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--light);
+  }
+
+  .m-card.selected .measure-dates {
+    display: grid;
+  }
+
+  .measure-date {
+    display: flex;
+    flex-direction: column;
+    gap: 0.24rem;
+  }
+
+  .measure-date label {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .measure-date input[type="date"] {
+    width: 100%;
+    border: 1px solid var(--light);
+    background: var(--white);
+    color: var(--ink);
+    font-size: 0.68rem;
+    padding: 0.26rem 0.35rem;
+    outline: none;
+  }
+
+  .measure-date input[type="date"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(200,75,49,0.14);
+  }
+
   .m-legend {
     background: var(--white);
     padding: 1.2rem 1.4rem;
@@ -1040,6 +1082,104 @@
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+  }
+
+  .planning-table-wrap {
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 0.8rem 1rem;
+  }
+
+  .planning-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .planning-table th,
+  .planning-table td {
+    border-bottom: 1px solid var(--light);
+    text-align: left;
+    padding: 0.45rem 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .planning-table th {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .planning-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .planning-empty {
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding: 0.35rem 0.2rem 0.1rem;
+  }
+
+  .planning-timeline {
+    background: var(--white);
+    border: 1px solid var(--light);
+    padding: 0.9rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .timeline-axis {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+    gap: 0.2rem;
+  }
+
+  .timeline-month {
+    font-size: 0.56rem;
+    text-align: center;
+    color: var(--muted);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    background: rgba(236,234,228,0.8);
+    padding: 0.2rem 0.05rem;
+  }
+
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 18rem 1fr;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .timeline-label {
+    font-size: 0.67rem;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  .timeline-track {
+    position: relative;
+    height: 1rem;
+    border: 1px solid var(--light);
+    background:
+      linear-gradient(to right, rgba(236,234,228,0.8) 1px, transparent 1px) 0 0 / calc(100% / 18) 100%;
+  }
+
+  .timeline-bar {
+    position: absolute;
+    top: 0.12rem;
+    bottom: 0.12rem;
+    border-radius: 999px;
+    background: var(--steel);
+    min-width: 3px;
+  }
+
+  .timeline-empty {
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding-top: 0.15rem;
   }
 
   .phase-row {
@@ -2029,75 +2169,107 @@
 
     <div class="m-grid">
 
-      <div class="m-card off js-massnahme" data-impact="0,4,2,20,6,8">
+      <div class="m-card measure-card off js-massnahme" data-impact="0,4,2,20,6,8">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">📘</span>Führungskräfteseminar „Führung im Industriebetrieb"</div>
         <div class="m-ziel">Zielkompetenz: Mitarbeiterführung, Gesprächsführung</div>
         <div class="m-text">Konzeptionelle Grundlagen (situatives Führen, transaktional/transformational) und Rollenspiele zu Kritik-, Zielvereinbarungs- und Rückkehrgesprächen. Die Maßnahme schließt die Lücke in der direkten Mitarbeiterführung, weil Führungsverhalten in einem geschützten Rahmen eingeübt und reflektiert werden kann.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off js-massnahme" data-impact="0,2,4,8,10,20">
+      <div class="m-card measure-card off js-massnahme" data-impact="0,2,4,8,10,20">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">💬</span>Externes Einzelcoaching (6–8 Sitzungen)</div>
         <div class="m-ziel">Zielkompetenz: Durchsetzungsvermögen, Entscheidungsidentität</div>
         <div class="m-text">Individuelle Bearbeitung von Verhaltensmustern, die in Gruppensettings oft verborgen bleiben. Die Maßnahme adressiert das Defizit im Durchsetzungsverhalten, weil persönliche Hemmungen, Konfliktmuster und Entscheidungsunsicherheit gezielt bearbeitet werden. Begleitend über die gesamte Entwicklungsphase.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off js-massnahme" data-impact="2,4,3,6,2,4">
+      <div class="m-card measure-card off js-massnahme" data-impact="2,4,3,6,2,4">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">🎓</span>AdA-Kurs — Ausbildereignungsprüfung (IHK)</div>
         <div class="m-ziel">Zielkompetenz: Ausbildungskompetenz (AEVO)</div>
         <div class="m-text">Rechtliche Pflichtvoraussetzung: Ohne bestandene Ausbildereignungsprüfung ist die Durchführung der Berufsausbildung in der Abteilung unzulässig. Die Maßnahme schließt damit nicht nur eine Kompetenz-, sondern eine formale Zulassungslücke der Zielposition.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card off js-massnahme" data-impact="0,3,2,6,24,8">
+      <div class="m-card measure-card off js-massnahme" data-impact="0,3,2,6,24,8">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">⚖️</span>Seminar „Konfliktmanagement in der Produktion"</div>
         <div class="m-ziel">Zielkompetenz: Konfliktfähigkeit, Deeskalation</div>
         <div class="m-text">Modelle und Methoden der Konfliktklärung (z. B. Harvard-Konzept, Gewaltfreie Kommunikation) sowie Simulation von Schicht-, Übergabe- und Teamkonflikten. Die Maßnahme ist geeignet, weil Konfliktverhalten trainiert werden kann, ohne dass reale Produktionsbeziehungen beschädigt werden.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off js-massnahme" data-impact="0,18,8,4,2,12">
+      <div class="m-card measure-card off js-massnahme" data-impact="0,18,8,4,2,12">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">🎯</span>Planspiel „Produktionssteuerung & Wirtschaftlichkeit"</div>
         <div class="m-ziel">Zielkompetenz: Entscheidungsstärke, wirtschaftl. Denken</div>
         <div class="m-text">Simulation von Schichtplanung, KPI-Steuerung und Budgetentscheidungen in komprimierter Form. Die Maßnahme entwickelt Entscheidungsstärke, weil Konsequenzen von Priorisierungen und Fehlentscheidungen unmittelbar sichtbar werden – jedoch ohne reales Betriebsrisiko.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card off js-massnahme" data-impact="0,6,6,10,4,12">
+      <div class="m-card measure-card off js-massnahme" data-impact="0,6,6,10,4,12">
         <div class="m-check">✓</div>
         <div class="m-type">Off-the-job · Priorität ●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">🛠</span>Workshop „Arbeitsrecht für Führungskräfte"</div>
         <div class="m-ziel">Zielkompetenz: Rechtliche Handlungssicherheit</div>
         <div class="m-text">Grundlagen zu BetrVG, ArbZG, Abmahnung und Kündigung. Die Maßnahme stärkt Handlungssicherheit, weil Durchsetzung in Führungsrollen nur dann wirksam ist, wenn sie rechtlich sauber und belastbar erfolgt.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd"></div></div>
       </div>
 
-      <div class="m-card near js-massnahme" data-impact="18,8,4,6,2,4">
+      <div class="m-card measure-card near js-massnahme" data-impact="18,8,4,6,2,4">
         <div class="m-check">✓</div>
         <div class="m-type">Near-the-job · Priorität ●●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">👀</span>Strukturierte Hospitation Finishing-Abteilung</div>
         <div class="m-ziel">Zielkompetenz: Anlagenwissen, operative Glaubwürdigkeit</div>
         <div class="m-text">4–6 Wochen, alle Schichten, mit dokumentiertem Lernauftrag und Abschlusspräsentation. Die Maßnahme schließt die Glaubwürdigkeitslücke, weil ohne Anlagenkenntnisse zu Rollenschneider, Querschneider und Palettierer die Akzeptanz als zukünftige Führungskraft im Team begrenzt bleibt.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
-      <div class="m-card on js-massnahme" data-impact="4,10,8,35,12,20">
+      <div class="m-card measure-card on js-massnahme" data-impact="4,10,8,35,12,20">
         <div class="m-check">✓</div>
         <div class="m-type">On-the-job · Transfer · Priorität ●●●</div>
         <div class="m-name"><span class="inline-icon" aria-hidden="true">🏭</span>Vertretungsmandat Leitung Finishing (schrittweise)</div>
         <div class="m-ziel">Zielkompetenz: Reale Führungserfahrung, Personalverantwortung</div>
         <div class="m-text">Erst nach Abschluss der off-the-job-Grundlagen: zunächst Schichtleitungsvertretung, dann Urlaubsvertretung. Die Maßnahme überführt Lernen in reale Führungsverantwortung; das begleitende Coaching sichert Reflexion und verhindert, dass neue Führungsanforderungen nur situativ statt systematisch bewältigt werden.</div>
+        <div class="measure-dates">
+          <div class="measure-date"><label>Start</label><input type="date" class="measure-start"></div>
+          <div class="measure-date"><label>Ende</label><input type="date" class="measure-end"></div>
+        </div>
         <div class="m-prio"><div class="pd on"></div><div class="pd on"></div><div class="pd on"></div></div>
       </div>
 
@@ -2122,89 +2294,26 @@
     </div>
 
     <div class="zeitplan">
-
-      <!-- Phase 1 -->
-      <div class="phase-row">
-        <div class="phase-col">
-          <div class="phase-name">Kurzfristig</div>
-          <div class="phase-period">Monat 1–4</div>
-        </div>
-        <div class="phase-cards">
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">Führungs&shy;kräfte&shy;seminar</div>
-          </div>
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">Coaching (Start)</div>
-          </div>
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">AdA-Kurs IHK</div>
-          </div>
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">Arbeitsrecht&shy;workshop</div>
-          </div>
-          <div class="p-card c-near">
-            <div class="p-type">Near-the-job</div>
-            <div class="p-name">Hospitation Finishing</div>
-          </div>
-        </div>
+      <div class="planning-table-wrap">
+        <table class="planning-table" aria-label="Ausgewählte Maßnahmen mit Datumsplanung">
+          <thead>
+            <tr>
+              <th>Maßnahme</th>
+              <th>Typ</th>
+              <th>Start</th>
+              <th>Ende</th>
+            </tr>
+          </thead>
+          <tbody id="planning-selected-body"></tbody>
+        </table>
+        <div id="planning-empty" class="planning-empty">Noch keine Maßnahmen auf Folie 7 ausgewählt.</div>
       </div>
 
-      <div class="divider"></div>
-
-      <!-- Phase 2 -->
-      <div class="phase-row">
-        <div class="phase-col">
-          <div class="phase-name">Mittel&shy;fristig</div>
-          <div class="phase-period">Monat 5–10</div>
-        </div>
-        <div class="phase-cards">
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">Konflikt&shy;management-Seminar</div>
-          </div>
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">Planspiel Produktions&shy;steuerung</div>
-          </div>
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">Coaching (Vertiefung)</div>
-          </div>
-          <div class="p-card c-on">
-            <div class="p-type">On-the-job · Transfer</div>
-            <div class="p-name">Vertretungs&shy;mandat Schicht&shy;leitung</div>
-          </div>
-        </div>
+      <div class="planning-timeline" aria-label="Zeitstrahl über 18 Monate">
+        <div id="planning-timeline-axis" class="timeline-axis"></div>
+        <div id="planning-timeline-rows"></div>
+        <div id="planning-timeline-empty" class="timeline-empty">Für die Timeline bitte Start- und Enddatum in Folie 7 setzen.</div>
       </div>
-
-      <div class="divider"></div>
-
-      <!-- Phase 3 -->
-      <div class="phase-row">
-        <div class="phase-col">
-          <div class="phase-name">Lang&shy;fristig</div>
-          <div class="phase-period">Monat 11–18</div>
-        </div>
-        <div class="phase-cards">
-          <div class="p-card c-on">
-            <div class="p-type">On-the-job · Transfer</div>
-            <div class="p-name">Erweitertes Vertretungs&shy;mandat (Leitungsvertretung)</div>
-          </div>
-          <div class="p-card c-off">
-            <div class="p-type">Off-the-job</div>
-            <div class="p-name">Coaching (bedarfs&shy;orientiert)</div>
-          </div>
-          <div class="p-card c-ms">
-            <div class="p-type">Meilenstein</div>
-            <div class="p-name">360°-Kompetenz&shy;bewertung → Entscheidung Übernahme</div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
   <div class="slide-number">08 / 10</div>
@@ -2499,6 +2608,82 @@
     const radarProjectionPolygon = Array.from(document.querySelectorAll('#massnahmen-radar-projektion')).at(-1) || null;
     const radarPoints = Array.from(document.querySelectorAll('#massnahmen-radar-points')).at(-1) || null;
     const measureCountLabel = Array.from(document.querySelectorAll('#massnahmen-count')).at(-1) || null;
+    const planningStartDate = new Date(2024, 4, 1);
+    const planningWindowMonths = 18;
+    const planningSelectedBody = document.getElementById('planning-selected-body');
+    const planningEmpty = document.getElementById('planning-empty');
+    const planningTimelineAxis = document.getElementById('planning-timeline-axis');
+    const planningTimelineRows = document.getElementById('planning-timeline-rows');
+    const planningTimelineEmpty = document.getElementById('planning-timeline-empty');
+
+    function addMonths(date, months) {
+      const result = new Date(date);
+      result.setMonth(result.getMonth() + months);
+      return result;
+    }
+
+    function startOfDay(date) {
+      const result = new Date(date);
+      result.setHours(0, 0, 0, 0);
+      return result;
+    }
+
+    function endOfDay(date) {
+      const result = startOfDay(date);
+      result.setHours(23, 59, 59, 999);
+      return result;
+    }
+
+    function parseInputDate(value) {
+      if (!value) return null;
+      const [year, month, day] = value.split('-').map(Number);
+      if (!year || !month || !day) return null;
+      return new Date(year, month - 1, day);
+    }
+
+    function toInputDate(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatDateDe(date) {
+      return new Intl.DateTimeFormat('de-DE').format(date);
+    }
+
+    function clampDate(date, minDate, maxDate) {
+      if (!date) return null;
+      if (date < minDate) return new Date(minDate);
+      if (date > maxDate) return new Date(maxDate);
+      return date;
+    }
+
+    function adjustWeekendToMonday(date) {
+      if (!date) return null;
+      const adjusted = new Date(date);
+      const day = adjusted.getDay();
+      if (day === 6) adjusted.setDate(adjusted.getDate() + 2);
+      if (day === 0) adjusted.setDate(adjusted.getDate() + 1);
+      return adjusted;
+    }
+
+    function getPhaseRangeByIndex(index) {
+      if (index <= 3) {
+        return { monthFrom: 1, monthTo: 4 };
+      }
+      if (index <= 9) {
+        return { monthFrom: 5, monthTo: 10 };
+      }
+      return { monthFrom: 11, monthTo: 18 };
+    }
+
+    function phaseRangeToDates(range) {
+      const start = addMonths(planningStartDate, range.monthFrom - 1);
+      const end = addMonths(planningStartDate, range.monthTo);
+      end.setDate(0);
+      return { start: startOfDay(start), end: endOfDay(end) };
+    }
 
     function profileToPoints(profile) {
       return profile.map((value, index) => {
@@ -2535,6 +2720,143 @@
       }
     }
 
+    function buildPlanningAxis() {
+      if (!planningTimelineAxis) return;
+      planningTimelineAxis.innerHTML = '';
+      for (let month = 1; month <= planningWindowMonths; month += 1) {
+        const label = document.createElement('div');
+        label.className = 'timeline-month';
+        label.textContent = `M ${month}`;
+        planningTimelineAxis.appendChild(label);
+      }
+    }
+
+    function getSelectedMeasures() {
+      return measureCards
+        .filter((card) => card.classList.contains('selected'))
+        .map((card) => {
+          const name = card.querySelector('.m-name')?.textContent.replace(/\s+/g, ' ').trim() || 'Maßnahme';
+          const typeRaw = card.querySelector('.m-type')?.textContent || '';
+          const type = typeRaw.split('·')[0].trim();
+          const startInput = card.querySelector('.measure-start');
+          const endInput = card.querySelector('.measure-end');
+          const start = parseInputDate(startInput?.value || '');
+          const end = parseInputDate(endInput?.value || '');
+          return { card, name, type, start, end };
+        });
+    }
+
+    function renderPlanning() {
+      if (!planningSelectedBody || !planningEmpty || !planningTimelineRows || !planningTimelineEmpty) return;
+
+      const measures = getSelectedMeasures();
+      planningSelectedBody.innerHTML = '';
+
+      measures.forEach((measure) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${measure.name}</td>
+          <td>${measure.type || '—'}</td>
+          <td>${measure.start ? formatDateDe(measure.start) : '—'}</td>
+          <td>${measure.end ? formatDateDe(measure.end) : '—'}</td>
+        `;
+        planningSelectedBody.appendChild(row);
+      });
+
+      planningEmpty.style.display = measures.length ? 'none' : 'block';
+
+      planningTimelineRows.innerHTML = '';
+      const windowStart = startOfDay(planningStartDate);
+      const windowEnd = endOfDay(addMonths(planningStartDate, planningWindowMonths));
+      windowEnd.setDate(0);
+      const windowSpan = windowEnd.getTime() - windowStart.getTime();
+
+      const timelineMeasures = measures.filter((measure) => measure.start && measure.end);
+      timelineMeasures.forEach((measure) => {
+        const safeStart = clampDate(startOfDay(measure.start), windowStart, windowEnd);
+        const safeEnd = clampDate(endOfDay(measure.end), windowStart, windowEnd);
+        if (safeEnd < safeStart) return;
+
+        const leftPercent = ((safeStart.getTime() - windowStart.getTime()) / windowSpan) * 100;
+        const barWidthPercent = ((safeEnd.getTime() - safeStart.getTime()) / windowSpan) * 100;
+        const row = document.createElement('div');
+        row.className = 'timeline-row';
+        row.innerHTML = `
+          <div class="timeline-label">${measure.name}</div>
+          <div class="timeline-track">
+            <div class="timeline-bar" style="left:${Math.max(0, leftPercent)}%;width:${Math.max(0.8, barWidthPercent)}%;"></div>
+          </div>
+        `;
+        planningTimelineRows.appendChild(row);
+      });
+
+      planningTimelineEmpty.style.display = timelineMeasures.length ? 'none' : 'block';
+    }
+
+    function syncPlanning() {
+      renderRadarFromSelection();
+      renderPlanning();
+    }
+
+    function enforceDateConstraints(card, triggerInput) {
+      const startInput = card.querySelector('.measure-start');
+      const endInput = card.querySelector('.measure-end');
+      if (!startInput || !endInput) return;
+
+      const minDate = parseInputDate(startInput.min);
+      const maxDate = parseInputDate(startInput.max);
+
+      let startDate = parseInputDate(startInput.value);
+      let endDate = parseInputDate(endInput.value);
+      startDate = clampDate(adjustWeekendToMonday(startDate), minDate, maxDate);
+      endDate = clampDate(adjustWeekendToMonday(endDate), minDate, maxDate);
+
+      if (startDate && endDate && startDate > endDate) {
+        if (triggerInput === startInput) {
+          endDate = new Date(startDate);
+        } else {
+          startDate = new Date(endDate);
+        }
+      }
+
+      startInput.value = startDate ? toInputDate(startDate) : '';
+      endInput.value = endDate ? toInputDate(endDate) : '';
+    }
+
+    function initMeasureDateInputs() {
+      measureCards.forEach((card, index) => {
+        const startInput = card.querySelector('.measure-start');
+        const endInput = card.querySelector('.measure-end');
+        if (!startInput || !endInput) return;
+
+        const phaseRange = getPhaseRangeByIndex(index);
+        const { start, end } = phaseRangeToDates(phaseRange);
+        const min = toInputDate(start);
+        const max = toInputDate(end);
+        startInput.min = min;
+        startInput.max = max;
+        endInput.min = min;
+        endInput.max = max;
+
+        const stopToggle = (event) => event.stopPropagation();
+        ['click', 'mousedown', 'keydown'].forEach((eventName) => {
+          startInput.addEventListener(eventName, stopToggle);
+          endInput.addEventListener(eventName, stopToggle);
+        });
+
+        [startInput, endInput].forEach((input) => {
+          input.addEventListener('input', (event) => {
+            enforceDateConstraints(card, event.target);
+            syncPlanning();
+          });
+          input.addEventListener('change', (event) => {
+            enforceDateConstraints(card, event.target);
+            syncPlanning();
+          });
+        });
+      });
+    }
+
     measureCards.forEach((card) => {
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
@@ -2542,7 +2864,7 @@
       card.addEventListener('click', () => {
         card.classList.toggle('selected');
         card.setAttribute('aria-pressed', card.classList.contains('selected') ? 'true' : 'false');
-        renderRadarFromSelection();
+        syncPlanning();
       });
       card.addEventListener('keydown', (event) => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -2555,9 +2877,11 @@
       radarBasePolygon.setAttribute('points', profileToPoints(baseIstProfile).join(' '));
     }
 
+    initMeasureDateInputs();
+    buildPlanningAxis();
     renderSlideNav();
     renderSlides();
-    renderRadarFromSelection();
+    syncPlanning();
   })();
 </script>
 
