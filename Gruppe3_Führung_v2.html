@@ -2910,7 +2910,7 @@
 
   <div class="commitment-board" id="commitment-board" aria-live="polite">
     <div class="commitment-label">Urkunde · Commitment Board</div>
-    <div class="commitment-title">Niklas S. – Road to Leadership: 2026/2027</div>
+    <div class="commitment-title" id="commitment-title">Niklas S. – Road to Leadership: 2026/2027</div>
     <div class="commitment-sub">Der Entwicklungsplan wird verbindlich gestartet. Fokus: sichtbarer Kompetenzaufbau, konsequenter Transfer und verantwortliche Führungsübernahme in 18 Monaten.</div>
   </div>
 
@@ -3060,8 +3060,11 @@
     const measureCountLabel = Array.from(document.querySelectorAll('#massnahmen-count')).at(-1) || null;
     const selectedMeasuresBody = document.getElementById('selected-measures-body');
     const timelineContainer = document.getElementById('timeline-container');
-    const projectStartDate = new Date(2026, 4, 1);
-    const projectEndDate = new Date(2027, 9, 31);
+    const commitmentTitle = document.getElementById('commitment-title');
+    const PROJECT_START_YEAR = 2026;
+    const PROJECT_END_YEAR = 2027;
+    const projectStartDate = new Date(PROJECT_START_YEAR, 4, 1);
+    const projectEndDate = new Date(PROJECT_END_YEAR, 9, 31);
     const totalTimelineDays = Math.max(1, Math.round((projectEndDate - projectStartDate) / 86400000) + 1);
     const totalTimelineMonths = 18;
 
@@ -3168,6 +3171,9 @@
     function triggerFinale() {
       launchConfetti();
       playSuccessSound();
+      if (commitmentTitle) {
+        commitmentTitle.textContent = `Niklas S. – Road to Leadership: ${PROJECT_START_YEAR}/${PROJECT_END_YEAR}`;
+      }
       if (commitmentBoard) {
         commitmentBoard.classList.add('is-visible');
       }
@@ -3271,8 +3277,8 @@
     }
 
     function monthWindowToDates(startMonth, endMonth) {
-      const minDate = new Date(2026, 4 + (startMonth - 1), 1);
-      const maxDate = new Date(2026, 4 + endMonth, 0);
+      const minDate = new Date(PROJECT_START_YEAR, 4 + (startMonth - 1), 1);
+      const maxDate = new Date(PROJECT_START_YEAR, 4 + endMonth, 0);
       return {
         minDate: ensureWeekday(minDate, 1),
         maxDate: ensureWeekday(maxDate, -1)
